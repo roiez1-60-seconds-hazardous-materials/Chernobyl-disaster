@@ -1,0 +1,64 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --ink: #0c1222; --navy: #162040; --gold: #c8a44e; --gold-lt: #e8d5a0;
+  --cream: #f5f0e8; --parch: #faf7f0; --border: #e2e0d8;
+  --red: #dc2626; --danger: #ef4444; --amber: #f59e0b;
+  --blue: #06b6d4; --green: #22c55e; --muted: #94a3b8;
+  --rad: #86efac;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+body { font-family:'Heebo',sans-serif; background:#060a14; color:#fff; line-height:1.7; overflow-x:hidden; }
+a { color:inherit; text-decoration:none; }
+button { font-family:inherit; }
+
+.sf { font-family:'Playfair Display',Georgia,serif; }
+.mn { font-family:'JetBrains Mono',monospace; }
+
+.gr { width:60px; height:2px; background:linear-gradient(90deg,var(--gold),var(--gold-lt)); box-shadow:0 0 10px rgba(200,164,78,0.3); margin: 0 auto; }
+
+.mh { background:linear-gradient(175deg,var(--ink) 0%,var(--navy) 55%,#1a365d 100%); position:relative; overflow:hidden; }
+
+.card { background:rgba(0,0,0,0.5); border:1px solid rgba(200,164,78,0.2); border-radius:12px; backdrop-filter:blur(10px); transition: all 0.3s; }
+.card:hover { border-color:rgba(200,164,78,0.4); transform: translateY(-2px); box-shadow: 0 8px 30px rgba(0,0,0,0.4); }
+
+.btn-gold { padding: 10px 20px; background: rgba(200,164,78,0.15); color: var(--gold); border: 1px solid rgba(200,164,78,0.4); border-radius: 8px; font-family:'JetBrains Mono',monospace; font-size:12px; font-weight:700; cursor:pointer; transition: all 0.2s; }
+.btn-gold:hover { background: rgba(200,164,78,0.25); transform: translateY(-1px); }
+
+.glass { background: rgba(0,0,0,0.5); backdrop-filter: blur(12px); border: 1px solid rgba(200,164,78,0.25); border-radius: 14px; }
+
+.section-div { display: flex; align-items: center; gap: 16px; margin: 40px 0 24px; }
+.section-div::before, .section-div::after { content:''; flex: 1; height: 1px; background: linear-gradient(90deg, transparent, rgba(200,164,78,0.4), transparent); }
+
+@keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
+@keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.5; } }
+@keyframes pulseAlert { 0%,100% { box-shadow: 0 0 0 0 rgba(239,68,68,0.5); } 50% { box-shadow: 0 0 28px 8px rgba(239,68,68,0.7); } }
+@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+@keyframes fuelPulse { 0%,100% { opacity: 0.45; r: 1.8; } 50% { opacity: 1; r: 2.6; } }
+@keyframes pulseFire { 0%,100% { opacity: 1; } 50% { opacity: 0.55; } }
+@keyframes bubbleUp { 0% { transform: translateY(8px); opacity: 0.3; } 50% { opacity: 0.9; } 100% { transform: translateY(-12px); opacity: 0; } }
+@keyframes steamRise { 0% { transform: translateY(0) scale(0.6); opacity: 0.8; } 100% { transform: translateY(-40px) scale(1.4); opacity: 0; } }
+@keyframes flowD { to { stroke-dashoffset: -18; } }
+@keyframes flowDS { to { stroke-dashoffset: -12; } }
+@keyframes plumeRise { 0% { transform: translateY(0) scale(1); opacity: 0.4; } 100% { transform: translateY(-30px) scale(1.4); opacity: 0; } }
+@keyframes expFlash { 0% { opacity: 0; transform: scale(0.2); } 30% { opacity: 1; transform: scale(1.1); } 100% { opacity: 0.85; transform: scale(1); } }
+@keyframes radFloat { 0% { transform: translate(0,0) scale(1); opacity: 0; } 50% { opacity: 0.8; } 100% { transform: translate(-50px,-100px) scale(0.3); opacity: 0; } }
+@keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+.ff { animation: flowD 0.8s linear infinite; }
+.fs { animation: flowDS 1.6s linear infinite; }
+.fade-up { animation: fadeUp 0.6s ease-out; }
+
+.map-container { width: 100%; height: 70vh; min-height:500px; border-radius: 12px; overflow: hidden; border: 1px solid rgba(200,164,78,0.3); box-shadow: 0 8px 40px rgba(0,0,0,0.5); }
+.mapboxgl-popup-content { background: rgba(12,18,34,0.95) !important; color: #fff !important; border: 1px solid rgba(200,164,78,0.4) !important; border-radius: 8px !important; padding: 12px 16px !important; backdrop-filter: blur(10px); font-family: 'Heebo', sans-serif !important; }
+.mapboxgl-popup-tip { border-top-color: rgba(12,18,34,0.95) !important; }
+.mapboxgl-popup-close-button { color: #c8a44e !important; font-size: 18px !important; padding: 4px 8px !important; }
+
+.mod-card:hover { transform: translateY(-4px) !important; box-shadow: 0 8px 32px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.1) !important; }
+
+@media (max-width: 640px) {
+  .hide-mobile { display: none !important; }
+}
