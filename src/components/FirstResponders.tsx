@@ -1,6 +1,7 @@
 'use client';
 import { C } from '@/lib/data';
 import { useSpeech } from '@/lib/useSpeech';
+import HistoricalPhoto from './HistoricalPhoto';
 
 const STORY_HE = [
   {
@@ -234,6 +235,26 @@ export default function FirstResponders({ he, t }: { he: boolean; t: (h: string,
                 </div>
               );
             })}
+          </div>
+
+          {/* Historical photos */}
+          <div style={{ marginTop: 22, display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: 14 }}>
+            <HistoricalPhoto
+              src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/30/Chernobyl_Disaster.jpg/640px-Chernobyl_Disaster.jpg"
+              caption_he="הריסות יחידה 4 ב-1986. הסרקופג הראשון בבנייה. הקרינה במרחק כמה מטרים — קטלנית."
+              caption_en="Reactor 4 ruins in 1986. First sarcophagus under construction. Radiation meters away — lethal."
+              attribution="© IAEA Imagebank · CC BY-SA"
+              he={he} t={t}
+              height={220}
+            />
+            <HistoricalPhoto
+              src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/cf/Pripyat_-_Hospital_MsCh-126_-_Maternity_Ward.jpg/640px-Pripyat_-_Hospital_MsCh-126_-_Maternity_Ward.jpg"
+              caption_he="בית החולים MsCh-126 בפריפיאט — שם הגיעו הכבאים הפצועים בשעות הראשונות. הבגדים שלהם עדיין נמצאים במרתף, כשהם מקרינים."
+              caption_en="MsCh-126 hospital in Pripyat — where the wounded firefighters arrived in the first hours. Their clothes are still in the basement, still radioactive."
+              attribution="© Wikimedia Commons · CC BY-SA"
+              he={he} t={t}
+              height={220}
+            />
           </div>
 
           {/* Tribute */}

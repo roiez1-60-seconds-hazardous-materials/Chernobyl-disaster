@@ -1,6 +1,7 @@
 'use client';
 import { useState } from 'react';
 import { C, LIQUIDATORS } from '@/lib/data';
+import HistoricalPhoto from './HistoricalPhoto';
 
 const RISK_COLORS: Record<string, string> = { extreme: C.danger, high: C.amber, medium: C.blue };
 const RISK_HE: Record<string, string> = { extreme: 'קיצוני', high: 'גבוה', medium: 'בינוני' };
@@ -34,6 +35,17 @@ export default function Response({ he, t }: { he: boolean; t: (h: string, e: str
               <div className="stat-lbl">{s.l}</div>
             </div>
           ))}
+        </div>
+
+        <div style={{ marginBottom: 22 }}>
+          <HistoricalPhoto
+            src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c0/Chernobyl_liquidators_decontamination.jpg/640px-Chernobyl_liquidators_decontamination.jpg"
+            caption_he="ליקווידטורים בעבודת טיהור באזור הסגור, 1986. רובם חיילים שגויסו במילואים ללא הכשרה ייעודית בקרינה."
+            caption_en="Liquidators decontaminating the exclusion zone, 1986. Most were reservists conscripted without specialized radiation training."
+            attribution="© USFCRFC · Public Domain"
+            he={he} t={t}
+            height={260}
+          />
         </div>
 
         <h3 style={{ fontSize: 18, fontWeight: 800, color: C.gold, fontFamily: "'Playfair Display', serif", marginBottom: 14, textAlign: 'center' }}>

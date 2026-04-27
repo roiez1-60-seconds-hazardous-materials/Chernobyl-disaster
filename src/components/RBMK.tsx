@@ -33,6 +33,29 @@ export default function RBMK({ he, t }: { he: boolean; t: (h: string, e: string)
 
   return (
     <section id="rbmk" style={{ padding: '60px 16px 30px', position: 'relative', background: MOOD_BG[cur.mood], transition: 'background 1.5s ease' }}>
+      {/* Full-screen explosion flash for steps 8 (steam blast) and 9 (final) */}
+      {cur.mood === 'apocalypse' && (
+        <div
+          key={`flash-${step}`}
+          style={{
+            position: 'fixed', inset: 0,
+            pointerEvents: 'none',
+            zIndex: 100,
+            background: step === 8
+              ? `radial-gradient(circle at center, ${C.amber}aa 0%, ${C.danger}55 30%, transparent 70%)`
+              : `radial-gradient(circle at center, #ffffff 0%, ${C.danger}88 25%, transparent 70%)`,
+            animation: 'explosionFlash 1.4s ease-out forwards',
+          }}
+        />
+      )}
+      <style jsx>{`
+        @keyframes explosionFlash {
+          0% { opacity: 0; }
+          15% { opacity: 1; }
+          40% { opacity: 0.6; }
+          100% { opacity: 0; }
+        }
+      `}</style>
       <div style={{ maxWidth: 1100, margin: '0 auto' }}>
         <div style={{ textAlign: 'center', marginBottom: 22, position: 'relative' }}>
           <div className="section-number" style={{ top: '-20px', insetInlineEnd: '5%' }}>03</div>
