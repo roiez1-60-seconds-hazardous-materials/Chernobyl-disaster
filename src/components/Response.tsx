@@ -1,7 +1,7 @@
 'use client';
 import { useState } from 'react';
 import { C, LIQUIDATORS } from '@/lib/data';
-import HistoricalPhoto from './HistoricalPhoto';
+import MemorialCard from './MemorialCard';
 
 const RISK_COLORS: Record<string, string> = { extreme: C.danger, high: C.amber, medium: C.blue };
 const RISK_HE: Record<string, string> = { extreme: 'קיצוני', high: 'גבוה', medium: 'בינוני' };
@@ -38,13 +38,13 @@ export default function Response({ he, t }: { he: boolean; t: (h: string, e: str
         </div>
 
         <div style={{ marginBottom: 22 }}>
-          <HistoricalPhoto
-            src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c0/Chernobyl_liquidators_decontamination.jpg/640px-Chernobyl_liquidators_decontamination.jpg"
-            caption_he="ליקווידטורים בעבודת טיהור באזור הסגור, 1986. רובם חיילים שגויסו במילואים ללא הכשרה ייעודית בקרינה."
-            caption_en="Liquidators decontaminating the exclusion zone, 1986. Most were reservists conscripted without specialized radiation training."
-            attribution="© USFCRFC · Public Domain"
+          <MemorialCard
+            variant="liquidator"
+            caption_he="ליקווידטורים בעבודת טיהור. רובם חיילים בני 35-40 שגויסו מהמילואים. בגדי המגן: לוחות עופרת בעובי 2-4 מ״מ שתפרו לעצמם. המעטפה: 90 שניות בלבד."
+            caption_en="Liquidators decontaminating. Most were reservists aged 35-40. Their protective gear: lead sheets 2-4mm thick they sewed themselves. Their window: 90 seconds only."
+            date_he="קיץ · 1986"
+            date_en="SUMMER · 1986"
             he={he} t={t}
-            height={260}
           />
         </div>
 
@@ -94,6 +94,18 @@ export default function Response({ he, t }: { he: boolean; t: (h: string, e: str
               </div>
             );
           })}
+        </div>
+
+        {/* Closing memorial — sarcophagus */}
+        <div style={{ marginTop: 26 }}>
+          <MemorialCard
+            variant="sarcophagus"
+            caption_he="הסגירה החדשה (NSC) — קונסטרוקציית פלדה שהוסגה על הסרקופג הישן ב-2016. גובה 108 מ׳, משקל 36,000 ט׳. הגדולה בעולם. מתוכננת ל-100 שנה. מתחתיה — 200 טון של דלק גרעיני שעדיין יקרין למאות אלפי שנים."
+            caption_en="The New Safe Confinement (NSC) — steel arch slid over the old sarcophagus in 2016. Height 108m, weight 36,000 tons. Largest in the world. Designed for 100 years. Beneath it — 200 tons of nuclear fuel that will radiate for hundreds of thousands of years."
+            date_he="2016 · NSC"
+            date_en="2016 · NSC"
+            he={he} t={t}
+          />
         </div>
       </div>
     </section>

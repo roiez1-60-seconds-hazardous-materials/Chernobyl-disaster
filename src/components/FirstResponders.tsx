@@ -1,7 +1,7 @@
 'use client';
 import { C } from '@/lib/data';
 import { useSpeech } from '@/lib/useSpeech';
-import HistoricalPhoto from './HistoricalPhoto';
+import MemorialCard from './MemorialCard';
 
 const STORY_HE = [
   {
@@ -237,23 +237,23 @@ export default function FirstResponders({ he, t }: { he: boolean; t: (h: string,
             })}
           </div>
 
-          {/* Historical photos */}
-          <div style={{ marginTop: 22, display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: 14 }}>
-            <HistoricalPhoto
-              src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/30/Chernobyl_Disaster.jpg/640px-Chernobyl_Disaster.jpg"
-              caption_he="הריסות יחידה 4 ב-1986. הסרקופג הראשון בבנייה. הקרינה במרחק כמה מטרים — קטלנית."
-              caption_en="Reactor 4 ruins in 1986. First sarcophagus under construction. Radiation meters away — lethal."
-              attribution="© IAEA Imagebank · CC BY-SA"
+          {/* Memorial scenes */}
+          <div style={{ marginTop: 22, display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 14 }}>
+            <MemorialCard
+              variant="firefighter"
+              caption_he="01:28 — שלוש דמויות על גג היחידה השלישית, אחרי שעלו מהיחידה הרביעית הבוערת. הקרינה ב-3,500 רנטגן/שעה. הם לא ידעו."
+              caption_en="01:28 — Three figures on Unit 3 roof, after coming up from the burning Unit 4. Radiation at 3,500 R/hr. They did not know."
+              date_he="01:28 · 26·04·1986"
+              date_en="01:28 · APR 26, 1986"
               he={he} t={t}
-              height={220}
             />
-            <HistoricalPhoto
-              src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/cf/Pripyat_-_Hospital_MsCh-126_-_Maternity_Ward.jpg/640px-Pripyat_-_Hospital_MsCh-126_-_Maternity_Ward.jpg"
-              caption_he="בית החולים MsCh-126 בפריפיאט — שם הגיעו הכבאים הפצועים בשעות הראשונות. הבגדים שלהם עדיין נמצאים במרתף, כשהם מקרינים."
-              caption_en="MsCh-126 hospital in Pripyat — where the wounded firefighters arrived in the first hours. Their clothes are still in the basement, still radioactive."
-              attribution="© Wikimedia Commons · CC BY-SA"
+            <MemorialCard
+              variant="reactor"
+              caption_he="יחידה 4 בערב 26 באפריל. הליבה חשופה לאוויר הפתוח. שריפת גרפיט בטמפרטורה של 2,500°C. בשמיים — עמוד עשן רדיואקטיבי שיגיע לשבדיה תוך 36 שעות."
+              caption_en="Unit 4 on the evening of April 26. Core exposed to open air. Graphite fire at 2,500°C. In the sky — a radioactive plume that would reach Sweden in 36 hours."
+              date_he="ערב · 26·04·1986"
+              date_en="EVE · APR 26, 1986"
               he={he} t={t}
-              height={220}
             />
           </div>
 
