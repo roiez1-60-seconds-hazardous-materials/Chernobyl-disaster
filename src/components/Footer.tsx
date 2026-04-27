@@ -99,7 +99,7 @@ export default function Footer({ he, t }: { he: boolean; t: (h: string, e: strin
         </p>
 
         <div style={{ marginTop: 16, fontSize: 10, color: 'rgba(255,255,255,0.5)', fontFamily: "'JetBrains Mono', monospace" }}>
-          © {new Date().getFullYear()} · {t('60 שניות חומ״ס', '60 Seconds HazMat')} · v2.3
+          © {new Date().getFullYear()} · {t('60 שניות חומ״ס', '60 Seconds HazMat')}
         </div>
       </div>
     </footer>
