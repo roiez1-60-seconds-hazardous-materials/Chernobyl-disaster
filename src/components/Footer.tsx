@@ -5,32 +5,48 @@ import { C } from '@/lib/data';
 
 export default function Footer({ he, t }: { he: boolean; t: (h: string, e: string) => string }) {
   const [visits, setVisits] = useState<number | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [status, setStatus] = useState<'loading' | 'ok' | 'err'>('loading');
 
   useEffect(() => {
     let cancelled = false;
+    let attempts = 0;
 
-    // Increment-once-per-session pattern
     const sessionKey = 'chernobyl-visit-counted';
     const alreadyCounted = typeof window !== 'undefined' && window.sessionStorage.getItem(sessionKey);
-    const url = alreadyCounted ? '/api/visits' : '/api/visits?inc=1';
 
-    fetch(url, { cache: 'no-store' })
-      .then((r) => r.json())
-      .then((data) => {
+    const fetchVisits = async () => {
+      attempts++;
+      try {
+        const url = alreadyCounted ? '/api/visits' : '/api/visits?inc=1';
+        const res = await fetch(url, { cache: 'no-store' });
+        const data = await res.json();
         if (cancelled) return;
+
         if (typeof data.count === 'number') {
           setVisits(data.count);
+          setStatus('ok');
           if (!alreadyCounted && typeof window !== 'undefined') {
             window.sessionStorage.setItem(sessionKey, '1');
           }
+        } else {
+          // Retry up to 2 times if count is null
+          if (attempts < 3) {
+            setTimeout(fetchVisits, 1500);
+          } else {
+            setStatus('err');
+          }
         }
-        setLoading(false);
-      })
-      .catch(() => {
-        if (!cancelled) setLoading(false);
-      });
+      } catch {
+        if (cancelled) return;
+        if (attempts < 3) {
+          setTimeout(fetchVisits, 1500);
+        } else {
+          setStatus('err');
+        }
+      }
+    };
 
+    fetchVisits();
     return () => { cancelled = true; };
   }, []);
 
@@ -67,12 +83,12 @@ export default function Footer({ he, t }: { he: boolean; t: (h: string, e: strin
           </span>
           <span style={{
             fontSize: 14, fontWeight: 800,
-            color: C.gold,
+            color: status === 'err' ? 'rgba(255,255,255,0.4)' : C.gold,
             fontFamily: "'Playfair Display', serif",
             minWidth: 24,
             textAlign: 'center',
           }}>
-            {loading ? '···' : visits !== null ? visits.toLocaleString() : '—'}
+            {status === 'loading' ? '···' : status === 'ok' && visits !== null ? visits.toLocaleString() : '—'}
           </span>
         </div>
 
@@ -83,7 +99,7 @@ export default function Footer({ he, t }: { he: boolean; t: (h: string, e: strin
         </p>
 
         <div style={{ marginTop: 16, fontSize: 10, color: 'rgba(255,255,255,0.5)', fontFamily: "'JetBrains Mono', monospace" }}>
-          © {new Date().getFullYear()} · {t('60 שניות חומ״ס', '60 Seconds HazMat')} · v2.2
+          © {new Date().getFullYear()} · {t('60 שניות חומ״ס', '60 Seconds HazMat')} · v2.3
         </div>
       </div>
     </footer>
