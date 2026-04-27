@@ -292,17 +292,33 @@ function DispersionMap({ he, t }: { he: boolean; t: (h: string, e: string) => st
 
         mapboxgl.accessToken = token;
 
+        // Bounds covering all of Europe + Chernobyl (covers all 4 phases)
+        // SW corner: [-12 lng, 35 lat] = west of UK, southern Mediterranean
+        // NE corner: [42 lng, 65 lat] = east of Moscow, northern Scandinavia
+        const EUROPE_BOUNDS: [[number, number], [number, number]] = [[-12, 35], [42, 65]];
+
         const map = new mapboxgl.Map({
           container: containerRef.current,
           style: 'mapbox://styles/mapbox/light-v11', // LIGHT clear style
-          center: [15, 53],
-          zoom: 3.6,
-          minZoom: 3,
-          maxZoom: 6,
+          bounds: EUROPE_BOUNDS,
+          fitBoundsOptions: { padding: 20 },
+          minZoom: 2.5,
+          maxZoom: 7,
           attributionControl: true,
         });
 
         mapRef.current = map;
+
+        // Re-fit on container resize so map always shows all of Europe
+        const resizeObserver = new ResizeObserver(() => {
+          if (map && !cancelled) {
+            map.resize();
+            map.fitBounds(EUROPE_BOUNDS, { padding: 20, duration: 400 });
+          }
+        });
+        resizeObserver.observe(containerRef.current);
+        // Store for cleanup
+        (map as any).__resizeObs = resizeObserver;
 
         map.on('load', () => {
           if (cancelled) return;
@@ -402,6 +418,8 @@ function DispersionMap({ he, t }: { he: boolean; t: (h: string, e: string) => st
       markersRef.current.forEach((m) => m.remove());
       markersRef.current = [];
       if (mapRef.current) {
+        const ro = (mapRef.current as any).__resizeObs;
+        if (ro) ro.disconnect();
         mapRef.current.remove();
         mapRef.current = null;
       }
