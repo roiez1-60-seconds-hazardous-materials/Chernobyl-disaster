@@ -5,6 +5,7 @@ import Hero from '@/components/Hero';
 import Timeline from '@/components/Timeline';
 import NuclearReactor from '@/components/NuclearReactor';
 import RBMK from '@/components/RBMK';
+import FirstResponders from '@/components/FirstResponders';
 import Response from '@/components/Response';
 import Casualties from '@/components/Casualties';
 import Radiation from '@/components/Radiation';
@@ -30,6 +31,7 @@ export default function Page() {
       <Timeline he={he} t={t} />
       <NuclearReactor he={he} t={t} />
       <RBMK he={he} t={t} />
+      <FirstResponders he={he} t={t} />
       <Response he={he} t={t} />
       <Casualties he={he} t={t} />
       <Radiation he={he} t={t} />

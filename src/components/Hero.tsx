@@ -1,57 +1,15 @@
 'use client';
-import { useState, useEffect, useRef } from 'react';
 import { C } from '@/lib/data';
+import { useSpeech } from '@/lib/useSpeech';
 
 export default function Hero({ he, t }: { he: boolean; t: (h: string, e: string) => string }) {
-  const [playing, setPlaying] = useState(false);
-  const utterRef = useRef<SpeechSynthesisUtterance | null>(null);
+  const { playing, supported, speak } = useSpeech(he ? 'he' : 'en');
+  const isPlaying = playing === 'legasov';
 
-  // Stop on language change or unmount
-  useEffect(() => {
-    return () => {
-      if (typeof window !== 'undefined' && window.speechSynthesis) {
-        window.speechSynthesis.cancel();
-      }
-    };
-  }, []);
-
-  useEffect(() => {
-    if (typeof window !== 'undefined' && window.speechSynthesis) {
-      window.speechSynthesis.cancel();
-      setPlaying(false);
-    }
-  }, [he]);
-
-  const speak = () => {
-    if (typeof window === 'undefined' || !window.speechSynthesis) return;
-    if (playing) {
-      window.speechSynthesis.cancel();
-      setPlaying(false);
-      return;
-    }
-
-    const text_he = 'כל שקר שאנחנו אומרים. הוא חוב. חוב אשר במוקדם או במאוחר. נדרש לשלם אותו.';
-    const text_en = 'Every lie we tell. Incurs a debt. Sooner or later. That debt is paid.';
-    const text = he ? text_he : text_en;
-
-    // Find best Hebrew/English voice
-    const voices = window.speechSynthesis.getVoices();
-    const voice = he
-      ? voices.find((v) => v.lang.startsWith('he')) || voices.find((v) => v.lang.startsWith('iw'))
-      : voices.find((v) => v.lang.startsWith('en') && v.name.toLowerCase().includes('male'))
-        || voices.find((v) => v.lang.startsWith('en'));
-
-    const u = new SpeechSynthesisUtterance(text);
-    u.lang = he ? 'he-IL' : 'en-US';
-    if (voice) u.voice = voice;
-    u.rate = 0.72;
-    u.pitch = 0.78;
-    u.volume = 1;
-    u.onend = () => setPlaying(false);
-    u.onerror = () => setPlaying(false);
-    utterRef.current = u;
-    setPlaying(true);
-    window.speechSynthesis.speak(u);
+  const onPlay = () => {
+    const text_he = 'כל שקר שאנחנו אומרים, הוא חוב. חוב אשר, במוקדם או במאוחר, נדרש לשלם אותו.';
+    const text_en = 'Every lie we tell, incurs a debt. Sooner or later, that debt is paid.';
+    speak('legasov', he ? text_he : text_en);
   };
 
   return (
@@ -88,7 +46,7 @@ export default function Hero({ he, t }: { he: boolean; t: (h: string, e: string)
         <div className="fade-in" style={{
           margin: '0 auto 32px',
           maxWidth: 640,
-          padding: '22px 22px 18px',
+          padding: '24px 22px 18px',
           background: 'linear-gradient(135deg, rgba(0,0,0,0.7), rgba(22,32,64,0.4))',
           border: `1px solid ${C.gold}55`,
           borderRadius: 14,
@@ -97,15 +55,15 @@ export default function Hero({ he, t }: { he: boolean; t: (h: string, e: string)
           animationDelay: '0.1s',
           boxShadow: `0 0 36px rgba(200,164,78,0.12)`,
         }}>
-          {/* Quote mark */}
+          {/* Big quote mark */}
           <div style={{
             position: 'absolute',
-            top: -12, [he ? 'right' : 'left']: 18,
-            fontSize: 50, color: C.gold, opacity: 0.6,
+            top: -16, [he ? 'right' : 'left']: 18,
+            fontSize: 56, color: C.gold, opacity: 0.7,
             fontFamily: "'Playfair Display', serif",
             lineHeight: 1, fontWeight: 900,
             background: '#0a0e1a',
-            padding: '0 8px',
+            padding: '0 10px',
           }}>״</div>
 
           <p style={{
@@ -114,8 +72,9 @@ export default function Hero({ he, t }: { he: boolean; t: (h: string, e: string)
             fontStyle: 'italic',
             fontFamily: "'Playfair Display', serif",
             lineHeight: 1.7,
-            marginBottom: 14,
+            marginBottom: 16,
             fontWeight: 400,
+            paddingTop: 4,
           }}>
             {t(
               'כל שקר שאנחנו אומרים הוא חוב, חוב אשר במוקדם או במאוחר, נדרש לשלם אותו.',
@@ -123,9 +82,9 @@ export default function Hero({ he, t }: { he: boolean; t: (h: string, e: string)
             )}
           </p>
 
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 10 }}>
-            <div style={{ fontSize: 11, color: C.gL, lineHeight: 1.5, textAlign: he ? 'right' : 'left' }}>
-              <div style={{ fontWeight: 700, color: C.gold, fontFamily: "'Playfair Display', serif", fontStyle: 'normal' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 12 }}>
+            <div style={{ fontSize: 11, color: C.gL, lineHeight: 1.5, textAlign: he ? 'right' : 'left', flex: 1, minWidth: 200 }}>
+              <div style={{ fontWeight: 700, color: C.gold, fontFamily: "'Playfair Display', serif", fontStyle: 'normal', fontSize: 13 }}>
                 {t('— ולרי לגאסוב', '— Valery Legasov')}
               </div>
               <div style={{ fontSize: 9, color: 'rgba(255,255,255,0.55)', fontFamily: "'JetBrains Mono', monospace", letterSpacing: '0.08em', marginTop: 2 }}>
@@ -133,23 +92,29 @@ export default function Hero({ he, t }: { he: boolean; t: (h: string, e: string)
               </div>
             </div>
 
-            <button onClick={speak} aria-label={t('הפעל קריינות', 'Play narration')} style={{
-              display: 'inline-flex', alignItems: 'center', gap: 6,
-              padding: '8px 14px',
-              background: playing ? `${C.danger}25` : `${C.gold}20`,
-              border: `1px solid ${playing ? C.danger : C.gold}99`,
-              borderRadius: 22,
-              color: playing ? C.danger : C.gold,
-              fontSize: 11, fontWeight: 700,
-              fontFamily: "'JetBrains Mono', monospace",
-              letterSpacing: '0.08em',
-              cursor: 'pointer',
-              transition: 'all 0.25s',
-              whiteSpace: 'nowrap',
-            }}>
-              <span style={{ fontSize: 14 }}>{playing ? '⏸' : '▶'}</span>
-              {playing ? t('עצור', 'STOP') : t('האזן', 'LISTEN')}
-            </button>
+            {supported && (
+              <button onClick={onPlay} aria-label={t('הפעל קריינות', 'Play narration')} style={{
+                display: 'inline-flex', alignItems: 'center', gap: 8,
+                padding: '10px 18px',
+                background: isPlaying
+                  ? `linear-gradient(135deg, ${C.danger}55, ${C.danger}25)`
+                  : `linear-gradient(135deg, ${C.gold}40, ${C.gold}15)`,
+                border: `1.5px solid ${isPlaying ? C.danger : C.gold}`,
+                borderRadius: 30,
+                color: '#fff',
+                fontSize: 12, fontWeight: 800,
+                fontFamily: "'JetBrains Mono', monospace",
+                letterSpacing: '0.1em',
+                cursor: 'pointer',
+                transition: 'all 0.25s',
+                whiteSpace: 'nowrap',
+                boxShadow: isPlaying ? `0 0 22px ${C.danger}77` : `0 4px 12px ${C.gold}44`,
+                animation: isPlaying ? 'pulseAlert 1.4s infinite' : 'none',
+              }}>
+                <span style={{ fontSize: 16 }}>{isPlaying ? '⏸' : '🔊'}</span>
+                {isPlaying ? t('עצור', 'STOP') : t('האזן', 'LISTEN')}
+              </button>
+            )}
           </div>
         </div>
 
