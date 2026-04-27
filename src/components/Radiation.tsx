@@ -241,6 +241,7 @@ function DispersionMap({ he, t }: { he: boolean; t: (h: string, e: string) => st
   const containerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<any>(null);
   const markersRef = useRef<any[]>([]);
+  const [token, setToken] = useState<string | null>(null);
 
   const cur = PHASES[phase - 1];
 
@@ -251,15 +252,36 @@ function DispersionMap({ he, t }: { he: boolean; t: (h: string, e: string) => st
     return () => clearInterval(id);
   }, [auto]);
 
-  // Initialize map
+  // Fetch Mapbox token at runtime (build-time env var may be stale)
   useEffect(() => {
-    if (!containerRef.current || mapRef.current) return;
-
-    const token = process.env.NEXT_PUBLIC_MAPBOX_TOKEN;
-    if (!token) {
-      setMapError(he ? 'מפתח Mapbox חסר במשתני הסביבה' : 'Mapbox token not configured');
+    let cancelled = false;
+    // 1) Try build-time env var first (fastest, no network call)
+    const envToken = process.env.NEXT_PUBLIC_MAPBOX_TOKEN;
+    if (envToken && envToken.length > 10) {
+      setToken(envToken);
       return;
     }
+    // 2) Fall back to runtime fetch from API route
+    fetch('/api/mapbox-token', { cache: 'no-store' })
+      .then((r) => r.json())
+      .then((data) => {
+        if (cancelled) return;
+        if (data.token && data.token.length > 10) {
+          setToken(data.token);
+        } else {
+          setMapError(he ? `מפתח Mapbox לא הוגדר בשרת. ${data.hint || ''}` : `Mapbox token missing. ${data.hint || ''}`);
+        }
+      })
+      .catch((err) => {
+        if (cancelled) return;
+        setMapError(he ? 'נכשלה הבאת מפתח Mapbox' : 'Failed to fetch Mapbox token');
+      });
+    return () => { cancelled = true; };
+  }, [he]);
+
+  // Initialize map
+  useEffect(() => {
+    if (!containerRef.current || mapRef.current || !token) return;
 
     let cancelled = false;
 
@@ -384,7 +406,7 @@ function DispersionMap({ he, t }: { he: boolean; t: (h: string, e: string) => st
         mapRef.current = null;
       }
     };
-  }, [he]);
+  }, [he, token]);
 
   // Update map content when phase changes
   useEffect(() => {
