@@ -1,5 +1,5 @@
 'use client';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { C, INSAG, RBMK_COMP } from '@/lib/data';
 
 const MOOD_BG: Record<string, string> = {
@@ -15,11 +15,11 @@ export default function RBMK({ he, t }: { he: boolean; t: (h: string, e: string)
   const [step, setStep] = useState(0);
   const [auto, setAuto] = useState(false);
   const [pro, setPro] = useState(false);
-  const [selected, setSelected] = useState<string | null>(null);
+  const [openComp, setOpenComp] = useState<string | null>(null);
 
   useEffect(() => {
     if (!auto) return;
-    const id = setInterval(() => setStep((s) => (s + 1) % INSAG.length), 4500);
+    const id = setInterval(() => setStep((s) => (s + 1) % INSAG.length), 5500);
     return () => clearInterval(id);
   }, [auto]);
 
@@ -28,169 +28,230 @@ export default function RBMK({ he, t }: { he: boolean; t: (h: string, e: string)
   const rods = step <= 1 ? 211 : step === 2 ? 100 : step === 3 ? 60 : step === 4 ? 8 : step === 5 ? 8 : step === 6 ? 211 : 0;
   const voids = step <= 1 ? 14 : step === 2 ? 18 : step === 3 ? 5 : step === 4 ? 25 : step === 5 ? 60 : step === 6 ? 90 : 100;
 
-  const sel = selected ? RBMK_COMP.find((c) => c.id === selected) : null;
+  const isExplosion = cur.mood === 'explosion' || cur.mood === 'apocalypse';
+  const accentColor = cur.mood === 'apocalypse' ? C.danger : cur.mood === 'critical' ? C.amber : cur.mood === 'danger' ? '#f97316' : cur.mood === 'caution' ? C.amber : C.gold;
 
   return (
     <section id="rbmk" style={{ padding: '60px 16px 30px', position: 'relative', background: MOOD_BG[cur.mood], transition: 'background 1.5s ease' }}>
-      <div style={{ maxWidth: 1200, margin: '0 auto' }}>
-        <div style={{ textAlign: 'center', marginBottom: 28, position: 'relative' }}>
+      <div style={{ maxWidth: 1100, margin: '0 auto' }}>
+        <div style={{ textAlign: 'center', marginBottom: 22, position: 'relative' }}>
           <div className="section-number" style={{ top: '-20px', insetInlineEnd: '5%' }}>03</div>
           <div className="section-kicker">[ {t('סעיף שלישי · RBMK', 'PART THREE · RBMK')} ]</div>
           <h2 className="section-title">{t('RBMK והכשלים הבטיחותיים', 'RBMK & Safety Failures')}</h2>
-          <p className="section-subtitle">{t('סימולציה אינטראקטיבית של 10 שלבי INSAG-7', 'Interactive simulation of INSAG-7 ten steps')}</p>
+          <p className="section-subtitle">{t('סימולציה קולנועית של 10 דקות לפני הפיצוץ', 'Cinematic simulation of 10 minutes before explosion')}</p>
           <div className="gr" style={{ margin: '0 auto' }} />
         </div>
 
-        {/* Controls */}
-        <div className="card" style={{ padding: 12, marginBottom: 16, display: 'flex', gap: 8, flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'center' }}>
-          <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-            <button onClick={() => setAuto((a) => !a)} className="btn-gold" style={{ background: auto ? `${C.danger}33` : undefined, color: auto ? '#fff' : undefined, borderColor: auto ? C.danger : undefined }}>
-              {auto ? '⏸ ' + t('עצור', 'PAUSE') : '▶ ' + t('הפעל', 'PLAY')}
-            </button>
-            <button onClick={() => setPro((p) => !p)} className="btn-gold" style={{ background: pro ? `${C.gold}45` : undefined, color: pro ? '#fff' : undefined }}>
-              {pro ? t('🎓 מקצועי', '🎓 PRO') : t('👨‍🏫 פשוט', '👨‍🏫 SIMPLE')}
-            </button>
-          </div>
-          <div style={{ display: 'flex', gap: 8, alignItems: 'center', fontFamily: "'JetBrains Mono', monospace", fontSize: 11, color: C.gold }}>
-            <span>STEP {step + 1}/{INSAG.length}</span>
-            <span style={{ color: 'rgba(255,255,255,0.4)' }}>·</span>
-            <span style={{ color: '#fff' }}>{cur.time}</span>
-          </div>
-        </div>
-
-        {/* Simulator */}
-        <div className="card" style={{ padding: 'clamp(16px, 3vw, 28px)', marginBottom: 18 }}>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 20 }}>
-            {/* SVG Reactor */}
-            <ReactorSVG step={step} />
-
-            {/* Stats panel */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-              <StatCard label={t('הספק', 'POWER')} value={power} unit="MWt" max={32000} color={power > 5000 ? C.danger : power > 1500 ? C.amber : C.green} dangerOn={power > 5000} />
-              <StatCard label={t('מוטות בקרה בליבה', 'CONTROL RODS IN CORE')} value={rods} unit={`/ 211`} max={211} color={rods < 30 ? C.danger : rods < 100 ? C.amber : C.green} dangerOn={rods < 30} />
-              <StatCard label={t('בועות קיטור', 'STEAM VOIDS')} value={voids} unit="%" max={100} color={voids > 60 ? C.danger : voids > 25 ? C.amber : C.blue} dangerOn={voids > 60} />
-
-              {/* Mood indicator */}
-              <div style={{
-                padding: '10px 14px',
-                borderRadius: 10,
-                border: `1px solid ${cur.mood === 'apocalypse' ? C.danger : cur.mood === 'critical' ? C.amber : 'rgba(255,255,255,0.15)'}`,
-                background: 'rgba(0,0,0,0.4)',
-                textAlign: 'center',
-                animation: cur.mood === 'apocalypse' || cur.mood === 'explosion' ? 'pulseAlert 1.5s infinite' : 'none',
-                color: cur.mood === 'apocalypse' || cur.mood === 'explosion' ? C.danger : C.gold,
-              }}>
-                <div style={{ fontSize: 9, fontFamily: "'JetBrains Mono', monospace", letterSpacing: '0.2em', opacity: 0.7, marginBottom: 4 }}>STATUS</div>
-                <div style={{ fontSize: 13, fontWeight: 800, fontFamily: "'JetBrains Mono', monospace", letterSpacing: '0.05em', textTransform: 'uppercase' }}>
-                  {cur.mood}
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Step description */}
-          <div className="fade-in" key={step} style={{
-            marginTop: 18, padding: '16px 20px',
-            background: 'rgba(0,0,0,0.5)',
-            borderInlineStart: `4px solid ${cur.mood === 'apocalypse' ? C.danger : cur.mood === 'critical' ? C.amber : C.gold}`,
-            borderRadius: 8,
+        {/* CINEMATIC STAGE — everything in one frame */}
+        <div style={{
+          background: 'linear-gradient(180deg, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.7) 100%)',
+          border: `2px solid ${accentColor}66`,
+          borderRadius: 16,
+          overflow: 'hidden',
+          boxShadow: isExplosion ? `0 0 50px ${C.danger}66, inset 0 0 60px ${C.danger}22` : `0 0 30px ${C.gold}22`,
+          transition: 'all 0.8s ease',
+          marginBottom: 22,
+          animation: isExplosion ? 'shake 0.4s infinite' : 'none',
+        }}>
+          {/* Top bar: timestamp + status */}
+          <div style={{
+            padding: '10px 18px',
+            background: 'rgba(0,0,0,0.6)',
+            borderBottom: `1px solid ${accentColor}55`,
+            display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+            flexWrap: 'wrap', gap: 8,
           }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8, gap: 8, flexWrap: 'wrap' }}>
-              <div style={{ fontSize: 18, fontWeight: 900, color: '#fff', fontFamily: "'Playfair Display', serif" }}>
-                {t(cur.he, cur.en)}
-              </div>
-              <div style={{ fontSize: 11, color: C.gold, fontFamily: "'JetBrains Mono', monospace", fontWeight: 700 }}>
-                {cur.time} · 26.04.1986
-              </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+              <span style={{ width: 8, height: 8, borderRadius: '50%', background: accentColor, animation: 'pulseAlert 1.2s infinite', boxShadow: `0 0 10px ${accentColor}` }} />
+              <span style={{ fontSize: 13, fontWeight: 800, color: '#fff', fontFamily: "'JetBrains Mono', monospace", letterSpacing: '0.1em' }}>
+                {cur.time}
+              </span>
+              <span style={{ fontSize: 10, color: 'rgba(255,255,255,0.5)', fontFamily: "'JetBrains Mono', monospace" }}>
+                26·04·1986
+              </span>
             </div>
-            <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.9)', lineHeight: 1.85 }}>
-              {pro ? t(cur.pro_he, cur.pro_en) : t(cur.simple_he, cur.simple_en)}
-            </p>
+            <div style={{
+              padding: '3px 10px',
+              background: `${accentColor}25`,
+              border: `1px solid ${accentColor}99`,
+              borderRadius: 4,
+              fontSize: 10,
+              fontWeight: 800,
+              color: accentColor,
+              fontFamily: "'JetBrains Mono', monospace",
+              letterSpacing: '0.2em',
+              textTransform: 'uppercase',
+              animation: isExplosion ? 'pulseAlert 0.8s infinite' : 'none',
+            }}>
+              {cur.mood}
+            </div>
           </div>
 
-          {/* Scrubber */}
-          <div style={{ marginTop: 14 }}>
-            <input
-              type="range"
-              min={0}
-              max={INSAG.length - 1}
-              value={step}
-              onChange={(e) => { setStep(Number(e.target.value)); setAuto(false); }}
-              style={{ width: '100%', accentColor: C.gold }}
-            />
-            <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 6 }}>
+          {/* Cinematic visual area */}
+          <div style={{ padding: 'clamp(14px, 3vw, 24px)', position: 'relative' }}>
+            <CinematicReactor step={step} he={he} t={t} />
+
+            {/* Live stats overlay */}
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 8, marginTop: 14 }}>
+              <MiniStat label={t('הספק', 'POWER')} value={power.toLocaleString()} unit="MWt" max={32000} cur={power} color={power > 5000 ? C.danger : power > 1500 ? C.amber : C.green} alert={power > 5000} />
+              <MiniStat label={t('מוטות', 'RODS')} value={rods.toString()} unit="/211" max={211} cur={rods} color={rods < 30 ? C.danger : rods < 100 ? C.amber : C.green} alert={rods < 30} />
+              <MiniStat label={t('בועות', 'VOIDS')} value={voids.toString()} unit="%" max={100} cur={voids} color={voids > 60 ? C.danger : voids > 25 ? C.amber : C.blue} alert={voids > 60} />
+            </div>
+          </div>
+
+          {/* Description WITHIN the frame */}
+          <div style={{
+            padding: '14px 18px',
+            background: `linear-gradient(180deg, rgba(0,0,0,0.4), rgba(0,0,0,0.7))`,
+            borderTop: `1px solid ${accentColor}33`,
+            borderInlineStart: `5px solid ${accentColor}`,
+          }}>
+            <div className="fade-in" key={step}>
+              <h3 style={{ fontSize: 17, fontWeight: 900, color: '#fff', fontFamily: "'Playfair Display', serif", marginBottom: 6, lineHeight: 1.3 }}>
+                {t(cur.he, cur.en)}
+              </h3>
+              <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.92)', lineHeight: 1.85 }}>
+                {pro ? t(cur.pro_he, cur.pro_en) : t(cur.simple_he, cur.simple_en)}
+              </p>
+            </div>
+          </div>
+
+          {/* Step navigator + controls */}
+          <div style={{ padding: '12px 18px', background: 'rgba(0,0,0,0.55)', borderTop: `1px solid ${C.gold}22` }}>
+            {/* Step dots */}
+            <div style={{ display: 'flex', gap: 4, marginBottom: 10, overflowX: 'auto', paddingBottom: 4 }}>
               {INSAG.map((s, i) => (
                 <button key={i} onClick={() => { setStep(i); setAuto(false); }} style={{
-                  fontSize: 9, padding: '3px 6px',
-                  background: i === step ? C.gold + '44' : 'transparent',
-                  color: i === step ? C.gold : 'rgba(255,255,255,0.4)',
-                  border: 'none', borderRadius: 3, cursor: 'pointer',
-                  fontFamily: "'JetBrains Mono', monospace", fontWeight: 700,
+                  flex: '1 1 auto', minWidth: 28,
+                  padding: '6px 4px',
+                  background: i === step ? `${accentColor}45` : 'rgba(255,255,255,0.04)',
+                  color: i === step ? '#fff' : 'rgba(255,255,255,0.5)',
+                  border: i === step ? `1px solid ${accentColor}` : '1px solid rgba(255,255,255,0.08)',
+                  borderRadius: 5,
+                  cursor: 'pointer',
+                  fontSize: 9, fontWeight: 700,
+                  fontFamily: "'JetBrains Mono', monospace",
+                  transition: 'all 0.25s',
+                  boxShadow: i === step ? `0 0 10px ${accentColor}88` : 'none',
                 }}>
-                  {s.time.slice(-5)}
+                  {i + 1}
                 </button>
               ))}
             </div>
-          </div>
-        </div>
 
-        {/* Components grid */}
-        <div className="card" style={{ padding: 'clamp(16px, 3vw, 28px)' }}>
-          <h3 style={{ fontSize: 18, fontWeight: 800, color: C.gold, fontFamily: "'Playfair Display', serif", marginBottom: 14, textAlign: 'center' }}>
-            🔧 {t('12 רכיבי הכור — לחץ ללימוד', '12 Reactor Components — Click to Learn')}
-          </h3>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))', gap: 8, marginBottom: 14 }}>
-            {RBMK_COMP.map((c) => (
-              <button key={c.id} onClick={() => setSelected(selected === c.id ? null : c.id)} style={{
-                padding: '10px 12px',
-                background: selected === c.id ? `${C.gold}33` : 'rgba(0,0,0,0.4)',
-                border: `1px solid ${selected === c.id ? C.gold : 'rgba(200,164,78,0.2)'}`,
-                borderRadius: 8, cursor: 'pointer', textAlign: he ? 'right' : 'left',
-                transition: 'all 0.25s', color: selected === c.id ? '#fff' : 'rgba(255,255,255,0.85)',
-              }}>
-                <div style={{ fontSize: 12, fontWeight: 700, fontFamily: "'Heebo', sans-serif" }}>
-                  {t(c.he, c.en)}
-                </div>
-              </button>
-            ))}
-          </div>
-
-          {sel && (
-            <div className="fade-in" style={{ padding: '14px 18px', background: 'rgba(0,0,0,0.5)', border: `1px solid ${C.gold}55`, borderRadius: 10, borderInlineStart: `4px solid ${C.gold}` }}>
-              <h4 style={{ fontSize: 16, fontWeight: 800, color: C.gold, fontFamily: "'Playfair Display', serif", marginBottom: 8 }}>
-                {t(sel.he, sel.en)}
-              </h4>
-              <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.9)', lineHeight: 1.85, marginBottom: 8 }}>
-                {pro ? t(sel.pro_he, sel.pro_en) : t(sel.simple_he, sel.simple_en)}
-              </p>
-              <div style={{ display: 'flex', gap: 6, fontSize: 9, color: 'rgba(255,255,255,0.5)', fontFamily: "'JetBrains Mono', monospace" }}>
-                <span>{t('מצב הצגה', 'Mode')}: {pro ? t('מקצועי 🎓', 'PRO 🎓') : t('פשוט 👨‍🏫', 'SIMPLE 👨‍🏫')}</span>
+            {/* Controls row */}
+            <div style={{ display: 'flex', gap: 6, justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap' }}>
+              <div style={{ display: 'flex', gap: 6 }}>
+                <button onClick={() => { setStep(Math.max(0, step - 1)); setAuto(false); }} disabled={step === 0} className="btn-gold" style={{ padding: '6px 12px', opacity: step === 0 ? 0.4 : 1 }}>
+                  {he ? '→' : '←'} {t('הקודם', 'PREV')}
+                </button>
+                <button onClick={() => setAuto((a) => !a)} className="btn-gold" style={{ background: auto ? `${C.danger}33` : undefined, color: auto ? '#fff' : undefined, borderColor: auto ? C.danger : undefined }}>
+                  {auto ? '⏸' : '▶'} {auto ? t('עצור', 'PAUSE') : t('הפעל', 'PLAY')}
+                </button>
+                <button onClick={() => { setStep(Math.min(INSAG.length - 1, step + 1)); setAuto(false); }} disabled={step === INSAG.length - 1} className="btn-gold" style={{ padding: '6px 12px', opacity: step === INSAG.length - 1 ? 0.4 : 1 }}>
+                  {t('הבא', 'NEXT')} {he ? '←' : '→'}
+                </button>
               </div>
+              <button onClick={() => setPro((p) => !p)} className="btn-gold" style={{ background: pro ? `${C.gold}45` : undefined, color: pro ? '#fff' : undefined }}>
+                {pro ? '🎓 ' + t('מקצועי', 'PRO') : '👨‍🏫 ' + t('פשוט', 'SIMPLE')}
+              </button>
             </div>
-          )}
-          {!sel && (
-            <div style={{ padding: 14, textAlign: 'center', color: 'rgba(255,255,255,0.4)', fontSize: 12, fontFamily: "'JetBrains Mono', monospace" }}>
-              ⚙ {t('בחר רכיב למידע מפורט', 'Select a component for detailed info')}
-            </div>
-          )}
+          </div>
         </div>
 
-        {/* The 4 fatal flaws */}
-        <div className="card-light" style={{ padding: 'clamp(16px, 3vw, 24px)', marginTop: 18 }}>
-          <h3 style={{ fontSize: 18, fontWeight: 800, color: C.danger, fontFamily: "'Playfair Display', serif", marginBottom: 14, textAlign: 'center' }}>
-            ⚠ {t('4 הכשלים הקטלניים של RBMK', '4 Fatal RBMK Failures')}
+        {/* Components — expand in place */}
+        <div className="card" style={{ padding: 'clamp(14px, 3vw, 22px)' }}>
+          <h3 style={{ fontSize: 17, fontWeight: 800, color: C.gold, fontFamily: "'Playfair Display', serif", marginBottom: 14, textAlign: 'center' }}>
+            🔧 {t('12 רכיבי הכור', '12 Reactor Components')}
+          </h3>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+            {RBMK_COMP.map((comp) => {
+              const isOpen = openComp === comp.id;
+              return (
+                <div key={comp.id} style={{
+                  background: isOpen ? `${C.gold}10` : 'rgba(0,0,0,0.4)',
+                  border: `1px solid ${isOpen ? C.gold : 'rgba(200,164,78,0.18)'}`,
+                  borderRadius: 8,
+                  overflow: 'hidden',
+                  transition: 'all 0.3s',
+                }}>
+                  <button onClick={() => setOpenComp(isOpen ? null : comp.id)} style={{
+                    width: '100%', padding: '11px 14px',
+                    background: 'transparent', border: 'none', cursor: 'pointer',
+                    display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+                    color: isOpen ? '#fff' : 'rgba(255,255,255,0.85)',
+                    textAlign: he ? 'right' : 'left',
+                    fontSize: 13, fontWeight: 700,
+                    fontFamily: "'Heebo', sans-serif",
+                  }}>
+                    <span>{t(comp.he, comp.en)}</span>
+                    <span style={{ color: C.gold, fontSize: 12, transition: 'transform 0.3s', transform: isOpen ? 'rotate(45deg)' : 'rotate(0)' }}>＋</span>
+                  </button>
+                  {isOpen && (
+                    <div className="fade-in" style={{ padding: '0 14px 14px', borderTop: `1px solid ${C.gold}33` }}>
+                      <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.9)', lineHeight: 1.85, paddingTop: 10 }}>
+                        {pro ? t(comp.pro_he, comp.pro_en) : t(comp.simple_he, comp.simple_en)}
+                      </p>
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+          <div style={{ marginTop: 12, fontSize: 11, color: 'rgba(255,255,255,0.55)', textAlign: 'center', fontFamily: "'JetBrains Mono', monospace" }}>
+            💡 {t('מצב נוכחי', 'Current mode')}: <span style={{ color: pro ? C.gold : C.green }}>{pro ? '🎓 ' + t('מקצועי', 'PRO') : '👨‍🏫 ' + t('פשוט', 'SIMPLE')}</span>
+          </div>
+        </div>
+
+        {/* The 4 fatal flaws — clearer language */}
+        <div className="card-light" style={{ padding: 'clamp(14px, 3vw, 22px)', marginTop: 18 }}>
+          <h3 style={{ fontSize: 17, fontWeight: 800, color: C.danger, fontFamily: "'Playfair Display', serif", marginBottom: 14, textAlign: 'center' }}>
+            ⚠ {t('4 הכשלים הקטלניים של RBMK', '4 Fatal RBMK Flaws')}
           </h3>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 10 }}>
             {[
-              { he: 'מקדם החללות חיובי', en: 'Positive Void Coefficient', desc_he: '+4.7β — בועות קיטור גורמות לעלייה בהספק. בכורים מערביים (PWR/BWR) מים = מאט+קירור: כשמים מתאדים, התגובה יורדת = בטיחות מובנית. ב-RBMK: גרפיט מאט, מים רק קירור — הפוך בדיוק.', desc_en: '+4.7β — steam voids cause power rise. In Western reactors (PWR/BWR) water = moderator+coolant: vaporized water = reaction drops = built-in safety. In RBMK: graphite moderator, water only coolant — exact opposite.' },
-              { he: 'קצה גרפיט במוטות AZ-5', en: 'Graphite Tips on AZ-5 Rods', desc_he: 'הקצה הגרפיטי דחף מים החוצה לפני הבורון — גרם לתוספת תגובתיות חיובית בעצירת חירום במקום לעצור.', desc_en: 'Graphite tip displaced water before boron — caused positive reactivity insertion during emergency scram instead of stopping.' },
-              { he: 'אין מבנה הכלה', en: 'No Containment', desc_he: 'בניגוד לכורים מערביים, אין כיפת בטון מסביב לכור. בפיצוץ — הקרינה התפזרה ישר לאוויר ללא מסנן.', desc_en: 'Unlike Western reactors, no concrete dome around reactor. In explosion — radiation dispersed directly to air without filter.' },
-              { he: 'תרבות בטיחות', en: 'Safety Culture', desc_he: 'הסתרת מידע (פגם איגנלינה לא הופץ), 3 ניסויי טורבינה קודמים שנכשלו, לחץ פוליטי על מהנדסים, הפרת רישיון תפעולי, חוסר הכשרה — כל אלה מולל הפיזיקה.', desc_en: 'Information hiding (Ignalina flaw not distributed), 3 previous failed turbine tests, political pressure on engineers, license violations, lack of training — all compounded physics failure.' },
+              {
+                icon: '🔥',
+                he: 'מקדם החללות חיובי',
+                en: 'Positive Void Coefficient',
+                desc_he: 'בעיה פיזיקלית הפוכה: כשהמים בליבה מתחממים והופכים לקיטור, הכור רץ מהר יותר במקום להאט. בכורים מערביים זה הפוך — בועות = הכור נחלש. במונחים מקצועיים: +4.7β תגובתיות חיובית.',
+                desc_en: 'Inverted physics: when water heats and becomes steam, the reactor accelerates instead of slowing. In Western reactors it\'s the opposite — voids = weakening. Professionally: +4.7β positive reactivity coefficient.',
+              },
+              {
+                icon: '🛑',
+                he: 'קצה גרפיט במוטות החירום',
+                en: 'Graphite Tips on Emergency Rods',
+                desc_he: 'פגם תכן קטסטרופלי: בקצה העליון של מוטות AZ-5 יש 4.5 מ׳ של גרפיט. כשלוחצים עצירת חירום, הגרפיט נכנס ראשון לליבה ודוחף את המים החוצה — מה שמגביר את התגובה במקום לעצור אותה. הפיצוץ נגרם בדיוק מזה.',
+                desc_en: 'Catastrophic design flaw: top of AZ-5 rods have 4.5m of graphite. When emergency scram is pressed, graphite enters core first and displaces water — increasing reaction instead of stopping it. The explosion was caused by exactly this.',
+              },
+              {
+                icon: '🏗',
+                he: 'ללא מבנה הכלה (Containment)',
+                en: 'No Containment Building',
+                desc_he: 'בכורים מערביים יש כיפת בטון מסיבית מסביב לכור — מסוגלת להחזיק פיצוץ פנימי ולמנוע פליטת קרינה. ב-RBMK הסובייטי אין כזו. כשהפיצוץ קרה, אין שום דבר בין הליבה החשופה לאוויר הפתוח.',
+                desc_en: 'Western reactors have massive concrete dome around reactor — capable of containing internal explosion and preventing radiation release. RBMK has none. When explosion occurred, nothing stood between exposed core and open air.',
+              },
+              {
+                icon: '👥',
+                he: 'תרבות בטיחות לקויה',
+                en: 'Poor Safety Culture',
+                desc_he: 'דיווחים על בעיות (כמו פגם איגנלינה ב-1983) נחבאו ולא הופצו למפעילים. הניסוי בוצע על ידי משמרת לא מודרכת תחת לחץ פוליטי. ECCS נותקה ידנית בניגוד לרישיון. ORM צנח ל-8 (מינימום מותר: 30) — והצוות המשיך כי "הניסוי חייב להסתיים".',
+                desc_en: 'Reports of issues (like 1983 Ignalina flaw) were buried and not distributed to operators. Test was performed by unbriefed shift under political pressure. ECCS manually disabled against license. ORM dropped to 8 (allowed minimum: 30) — and crew continued because "test must finish."',
+              },
             ].map((f, i) => (
-              <div key={i} className="hover-lift" style={{ padding: '12px 14px', background: 'rgba(239,68,68,0.07)', border: '1px solid rgba(239,68,68,0.3)', borderRadius: 10 }}>
-                <div style={{ fontSize: 18, marginBottom: 4 }}>{['🔥', '🛑', '🏗', '👥'][i]}</div>
-                <div style={{ fontSize: 13, fontWeight: 800, color: C.danger, marginBottom: 4 }}>{i + 1}. {t(f.he, f.en)}</div>
-                <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.85)', lineHeight: 1.6 }}>{t(f.desc_he, f.desc_en)}</div>
+              <div key={i} className="hover-lift" style={{
+                padding: '14px 16px',
+                background: 'rgba(239,68,68,0.07)',
+                border: '1px solid rgba(239,68,68,0.3)',
+                borderRadius: 10,
+              }}>
+                <div style={{ fontSize: 22, marginBottom: 6 }}>{f.icon}</div>
+                <div style={{ fontSize: 13, fontWeight: 800, color: C.danger, marginBottom: 6, fontFamily: "'Playfair Display', serif" }}>
+                  {i + 1}. {t(f.he, f.en)}
+                </div>
+                <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.88)', lineHeight: 1.75 }}>
+                  {t(f.desc_he, f.desc_en)}
+                </div>
               </div>
             ))}
           </div>
@@ -200,126 +261,286 @@ export default function RBMK({ he, t }: { he: boolean; t: (h: string, e: string)
   );
 }
 
-// Reactor SVG
-function ReactorSVG({ step }: { step: number }) {
-  const power = step <= 2 ? 0.5 : step === 3 ? 0.05 : step === 4 ? 0.15 : step === 5 ? 0.15 : step === 6 ? 0.3 : step === 7 ? 0.95 : 1;
-  const exploded = step >= 8;
-  const heat = step <= 2 ? '#fbbf24' : step <= 5 ? '#f97316' : step <= 6 ? '#ef4444' : '#dc2626';
+// ============================================================
+// CINEMATIC REACTOR — shows actual operator actions per step
+// ============================================================
+function CinematicReactor({ step, he, t }: { step: number; he: boolean; t: (h: string, e: string) => string }) {
+  const isExplosion = step >= 8;
+  const isPostScram = step >= 7;
+  const azActive = step === 6 || step === 7;
+
+  // Rod positions — fraction inserted into core (1 = full, 0 = withdrawn)
+  const rodInsertion = step <= 1 ? 1.0 : step === 2 ? 0.5 : step === 3 ? 0.3 : step === 4 ? 0.04 : step === 5 ? 0.04 : step === 6 ? 0.5 : isPostScram ? 0 : 0;
+
+  // Core glow intensity
+  const coreGlow = step <= 2 ? 0.7 : step === 3 ? 0.2 : step === 4 ? 0.4 : step === 5 ? 0.5 : step === 6 ? 0.8 : step === 7 ? 1.0 : isExplosion ? 1.2 : 1;
+
+  // Heat color
+  const heatColor = step <= 2 ? '#fbbf24' : step <= 5 ? '#f97316' : step === 6 ? '#ef4444' : '#dc2626';
 
   return (
-    <div style={{ position: 'relative', width: '100%', aspectRatio: '1', maxWidth: 380, margin: '0 auto' }}>
-      <svg viewBox="0 0 280 280" style={{ width: '100%', height: '100%' }}>
+    <div style={{
+      position: 'relative',
+      width: '100%',
+      aspectRatio: '4/3',
+      maxWidth: 720,
+      margin: '0 auto',
+      background: 'radial-gradient(ellipse at center, rgba(20,30,55,0.4) 0%, rgba(0,0,0,0.6) 100%)',
+      borderRadius: 12,
+      overflow: 'hidden',
+      border: `1px solid ${C.gold}33`,
+    }}>
+      <svg viewBox="0 0 600 450" style={{ width: '100%', height: '100%', display: 'block' }}>
         <defs>
-          <radialGradient id="rbmkCoreGrad">
-            <stop offset="0%" stopColor="#fde047" />
-            <stop offset="50%" stopColor={heat} />
-            <stop offset="100%" stopColor="#7f1d1d" />
+          <radialGradient id="rbmkCore" cx="50%" cy="50%">
+            <stop offset="0%" stopColor="#fde047" stopOpacity={coreGlow} />
+            <stop offset="40%" stopColor={heatColor} stopOpacity={coreGlow * 0.9} />
+            <stop offset="100%" stopColor="#7f1d1d" stopOpacity={coreGlow * 0.4} />
           </radialGradient>
-          <linearGradient id="rodGrad" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="#94a3b8" />
-            <stop offset="100%" stopColor="#475569" />
+          <linearGradient id="rod" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor="#cbd5e1" />
+            <stop offset="100%" stopColor="#64748b" />
           </linearGradient>
+          <linearGradient id="graphiteTip" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor="#1f2937" />
+            <stop offset="100%" stopColor="#374151" />
+          </linearGradient>
+          <linearGradient id="vesselGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor="#1e293b" />
+            <stop offset="100%" stopColor="#0f172a" />
+          </linearGradient>
+          <filter id="glow"><feGaussianBlur stdDeviation="3" /></filter>
+          <filter id="bigGlow"><feGaussianBlur stdDeviation="8" /></filter>
         </defs>
 
-        {/* Outer pressure vessel */}
-        <rect x="40" y="40" width="200" height="200" rx="14" fill="rgba(15,23,42,0.6)" stroke={exploded ? C.danger : C.gold} strokeWidth="2" />
-        <text x="140" y="32" fill={C.gL} fontSize="10" fontFamily="JetBrains Mono" textAnchor="middle" fontWeight="700">RBMK-1000</text>
+        {/* Background environment */}
+        <rect width="600" height="450" fill="rgba(10,14,26,0.3)" />
 
-        {/* Core */}
-        <circle cx="140" cy="140" r={70 + power * 12} fill="url(#rbmkCoreGrad)" opacity={power}
-                style={{ animation: step >= 6 ? 'pulseFire 0.5s infinite' : 'pulseFire 2s infinite' }} />
+        {/* Reactor vessel */}
+        <rect x="100" y="80" width="350" height="290" rx="12" fill="url(#vesselGrad)" stroke={isExplosion ? C.danger : C.gold} strokeWidth="2.5" />
+        <text x="275" y="68" fill={C.gL} fontSize="11" fontFamily="JetBrains Mono" textAnchor="middle" fontWeight="700" letterSpacing="2">RBMK-1000</text>
 
-        {/* Control rods */}
-        {[...Array(11)].map((_, i) => {
-          const x = 60 + i * 16;
-          const inserted = step <= 1 ? 1 : step === 2 ? 0.5 : step === 3 ? 0.3 : step === 4 ? 0.04 : step === 5 ? 0.04 : step === 6 ? 0.5 : 0;
+        {/* Core glow */}
+        <circle cx="275" cy="225" r={90 + coreGlow * 14} fill="url(#rbmkCore)"
+                style={{ animation: step >= 7 ? 'pulseFire 0.6s infinite' : 'pulseFire 2.5s infinite' }} />
+
+        {/* Fuel pellets — bright dots representing fuel channels */}
+        {[...Array(12)].map((_, i) => {
+          const angle = (i / 12) * Math.PI * 2;
+          const r = 50;
           return (
-            <g key={i}>
-              <rect x={x - 2} y={50} width="4" height={30 + inserted * 110} fill="url(#rodGrad)" opacity={exploded ? 0.3 : 1} />
-              {/* Graphite tip */}
-              <rect x={x - 2} y={30 + inserted * 110 + 50} width="4" height="10" fill="#525252" opacity={exploded ? 0.3 : 1} />
+            <circle key={`fuel-${i}`}
+              cx={275 + Math.cos(angle) * r}
+              cy={225 + Math.sin(angle) * r}
+              r="3.5" fill="#fde047" opacity={coreGlow}
+              style={{ animation: 'fuelPulse 1.5s infinite', animationDelay: `${i * 0.08}s` }} />
+          );
+        })}
+
+        {/* Control rods — animated up/down */}
+        {[...Array(11)].map((_, i) => {
+          const x = 130 + i * 30;
+          const rodTopY = 90;
+          const fullRodLength = 200;
+          const insertedLength = fullRodLength * rodInsertion;
+          const rodBottomY = rodTopY + insertedLength;
+          return (
+            <g key={`rod-${i}`}>
+              {/* Rod body */}
+              <rect x={x - 3} y={rodTopY} width="6" height={Math.max(insertedLength - 14, 0)}
+                    fill="url(#rod)"
+                    opacity={isExplosion ? 0.3 : 1}
+                    style={{ transition: 'height 1s ease' }} />
+              {/* Graphite tip — visible at bottom of rod when inserted */}
+              {rodInsertion > 0 && rodInsertion < 1 && (
+                <rect x={x - 3} y={Math.max(rodBottomY - 14, rodTopY)} width="6" height="14"
+                      fill="url(#graphiteTip)"
+                      opacity={isExplosion ? 0.3 : 0.9}
+                      style={{ transition: 'y 1s ease' }} />
+              )}
+              {/* Rod cap */}
+              <circle cx={x} cy={rodTopY - 3} r="4" fill="#94a3b8" opacity={isExplosion ? 0.3 : 1} />
             </g>
           );
         })}
 
-        {/* Fuel pellet glow */}
-        {[...Array(8)].map((_, i) => {
-          const angle = (i / 8) * Math.PI * 2;
-          const r = 50;
-          return (
-            <circle key={i}
-              cx={140 + Math.cos(angle) * r}
-              cy={140 + Math.sin(angle) * r}
-              r="3" fill="#fde047" opacity={power} style={{ animation: 'fuelPulse 1.5s infinite', animationDelay: `${i * 0.1}s` }} />
-          );
-        })}
-
-        {/* Steam bubbles */}
-        {step >= 5 && [...Array(6)].map((_, i) => (
-          <circle key={i} cx={120 + i * 10} cy={200} r="3" fill="rgba(255,255,255,0.7)" style={{ animation: `bubbleUp ${1.5 + i * 0.2}s infinite ${i * 0.15}s` }} />
-        ))}
-
-        {/* Explosion effect */}
-        {exploded && (
-          <>
-            <circle cx="140" cy="140" r="100" fill="none" stroke={C.danger} strokeWidth="3" opacity="0.7" style={{ animation: 'ringPulse 1.5s infinite' }} />
-            <circle cx="140" cy="140" r="60" fill={C.amber} opacity="0.4" style={{ animation: 'expFlash 1.5s infinite' }} />
-            {/* Plume */}
-            {[...Array(12)].map((_, i) => {
-              const angle = (i / 12) * Math.PI * 2;
-              return (
-                <circle key={i}
-                  cx={140 + Math.cos(angle) * 30}
-                  cy={140 + Math.sin(angle) * 30}
-                  r={4 + Math.random() * 6}
-                  fill={i % 2 === 0 ? C.danger : C.amber}
-                  opacity="0.7"
-                  style={{ animation: `plumeRise ${2 + Math.random()}s infinite ${i * 0.1}s` }}
-                />
-              );
-            })}
-          </>
+        {/* Step-specific overlays */}
+        {/* Step 1: Power reduction arrows */}
+        {step === 0 && (
+          <g style={{ animation: 'fadeIn 0.6s' }}>
+            <text x="500" y="220" fill={C.amber} fontSize="22" fontFamily="JetBrains Mono" fontWeight="700">↓</text>
+            <text x="500" y="245" fill={C.gL} fontSize="9" fontFamily="JetBrains Mono">REDUCE</text>
+          </g>
         )}
 
-        {/* AZ-5 Button */}
-        <g transform="translate(245, 50)" style={{ animation: step === 6 ? 'pulseAlert 0.8s infinite' : 'none', color: C.danger }}>
-          <circle cx="0" cy="0" r="14" fill={step >= 6 ? C.danger : 'rgba(60,60,60,0.6)'} stroke="#000" strokeWidth="2" />
-          <text x="0" y="3" fill="#fff" fontSize="9" fontFamily="JetBrains Mono" textAnchor="middle" fontWeight="900">AZ-5</text>
+        {/* Step 2: ECCS DISABLED */}
+        {step === 1 && (
+          <g style={{ animation: 'pulseAlert 1.5s infinite', color: C.danger }}>
+            <rect x="465" y="110" width="120" height="60" rx="6" fill="rgba(0,0,0,0.85)" stroke={C.danger} strokeWidth="2" />
+            <text x="525" y="130" fill={C.danger} fontSize="11" fontFamily="JetBrains Mono" textAnchor="middle" fontWeight="900">ECCS</text>
+            <text x="525" y="148" fill="#fff" fontSize="9" fontFamily="JetBrains Mono" textAnchor="middle">DISABLED</text>
+            {/* Big X */}
+            <line x1="475" y1="120" x2="575" y2="160" stroke={C.danger} strokeWidth="4" />
+            <line x1="575" y1="120" x2="475" y2="160" stroke={C.danger} strokeWidth="4" />
+          </g>
+        )}
+
+        {/* Step 3: Shift change */}
+        {step === 2 && (
+          <g style={{ animation: 'fadeIn 0.8s' }}>
+            <rect x="465" y="110" width="120" height="60" rx="6" fill="rgba(0,0,0,0.85)" stroke={C.amber} strokeWidth="1.5" />
+            <text x="525" y="132" fill={C.amber} fontSize="11" fontFamily="JetBrains Mono" textAnchor="middle" fontWeight="800">23:10</text>
+            <text x="525" y="150" fill="#fff" fontSize="8" fontFamily="JetBrains Mono" textAnchor="middle" letterSpacing="1.5">SHIFT CHG</text>
+          </g>
+        )}
+
+        {/* Step 4: Xenon poison cloud */}
+        {step === 3 && (
+          <g style={{ animation: 'fadeIn 0.6s' }}>
+            {[...Array(15)].map((_, i) => (
+              <circle key={`xe-${i}`}
+                cx={200 + Math.random() * 150}
+                cy={180 + Math.random() * 90}
+                r={3 + Math.random() * 4}
+                fill="#a855f7" opacity="0.6"
+                style={{ animation: `bubbleUp ${2 + Math.random() * 2}s infinite ${i * 0.1}s` }} />
+            ))}
+            <text x="500" y="220" fill="#a855f7" fontSize="11" fontFamily="JetBrains Mono" fontWeight="700">Xe-135</text>
+            <text x="500" y="238" fill="#a855f7" fontSize="9" fontFamily="JetBrains Mono">POISON</text>
+          </g>
+        )}
+
+        {/* Step 5: Rods being PULLED OUT — animated arrows up */}
+        {step === 4 && (
+          <g style={{ animation: 'fadeIn 0.6s' }}>
+            {[...Array(11)].map((_, i) => (
+              <text key={`up-${i}`} x={130 + i * 30} y="60" fill={C.danger} fontSize="14" textAnchor="middle" fontWeight="900"
+                    style={{ animation: `float 1.4s infinite ${i * 0.05}s` }}>↑</text>
+            ))}
+            <text x="500" y="220" fill={C.danger} fontSize="11" fontFamily="JetBrains Mono" fontWeight="700">ORM=8</text>
+            <text x="500" y="238" fill={C.danger} fontSize="9" fontFamily="JetBrains Mono">CRITICAL</text>
+          </g>
+        )}
+
+        {/* Step 6: Test starts — turbine valve closing */}
+        {step === 5 && (
+          <g style={{ animation: 'fadeIn 0.6s' }}>
+            {/* Steam bubbles forming */}
+            {[...Array(8)].map((_, i) => (
+              <circle key={`steam-${i}`}
+                cx={210 + i * 16}
+                cy={310}
+                r={3 + Math.random() * 3}
+                fill="rgba(255,255,255,0.7)"
+                style={{ animation: `bubbleUp ${1.6 + i * 0.2}s infinite ${i * 0.12}s` }} />
+            ))}
+            <text x="500" y="220" fill={C.amber} fontSize="11" fontFamily="JetBrains Mono" fontWeight="700">TEST</text>
+            <text x="500" y="238" fill={C.amber} fontSize="9" fontFamily="JetBrains Mono">RUNNING</text>
+          </g>
+        )}
+
+        {/* AZ-5 button — dramatic close-up at step 6 */}
+        <g transform={azActive ? "translate(525, 100) scale(1.6)" : "translate(525, 110) scale(1)"} style={{ transition: 'transform 0.5s', transformOrigin: '525px 110px' }}>
+          {azActive && (
+            <>
+              <circle cx="0" cy="0" r="40" fill="none" stroke={C.danger} strokeWidth="2" opacity="0.8" style={{ animation: 'ringPulse 1s infinite' }} />
+              <circle cx="0" cy="0" r="30" fill="none" stroke={C.danger} strokeWidth="2" opacity="0.6" style={{ animation: 'ringPulse 1.2s infinite 0.3s' }} />
+            </>
+          )}
+          <circle cx="0" cy="0" r="20" fill={azActive ? C.danger : 'rgba(60,60,60,0.7)'} stroke="#000" strokeWidth="3"
+                  style={{ animation: azActive ? 'pulseAlert 0.5s infinite' : 'none' }} />
+          <text x="0" y="4" fill="#fff" fontSize="11" fontFamily="JetBrains Mono" textAnchor="middle" fontWeight="900">AZ-5</text>
+          {/* Hand pressing AZ-5 at step 6 */}
+          {step === 6 && (
+            <text x="0" y="-30" fontSize="22" textAnchor="middle" style={{ animation: 'shake 0.4s infinite' }}>👇</text>
+          )}
         </g>
+
+        {/* Power gauge — visible all steps */}
+        <g transform="translate(60, 250)">
+          <rect x="-20" y="-90" width="40" height="180" rx="6" fill="rgba(0,0,0,0.7)" stroke={C.gold} strokeWidth="1" />
+          <text x="0" y="-100" fill={C.gL} fontSize="8" fontFamily="JetBrains Mono" textAnchor="middle">POWER</text>
+          {/* Bar */}
+          {(() => {
+            const power = step <= 2 ? 1600 : step === 3 ? 30 : step === 4 ? 200 : step === 5 ? 200 : step === 6 ? 530 : step === 7 ? 30000 : 30000;
+            const norm = Math.min(power / 32000, 1);
+            const h = norm * 170;
+            const c = power > 5000 ? C.danger : power > 1500 ? C.amber : C.green;
+            return (
+              <>
+                <rect x="-15" y={85 - h} width="30" height={h} fill={c} style={{ transition: 'all 1s', filter: `drop-shadow(0 0 6px ${c})` }} />
+                <text x="0" y={Math.max(85 - h - 4, -85)} fill={c} fontSize="9" fontFamily="JetBrains Mono" textAnchor="middle" fontWeight="700">{power > 1000 ? `${(power/1000).toFixed(power > 5000 ? 0 : 1)}k` : power}</text>
+              </>
+            );
+          })()}
+        </g>
+
+        {/* Explosion effects */}
+        {isExplosion && (
+          <g>
+            {/* Bright flash */}
+            <circle cx="275" cy="225" r="120" fill="#fff" opacity={step === 8 ? 0.6 : 0.3} style={{ animation: 'pulseFire 0.4s infinite' }} />
+            {/* Shockwave rings */}
+            <circle cx="275" cy="225" r="80" fill="none" stroke={C.amber} strokeWidth="3" opacity="0.7" style={{ animation: 'ringPulse 1.2s infinite' }} />
+            <circle cx="275" cy="225" r="80" fill="none" stroke={C.danger} strokeWidth="3" opacity="0.7" style={{ animation: 'ringPulse 1.5s infinite 0.4s' }} />
+            {/* Schema E plate ejecting at step 8 */}
+            {step === 8 && (
+              <rect x="180" y={225 - (step === 8 ? 200 : 0)} width="190" height="20" rx="4" fill="#475569" stroke={C.gold} strokeWidth="2" style={{ animation: 'plumeRise 1.5s ease-out' }} />
+            )}
+            {/* Plume of debris */}
+            {[...Array(20)].map((_, i) => {
+              const angle = (i / 20) * Math.PI * 2;
+              return (
+                <circle key={`debris-${i}`}
+                  cx={275 + Math.cos(angle) * 30}
+                  cy={225 + Math.sin(angle) * 30}
+                  r={3 + Math.random() * 6}
+                  fill={i % 2 === 0 ? C.danger : C.amber}
+                  opacity="0.8"
+                  style={{ animation: `plumeRise ${1.5 + Math.random()}s infinite ${i * 0.1}s` }} />
+              );
+            })}
+            {/* Fire wisps at top of vessel */}
+            {step === 9 && [...Array(8)].map((_, i) => (
+              <text key={`fire-${i}`} x={150 + i * 35} y="100" fontSize="20" style={{ animation: `flameWave ${0.8 + Math.random()}s infinite alternate ${i * 0.1}s` }}>🔥</text>
+            ))}
+          </g>
+        )}
+
+        {/* Bottom labels */}
+        <text x="275" y="395" fill="rgba(255,255,255,0.5)" fontSize="9" fontFamily="JetBrains Mono" textAnchor="middle" letterSpacing="2">
+          {he ? '← ליבת הכור · 1,661 ערוצי דלק · 211 מוטות בקרה' : 'Reactor Core · 1,661 Fuel Channels · 211 Control Rods'}
+        </text>
       </svg>
     </div>
   );
 }
 
-// Stat card with bar
-function StatCard({ label, value, unit, max, color, dangerOn }: { label: string; value: number; unit: string; max: number; color: string; dangerOn?: boolean }) {
+// Mini stat tile
+function MiniStat({ label, value, unit, max, cur, color, alert }: { label: string; value: string; unit: string; max: number; cur: number; color: string; alert?: boolean }) {
   return (
     <div style={{
-      padding: '10px 14px',
-      borderRadius: 10,
-      background: 'rgba(0,0,0,0.45)',
-      border: `1px solid ${dangerOn ? color : 'rgba(255,255,255,0.1)'}`,
-      animation: dangerOn ? 'pulseAlert 1.8s infinite' : 'none',
+      padding: '8px 10px',
+      borderRadius: 8,
+      background: 'rgba(0,0,0,0.55)',
+      border: `1px solid ${alert ? color : 'rgba(255,255,255,0.1)'}`,
+      animation: alert ? 'pulseAlert 1.6s infinite' : 'none',
       transition: 'all 0.4s',
       color,
     }}>
-      <div style={{ fontSize: 9, fontFamily: "'JetBrains Mono', monospace", letterSpacing: '0.15em', color: 'rgba(255,255,255,0.6)', marginBottom: 4 }}>
+      <div style={{ fontSize: 8, fontFamily: "'JetBrains Mono', monospace", letterSpacing: '0.15em', color: 'rgba(255,255,255,0.6)', marginBottom: 2 }}>
         {label}
       </div>
-      <div style={{ display: 'flex', alignItems: 'baseline', gap: 4, marginBottom: 6 }}>
-        <span style={{ fontSize: 24, fontWeight: 900, color, fontFamily: "'Playfair Display', serif", lineHeight: 1 }}>
-          {value.toLocaleString()}
-        </span>
-        <span style={{ fontSize: 11, color: 'rgba(255,255,255,0.5)', fontFamily: "'JetBrains Mono', monospace" }}>
-          {unit}
-        </span>
+      <div style={{ display: 'flex', alignItems: 'baseline', gap: 3 }}>
+        <span style={{ fontSize: 18, fontWeight: 900, color, fontFamily: "'Playfair Display', serif", lineHeight: 1 }}>{value}</span>
+        <span style={{ fontSize: 9, color: 'rgba(255,255,255,0.5)', fontFamily: "'JetBrains Mono', monospace" }}>{unit}</span>
       </div>
-      <div style={{ height: 4, borderRadius: 2, background: 'rgba(255,255,255,0.08)', overflow: 'hidden' }}>
+      <div style={{ marginTop: 4, height: 3, borderRadius: 1, background: 'rgba(255,255,255,0.08)', overflow: 'hidden' }}>
         <div style={{
-          width: `${Math.min((value / max) * 100, 100)}%`, height: '100%',
+          width: `${Math.min((cur / max) * 100, 100)}%`, height: '100%',
           background: color,
-          transition: 'width 0.6s ease, background 0.4s',
-          boxShadow: dangerOn ? `0 0 12px ${color}` : 'none',
+          transition: 'width 0.6s ease',
+          boxShadow: alert ? `0 0 8px ${color}` : 'none',
         }} />
       </div>
     </div>

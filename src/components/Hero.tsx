@@ -1,21 +1,20 @@
 'use client';
-import Image from 'next/image';
 import { C } from '@/lib/data';
 
 export default function Hero({ he, t }: { he: boolean; t: (h: string, e: string) => string }) {
   return (
-    <section id="hero" style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', textAlign: 'center', position: 'relative', padding: '40px 20px' }}>
+    <section id="hero" style={{ minHeight: '95vh', display: 'flex', alignItems: 'center', justifyContent: 'center', textAlign: 'center', position: 'relative', padding: '90px 16px 40px' }}>
       {/* Floating particles bg */}
       <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', overflow: 'hidden' }}>
-        {[...Array(20)].map((_, i) => (
+        {[...Array(18)].map((_, i) => (
           <div key={i} style={{
             position: 'absolute',
             top: `${Math.random() * 100}%`,
             left: `${Math.random() * 100}%`,
-            width: 4 + Math.random() * 6, height: 4 + Math.random() * 6,
+            width: 3 + Math.random() * 5, height: 3 + Math.random() * 5,
             borderRadius: '50%',
             background: i % 3 === 0 ? C.gold : i % 3 === 1 ? C.danger : C.blue,
-            opacity: 0.25,
+            opacity: 0.22,
             animation: `radFloat ${5 + Math.random() * 8}s ease-in-out infinite`,
             animationDelay: `${Math.random() * 5}s`,
             filter: 'blur(1px)',
@@ -23,82 +22,107 @@ export default function Hero({ he, t }: { he: boolean; t: (h: string, e: string)
         ))}
       </div>
 
-      <div style={{ position: 'relative', zIndex: 1, maxWidth: 900 }}>
-        {/* Logo */}
-        <div className="logo-orb fade-in" style={{ width: 130, height: 130, margin: '0 auto 24px', position: 'relative', animation: 'fadeIn 0.8s, float 4s ease-in-out infinite 0.8s' }}>
-          <Image src="/images/logo-60sec.png" alt="60 שניות חומ״ס" width={130} height={130} priority style={{ borderRadius: '50%', boxShadow: '0 0 40px rgba(200,164,78,0.4)' }} />
-        </div>
+      {/* Atom rings decoration */}
+      <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: 400, height: 400, opacity: 0.08, pointerEvents: 'none' }}>
+        <svg viewBox="0 0 400 400" style={{ width: '100%', height: '100%' }}>
+          <ellipse cx="200" cy="200" rx="160" ry="60" fill="none" stroke={C.gold} strokeWidth="1.5" style={{ animation: 'spin 30s linear infinite', transformOrigin: '200px 200px' }} />
+          <ellipse cx="200" cy="200" rx="160" ry="60" fill="none" stroke={C.gold} strokeWidth="1.5" transform="rotate(60 200 200)" style={{ animation: 'spin 25s linear infinite reverse', transformOrigin: '200px 200px' }} />
+          <ellipse cx="200" cy="200" rx="160" ry="60" fill="none" stroke={C.gold} strokeWidth="1.5" transform="rotate(120 200 200)" style={{ animation: 'spin 35s linear infinite', transformOrigin: '200px 200px' }} />
+        </svg>
+      </div>
 
-        <div className="section-kicker fade-in" style={{ animationDelay: '0.2s' }}>
-          [ {t('תיק מודיעין מקצועי', 'PROFESSIONAL DOSSIER')} · 26.04.1986 ]
+      <div style={{ position: 'relative', zIndex: 1, maxWidth: 880, width: '100%' }}>
+        {/* Date stamp - smaller, fits */}
+        <div className="fade-in" style={{
+          display: 'inline-block',
+          padding: '5px 14px',
+          border: `1px solid ${C.gold}55`,
+          background: `${C.gold}08`,
+          borderRadius: 3,
+          fontSize: 10,
+          fontWeight: 700,
+          letterSpacing: '0.2em',
+          color: C.gold,
+          fontFamily: "'JetBrains Mono', monospace",
+          marginBottom: 18,
+          animationDelay: '0.1s',
+        }}>
+          26 · 04 · 1986
         </div>
 
         <h1 className="fade-in" style={{
-          fontSize: 'clamp(36px, 8vw, 80px)',
+          fontSize: 'clamp(40px, 11vw, 86px)',
           fontWeight: 900,
           fontFamily: "'Playfair Display', serif",
           lineHeight: 1.05,
-          marginBottom: 18,
+          marginBottom: 14,
           background: `linear-gradient(135deg, ${C.gold} 0%, ${C.gL} 50%, ${C.gold} 100%)`,
           WebkitBackgroundClip: 'text',
           backgroundClip: 'text',
           WebkitTextFillColor: 'transparent',
           letterSpacing: '-0.02em',
-          animationDelay: '0.4s',
+          animationDelay: '0.3s',
+          padding: '0 6px',
         }}>
-          {t('אסון צ׳רנוביל', 'Chernobyl Disaster')}
+          {t('אסון צ׳רנוביל', 'Chernobyl')}
         </h1>
 
         <h2 className="fade-in" style={{
-          fontSize: 'clamp(15px, 3vw, 22px)',
+          fontSize: 'clamp(13px, 2.6vw, 18px)',
           fontWeight: 400,
           color: C.gL,
           fontFamily: "'Playfair Display', serif",
           fontStyle: 'italic',
-          marginBottom: 12,
-          animationDelay: '0.6s',
+          marginBottom: 14,
+          animationDelay: '0.5s',
+          padding: '0 12px',
+          lineHeight: 1.4,
         }}>
-          {t('אנטומיה של כשל גרעיני · כור RBMK והקטסטרופה הגלובלית', 'Anatomy of a Nuclear Failure · RBMK Reactor & The Global Catastrophe')}
+          {t('אנטומיה של כשל גרעיני · כור RBMK והקטסטרופה', 'Anatomy of a Nuclear Failure · The RBMK Catastrophe')}
         </h2>
 
-        <div className="gr fade-in" style={{ margin: '20px auto', animationDelay: '0.7s' }} />
+        <div className="gr fade-in" style={{ margin: '18px auto', animationDelay: '0.6s' }} />
 
         <p className="fade-in" style={{
-          fontSize: 'clamp(13px, 2.4vw, 16px)',
+          fontSize: 'clamp(12px, 2.3vw, 15px)',
           color: 'rgba(255,255,255,0.85)',
           lineHeight: 1.85,
-          maxWidth: 720,
-          margin: '0 auto 32px',
-          animationDelay: '0.8s',
+          maxWidth: 660,
+          margin: '0 auto 26px',
+          padding: '0 8px',
+          animationDelay: '0.7s',
         }}>
           {t(
-            '40 שנה לאחר האסון הגרעיני הגדול ביותר בהיסטוריה, מאמר זה משלב הסבר מקצועי ויזואלי עם נגישות מלאה. מציר הזמן הראשוני, דרך הפיזיקה של הכור והכשלים הקטלניים שלו, אל פעולות הכיבוי הגדולות בהיסטוריה ועד ההשפעות לטווח ארוך.',
-            '40 years after history\'s greatest nuclear disaster, this dossier combines professional visual explanation with full accessibility. From the initial timeline, through reactor physics and fatal flaws, to history\'s largest containment operation and long-term impacts.'
+            '40 שנה לאסון הגרעיני הגדול בהיסטוריה. תיק מודיעין מקצועי המשלב הסבר ויזואלי, פיזיקה של הכור, הכשלים הקטלניים, פעולות הכיבוי והשפעות לטווח ארוך.',
+            '40 years since history\'s greatest nuclear disaster. Professional dossier with visual explanation, reactor physics, fatal flaws, response operations, and long-term impacts.'
           )}
         </p>
 
         {/* Quick stats grid */}
-        <div className="fade-in" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: 12, maxWidth: 760, margin: '0 auto', animationDelay: '1s' }}>
+        <div className="fade-in" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))', gap: 8, maxWidth: 720, margin: '0 auto', animationDelay: '0.9s' }}>
           {[
-            { n: '01:23:47', l: t('שעת הפיצוץ', 'Time of explosion'), c: C.danger },
+            { n: '01:23:47', l: t('הפיצוץ', 'Explosion'), c: C.danger },
             { n: '5,300', l: 'PBq Cs-137', c: C.amber },
             { n: '~600K', l: t('ליקווידטורים', 'Liquidators'), c: C.gold },
-            { n: '350K', l: t('פונו מבתיהם', 'Evacuated'), c: C.purple },
-            { n: '2,600', l: t('קמ״ר אזור הדרה', 'km² exclusion zone'), c: C.blue },
-            { n: '40', l: t('שנים מאז', 'Years since'), c: C.green },
+            { n: '350K', l: t('פונו', 'Evacuated'), c: C.purple },
+            { n: '2,600', l: t('קמ״ר', 'km²'), c: C.blue },
+            { n: '40', l: t('שנים', 'Years'), c: C.green },
           ].map((s, i) => (
             <div key={i} className="stat-box hover-lift" style={{ '--accent': s.c } as any}>
-              <div className="stat-num" style={{ color: s.c, textShadow: `0 0 20px ${s.c}55` }}>{s.n}</div>
+              <div className="stat-num" style={{ color: s.c, textShadow: `0 0 18px ${s.c}55`, fontSize: 'clamp(16px, 3.2vw, 26px)' }}>{s.n}</div>
               <div className="stat-lbl">{s.l}</div>
             </div>
           ))}
         </div>
 
-        <div className="fade-in" style={{ marginTop: 36, animationDelay: '1.2s' }}>
+        {/* Scroll cue */}
+        <div className="fade-in" style={{ marginTop: 30, animationDelay: '1.1s' }}>
           <a href="#timeline" style={{ textDecoration: 'none' }}>
-            <div style={{ display: 'inline-flex', flexDirection: 'column', alignItems: 'center', gap: 6, cursor: 'pointer', color: C.gold, opacity: 0.7, transition: 'opacity 0.3s' }} onMouseEnter={(e) => e.currentTarget.style.opacity = '1'} onMouseLeave={(e) => e.currentTarget.style.opacity = '0.7'}>
-              <div style={{ fontSize: 11, fontFamily: "'JetBrains Mono', monospace", letterSpacing: '0.2em' }}>{t('להמשיך למטה', 'SCROLL DOWN')}</div>
-              <div style={{ fontSize: 24, animation: 'float 2s ease-in-out infinite' }}>↓</div>
+            <div style={{ display: 'inline-flex', flexDirection: 'column', alignItems: 'center', gap: 4, color: C.gold, opacity: 0.7 }}>
+              <div style={{ fontSize: 10, fontFamily: "'JetBrains Mono', monospace", letterSpacing: '0.2em' }}>
+                {t('המשך למטה', 'SCROLL')}
+              </div>
+              <div style={{ fontSize: 22, animation: 'float 2s ease-in-out infinite' }}>↓</div>
             </div>
           </a>
         </div>
