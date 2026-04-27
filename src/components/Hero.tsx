@@ -1,9 +1,61 @@
 'use client';
+import { useState, useEffect, useRef } from 'react';
 import { C } from '@/lib/data';
 
 export default function Hero({ he, t }: { he: boolean; t: (h: string, e: string) => string }) {
+  const [playing, setPlaying] = useState(false);
+  const utterRef = useRef<SpeechSynthesisUtterance | null>(null);
+
+  // Stop on language change or unmount
+  useEffect(() => {
+    return () => {
+      if (typeof window !== 'undefined' && window.speechSynthesis) {
+        window.speechSynthesis.cancel();
+      }
+    };
+  }, []);
+
+  useEffect(() => {
+    if (typeof window !== 'undefined' && window.speechSynthesis) {
+      window.speechSynthesis.cancel();
+      setPlaying(false);
+    }
+  }, [he]);
+
+  const speak = () => {
+    if (typeof window === 'undefined' || !window.speechSynthesis) return;
+    if (playing) {
+      window.speechSynthesis.cancel();
+      setPlaying(false);
+      return;
+    }
+
+    const text_he = 'כל שקר שאנחנו אומרים. הוא חוב. חוב אשר במוקדם או במאוחר. נדרש לשלם אותו.';
+    const text_en = 'Every lie we tell. Incurs a debt. Sooner or later. That debt is paid.';
+    const text = he ? text_he : text_en;
+
+    // Find best Hebrew/English voice
+    const voices = window.speechSynthesis.getVoices();
+    const voice = he
+      ? voices.find((v) => v.lang.startsWith('he')) || voices.find((v) => v.lang.startsWith('iw'))
+      : voices.find((v) => v.lang.startsWith('en') && v.name.toLowerCase().includes('male'))
+        || voices.find((v) => v.lang.startsWith('en'));
+
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = he ? 'he-IL' : 'en-US';
+    if (voice) u.voice = voice;
+    u.rate = 0.72;
+    u.pitch = 0.78;
+    u.volume = 1;
+    u.onend = () => setPlaying(false);
+    u.onerror = () => setPlaying(false);
+    utterRef.current = u;
+    setPlaying(true);
+    window.speechSynthesis.speak(u);
+  };
+
   return (
-    <section id="hero" style={{ minHeight: '95vh', display: 'flex', alignItems: 'center', justifyContent: 'center', textAlign: 'center', position: 'relative', padding: '90px 16px 40px' }}>
+    <section id="hero" style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', textAlign: 'center', position: 'relative', padding: '90px 16px 40px' }}>
       {/* Floating particles bg */}
       <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', overflow: 'hidden' }}>
         {[...Array(18)].map((_, i) => (
@@ -32,7 +84,76 @@ export default function Hero({ he, t }: { he: boolean; t: (h: string, e: string)
       </div>
 
       <div style={{ position: 'relative', zIndex: 1, maxWidth: 880, width: '100%' }}>
-        {/* Date stamp - smaller, fits */}
+        {/* LEGASOV QUOTE — opening */}
+        <div className="fade-in" style={{
+          margin: '0 auto 32px',
+          maxWidth: 640,
+          padding: '22px 22px 18px',
+          background: 'linear-gradient(135deg, rgba(0,0,0,0.7), rgba(22,32,64,0.4))',
+          border: `1px solid ${C.gold}55`,
+          borderRadius: 14,
+          position: 'relative',
+          backdropFilter: 'blur(10px)',
+          animationDelay: '0.1s',
+          boxShadow: `0 0 36px rgba(200,164,78,0.12)`,
+        }}>
+          {/* Quote mark */}
+          <div style={{
+            position: 'absolute',
+            top: -12, [he ? 'right' : 'left']: 18,
+            fontSize: 50, color: C.gold, opacity: 0.6,
+            fontFamily: "'Playfair Display', serif",
+            lineHeight: 1, fontWeight: 900,
+            background: '#0a0e1a',
+            padding: '0 8px',
+          }}>״</div>
+
+          <p style={{
+            fontSize: 'clamp(13px, 2.6vw, 17px)',
+            color: '#fff',
+            fontStyle: 'italic',
+            fontFamily: "'Playfair Display', serif",
+            lineHeight: 1.7,
+            marginBottom: 14,
+            fontWeight: 400,
+          }}>
+            {t(
+              'כל שקר שאנחנו אומרים הוא חוב, חוב אשר במוקדם או במאוחר, נדרש לשלם אותו.',
+              'Every lie we tell incurs a debt. Sooner or later, that debt is paid.'
+            )}
+          </p>
+
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 10 }}>
+            <div style={{ fontSize: 11, color: C.gL, lineHeight: 1.5, textAlign: he ? 'right' : 'left' }}>
+              <div style={{ fontWeight: 700, color: C.gold, fontFamily: "'Playfair Display', serif", fontStyle: 'normal' }}>
+                {t('— ולרי לגאסוב', '— Valery Legasov')}
+              </div>
+              <div style={{ fontSize: 9, color: 'rgba(255,255,255,0.55)', fontFamily: "'JetBrains Mono', monospace", letterSpacing: '0.08em', marginTop: 2 }}>
+                {t('סגן מנהל מכון קורצ׳אטוב · אחראי חקירת האסון', 'Deputy Director, Kurchatov Institute · Lead Investigator')}
+              </div>
+            </div>
+
+            <button onClick={speak} aria-label={t('הפעל קריינות', 'Play narration')} style={{
+              display: 'inline-flex', alignItems: 'center', gap: 6,
+              padding: '8px 14px',
+              background: playing ? `${C.danger}25` : `${C.gold}20`,
+              border: `1px solid ${playing ? C.danger : C.gold}99`,
+              borderRadius: 22,
+              color: playing ? C.danger : C.gold,
+              fontSize: 11, fontWeight: 700,
+              fontFamily: "'JetBrains Mono', monospace",
+              letterSpacing: '0.08em',
+              cursor: 'pointer',
+              transition: 'all 0.25s',
+              whiteSpace: 'nowrap',
+            }}>
+              <span style={{ fontSize: 14 }}>{playing ? '⏸' : '▶'}</span>
+              {playing ? t('עצור', 'STOP') : t('האזן', 'LISTEN')}
+            </button>
+          </div>
+        </div>
+
+        {/* Date stamp */}
         <div className="fade-in" style={{
           display: 'inline-block',
           padding: '5px 14px',
@@ -45,7 +166,7 @@ export default function Hero({ he, t }: { he: boolean; t: (h: string, e: string)
           color: C.gold,
           fontFamily: "'JetBrains Mono', monospace",
           marginBottom: 18,
-          animationDelay: '0.1s',
+          animationDelay: '0.3s',
         }}>
           26 · 04 · 1986
         </div>
@@ -61,7 +182,7 @@ export default function Hero({ he, t }: { he: boolean; t: (h: string, e: string)
           backgroundClip: 'text',
           WebkitTextFillColor: 'transparent',
           letterSpacing: '-0.02em',
-          animationDelay: '0.3s',
+          animationDelay: '0.5s',
           padding: '0 6px',
         }}>
           {t('אסון צ׳רנוביל', 'Chernobyl')}
@@ -74,14 +195,14 @@ export default function Hero({ he, t }: { he: boolean; t: (h: string, e: string)
           fontFamily: "'Playfair Display', serif",
           fontStyle: 'italic',
           marginBottom: 14,
-          animationDelay: '0.5s',
+          animationDelay: '0.7s',
           padding: '0 12px',
           lineHeight: 1.4,
         }}>
           {t('אנטומיה של כשל גרעיני · כור RBMK והקטסטרופה', 'Anatomy of a Nuclear Failure · The RBMK Catastrophe')}
         </h2>
 
-        <div className="gr fade-in" style={{ margin: '18px auto', animationDelay: '0.6s' }} />
+        <div className="gr fade-in" style={{ margin: '18px auto', animationDelay: '0.8s' }} />
 
         <p className="fade-in" style={{
           fontSize: 'clamp(12px, 2.3vw, 15px)',
@@ -90,7 +211,7 @@ export default function Hero({ he, t }: { he: boolean; t: (h: string, e: string)
           maxWidth: 660,
           margin: '0 auto 26px',
           padding: '0 8px',
-          animationDelay: '0.7s',
+          animationDelay: '0.9s',
         }}>
           {t(
             '40 שנה לאסון הגרעיני הגדול בהיסטוריה. תיק מודיעין מקצועי המשלב הסבר ויזואלי, פיזיקה של הכור, הכשלים הקטלניים, פעולות הכיבוי והשפעות לטווח ארוך.',
@@ -99,7 +220,7 @@ export default function Hero({ he, t }: { he: boolean; t: (h: string, e: string)
         </p>
 
         {/* Quick stats grid */}
-        <div className="fade-in" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))', gap: 8, maxWidth: 720, margin: '0 auto', animationDelay: '0.9s' }}>
+        <div className="fade-in" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))', gap: 8, maxWidth: 720, margin: '0 auto', animationDelay: '1.1s' }}>
           {[
             { n: '01:23:47', l: t('הפיצוץ', 'Explosion'), c: C.danger },
             { n: '5,300', l: 'PBq Cs-137', c: C.amber },
@@ -115,8 +236,7 @@ export default function Hero({ he, t }: { he: boolean; t: (h: string, e: string)
           ))}
         </div>
 
-        {/* Scroll cue */}
-        <div className="fade-in" style={{ marginTop: 30, animationDelay: '1.1s' }}>
+        <div className="fade-in" style={{ marginTop: 30, animationDelay: '1.3s' }}>
           <a href="#timeline" style={{ textDecoration: 'none' }}>
             <div style={{ display: 'inline-flex', flexDirection: 'column', alignItems: 'center', gap: 4, color: C.gold, opacity: 0.7 }}>
               <div style={{ fontSize: 10, fontFamily: "'JetBrains Mono', monospace", letterSpacing: '0.2em' }}>
