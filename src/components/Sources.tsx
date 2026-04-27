@@ -10,7 +10,7 @@ export default function Sources({ he, t }: { he: boolean; t: (h: string, e: stri
     <section id="sources" style={{ padding: '60px 16px 30px', position: 'relative' }}>
       <div style={{ maxWidth: 1100, margin: '0 auto' }}>
         <div style={{ textAlign: 'center', marginBottom: 28, position: 'relative' }}>
-          <div className="section-number" style={{ top: '-20px', insetInlineStart: '5%' }}>08</div>
+          <div className="section-number" style={{ top: '-20px', insetInlineStart: '5%' }}>09</div>
           <div className="section-kicker">[ {t('סעיף שמיני · מקורות', 'PART EIGHT · SOURCES')} ]</div>
           <h2 className="section-title">{t('מקורות וקישורים', 'Sources & Links')}</h2>
           <p className="section-subtitle">{t(`${SOURCES.length} מקורות מאומתים — IAEA, UNSCEAR, WHO, ספרות מקצועית`, `${SOURCES.length} verified sources — IAEA, UNSCEAR, WHO, professional literature`)}</p>

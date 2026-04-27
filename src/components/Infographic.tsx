@@ -10,7 +10,7 @@ export default function Infographic({ he, t }: { he: boolean; t: (h: string, e: 
     <section id="infographic" style={{ padding: '60px 16px 40px', position: 'relative' }}>
       <div style={{ maxWidth: 1100, margin: '0 auto' }}>
         <div style={{ textAlign: 'center', marginBottom: 28, position: 'relative' }}>
-          <div className="section-number" style={{ top: '-20px', insetInlineStart: '5%' }}>10</div>
+          <div className="section-number" style={{ top: '-20px', insetInlineStart: '5%' }}>11</div>
           <div className="section-kicker">[ {t('סעיף עשירי · אינפוגרפיקה', 'PART TEN · INFOGRAPHIC')} ]</div>
           <h2 className="section-title">{t('האינפוגרפיקה', 'The Infographic')}</h2>
           <p className="section-subtitle">{t('סיכום ויזואלי של האסון בעמוד אחד', 'Visual summary of disaster in one page')}</p>

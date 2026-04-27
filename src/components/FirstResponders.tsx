@@ -93,7 +93,7 @@ export default function FirstResponders({ he, t }: { he: boolean; t: (h: string,
     <section id="responders" style={{ padding: '60px 16px 30px', position: 'relative' }}>
       <div style={{ maxWidth: 1100, margin: '0 auto' }}>
         <div style={{ textAlign: 'center', marginBottom: 28, position: 'relative' }}>
-          <div className="section-number" style={{ top: '-20px', insetInlineStart: '5%', color: 'rgba(220,38,38,0.18)' }}>4️</div>
+          <div className="section-number" style={{ top: '-20px', insetInlineStart: '5%', color: 'rgba(220,38,38,0.18)' }}>04</div>
           <div className="section-kicker" style={{ borderColor: `${C.danger}77`, color: C.danger, background: `${C.danger}10` }}>
             [ {t('הסיפור האנושי', 'THE HUMAN STORY')} ]
           </div>

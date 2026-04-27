@@ -21,7 +21,7 @@ export default function Glossary({ he, t }: { he: boolean; t: (h: string, e: str
     <section id="glossary" style={{ padding: '60px 16px 30px', position: 'relative' }}>
       <div style={{ maxWidth: 1100, margin: '0 auto' }}>
         <div style={{ textAlign: 'center', marginBottom: 28, position: 'relative' }}>
-          <div className="section-number" style={{ top: '-20px', insetInlineEnd: '5%' }}>07</div>
+          <div className="section-number" style={{ top: '-20px', insetInlineEnd: '5%' }}>08</div>
           <div className="section-kicker">[ {t('סעיף שביעי · מונחים', 'PART SEVEN · GLOSSARY')} ]</div>
           <h2 className="section-title">{t('מונחים מקצועיים', 'Professional Glossary')}</h2>
           <p className="section-subtitle">{t(`${TERMS.length} מונחים ב-6 קטגוריות`, `${TERMS.length} terms in 6 categories`)}</p>
