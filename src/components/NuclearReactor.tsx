@@ -116,35 +116,84 @@ export default function NuclearReactor({ he, t }: { he: boolean; t: (h: string, 
               <ellipse cx="270" cy="360" rx={step === 0 || step === 1 ? 75 : 60} ry={step === 0 || step === 1 ? 90 : 80}
                        fill="url(#coreGrad)" style={{ animation: 'pulseFire 2s infinite' }} />
 
-              {/* Step 0: Single atom + neutron */}
+              {/* Step 0: Single atom + neutron + fission products */}
               {step === 0 && (
                 <g style={{ animation: 'fadeIn 0.6s' }}>
-                  <circle cx="270" cy="360" r="14" fill="#fff" filter="url(#glow)" />
-                  <circle cx="270" cy="360" r="22" fill="none" stroke="rgba(255,255,255,0.4)" strokeWidth="1" strokeDasharray="3 2"
+                  {/* U-235 nucleus — wobble before fission */}
+                  <circle cx="270" cy="360" r="16" fill="#fff" filter="url(#glow)"
+                          style={{ animation: 'nucleusWobble 2s infinite' }} />
+                  <circle cx="270" cy="360" r="22" fill="none" stroke="rgba(255,255,255,0.5)" strokeWidth="1" strokeDasharray="3 2"
                           style={{ animation: 'spin 4s linear infinite', transformOrigin: '270px 360px' }} />
-                  {/* Incoming neutron */}
-                  <circle cx="190" cy="360" r="4" fill="#a855f7" filter="url(#glow)"
+                  <circle cx="270" cy="360" r="30" fill="none" stroke="rgba(168,85,247,0.4)" strokeWidth="0.5"
+                          style={{ animation: 'spin 6s linear infinite reverse', transformOrigin: '270px 360px' }} />
+
+                  {/* Incoming neutron — slow, deliberate */}
+                  <circle cx="190" cy="360" r="5" fill="#a855f7" filter="url(#glow)"
                           style={{ animation: 'incomingNeutron 2s linear infinite' }} />
-                  <text x="270" y="240" textAnchor="middle" fill="#fff" fontSize="18" fontFamily="JetBrains Mono" fontWeight="800">U-235</text>
+                  {/* Trail behind neutron */}
+                  <circle cx="190" cy="360" r="2" fill="#a855f7" opacity="0.4"
+                          style={{ animation: 'incomingNeutron 2s linear infinite 0.1s' }} />
+
+                  {/* Fission products — ejected at moment of split */}
+                  {[...Array(3)].map((_, i) => (
+                    <circle key={`emit-${i}`}
+                            cx="270" cy="360" r="3" fill="#fbbf24" filter="url(#glow)"
+                            style={{ animation: `fissionEmit-${i} 2s infinite 1.5s` }} />
+                  ))}
+
+                  <text x="270" y="240" textAnchor="middle" fill="#fff" fontSize="20" fontFamily="JetBrains Mono" fontWeight="800">
+                    U-235
+                  </text>
+                  <text x="270" y="262" textAnchor="middle" fill="#a855f7" fontSize="13" fontFamily="JetBrains Mono">
+                    {he ? '+ ניוטרון' : '+ neutron'}
+                  </text>
                 </g>
               )}
 
-              {/* Step 1: Chain reaction */}
+              {/* Step 1: Chain reaction — exponential growth */}
               {step === 1 && (
                 <g style={{ animation: 'fadeIn 0.6s' }}>
-                  {[...Array(12)].map((_, i) => {
-                    const angle = (i / 12) * Math.PI * 2;
-                    const dx = Math.cos(angle) * 70;
-                    const dy = Math.sin(angle) * 70;
+                  {/* First wave — close */}
+                  {[...Array(6)].map((_, i) => {
+                    const angle = (i / 6) * Math.PI * 2;
+                    const dx = Math.cos(angle) * 50;
+                    const dy = Math.sin(angle) * 50;
                     return (
-                      <g key={i}>
-                        <line x1="270" y1="360" x2={270 + dx} y2={360 + dy} stroke="#a855f7" strokeWidth="1" opacity="0.5"
-                              style={{ animation: `chainPulse 1.5s infinite ${i * 0.1}s` }} />
-                        <circle cx={270 + dx} cy={360 + dy} r="3" fill="#a855f7" filter="url(#glow)"
-                                style={{ animation: `chainPulse 1.5s infinite ${i * 0.1}s` }} />
+                      <g key={`w1-${i}`}>
+                        <line x1="270" y1="360" x2={270 + dx} y2={360 + dy} stroke="#fff" strokeWidth="1.5" opacity="0.7"
+                              style={{ animation: `chainPulse 1.2s infinite ${i * 0.05}s` }} />
+                        <circle cx={270 + dx} cy={360 + dy} r="4" fill="#a855f7" filter="url(#glow)"
+                                style={{ animation: `chainPulse 1.2s infinite ${i * 0.05}s` }} />
                       </g>
                     );
                   })}
+                  {/* Second wave — farther */}
+                  {[...Array(12)].map((_, i) => {
+                    const angle = (i / 12) * Math.PI * 2;
+                    const dx = Math.cos(angle) * 100;
+                    const dy = Math.sin(angle) * 100;
+                    return (
+                      <g key={`w2-${i}`}>
+                        <line x1="270" y1="360" x2={270 + dx} y2={360 + dy} stroke="#a855f7" strokeWidth="1" opacity="0.4"
+                              style={{ animation: `chainPulse 1.5s infinite ${0.4 + i * 0.05}s` }} />
+                        <circle cx={270 + dx} cy={360 + dy} r="2.5" fill="#a855f7" filter="url(#glow)"
+                                style={{ animation: `chainPulse 1.5s infinite ${0.4 + i * 0.05}s` }} />
+                      </g>
+                    );
+                  })}
+                  {/* Outer wave */}
+                  {[...Array(20)].map((_, i) => {
+                    const angle = (i / 20) * Math.PI * 2;
+                    const dx = Math.cos(angle) * 145;
+                    const dy = Math.sin(angle) * 145;
+                    return (
+                      <circle key={`w3-${i}`} cx={270 + dx} cy={360 + dy} r="2" fill="#fbbf24" filter="url(#glow)" opacity="0.7"
+                              style={{ animation: `chainPulse 1.8s infinite ${0.8 + i * 0.04}s` }} />
+                    );
+                  })}
+                  {/* Pulsing center */}
+                  <circle cx="270" cy="360" r="12" fill="#fff" filter="url(#glow)"
+                          style={{ animation: 'pulseFire 0.6s infinite' }} />
                 </g>
               )}
 
@@ -348,8 +397,30 @@ export default function NuclearReactor({ he, t }: { he: boolean; t: (h: string, 
           100% { transform: translateX(0); opacity: 0; }
         }
         @keyframes chainPulse {
-          0%, 100% { opacity: 0.3; transform: scale(0.5); transform-origin: 270px 360px; }
-          50% { opacity: 1; transform: scale(1); transform-origin: 270px 360px; }
+          0%, 100% { opacity: 0.2; transform: scale(0.4); transform-origin: 270px 360px; }
+          40% { opacity: 1; transform: scale(1.2); transform-origin: 270px 360px; }
+          100% { opacity: 0.2; transform: scale(0.4); transform-origin: 270px 360px; }
+        }
+        @keyframes nucleusWobble {
+          0%, 100% { transform: translate(0, 0) scale(1); }
+          25% { transform: translate(-2px, 1px) scale(1.05); }
+          50% { transform: translate(2px, -1px) scale(0.95); }
+          75% { transform: translate(-1px, 2px) scale(1.05); }
+        }
+        @keyframes fissionEmit-0 {
+          0%, 70% { transform: translate(0, 0); opacity: 0; }
+          75% { opacity: 1; }
+          100% { transform: translate(60px, -40px); opacity: 0; }
+        }
+        @keyframes fissionEmit-1 {
+          0%, 70% { transform: translate(0, 0); opacity: 0; }
+          75% { opacity: 1; }
+          100% { transform: translate(-50px, 50px); opacity: 0; }
+        }
+        @keyframes fissionEmit-2 {
+          0%, 70% { transform: translate(0, 0); opacity: 0; }
+          75% { opacity: 1; }
+          100% { transform: translate(70px, 30px); opacity: 0; }
         }
         @keyframes steamFlow {
           0% { transform: translateX(-30px); opacity: 0; }

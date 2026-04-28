@@ -212,6 +212,49 @@ section#presentation { background: linear-gradient(180deg, transparent, rgba(200
   from { opacity: 0; max-height: 0; transform: translateY(-8px) scaleY(0.95); }
   to { opacity: 1; max-height: 800px; transform: translateY(0) scaleY(1); }
 }
+@keyframes shockwave {
+  0% { r: 50; opacity: 1; stroke-width: 5; }
+  100% { r: 700; opacity: 0; stroke-width: 0.5; }
+}
+@keyframes debrisFly {
+  0% { opacity: 1; }
+  80% { opacity: 1; }
+  100% { opacity: 0; }
+}
+@keyframes fireballRise {
+  0% { transform: translateY(0) scale(0.5); opacity: 0; }
+  30% { opacity: 0.8; }
+  100% { transform: translateY(-200px) scale(2); opacity: 0; }
+}
+@keyframes screenShake {
+  0%, 100% { transform: translate(0, 0); }
+  10% { transform: translate(-6px, -3px); }
+  20% { transform: translate(8px, 4px); }
+  30% { transform: translate(-7px, 2px); }
+  40% { transform: translate(5px, -3px); }
+  50% { transform: translate(-4px, 4px); }
+  60% { transform: translate(6px, -2px); }
+  70% { transform: translate(-3px, 3px); }
+  80% { transform: translate(4px, -4px); }
+  90% { transform: translate(-2px, 1px); }
+}
+@keyframes reactorVibrate {
+  0%, 100% { transform: translate(0, 0); }
+  25% { transform: translate(-1px, 1px); }
+  50% { transform: translate(1px, -1px); }
+  75% { transform: translate(-1px, -1px); }
+}
+@keyframes alarmBlink {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 1; }
+}
+@keyframes glitchText {
+  0%, 100% { transform: translate(0); filter: none; }
+  20% { transform: translate(-2px, 1px); filter: hue-rotate(90deg); }
+  40% { transform: translate(2px, -1px); }
+  60% { transform: translate(-1px, 2px); filter: hue-rotate(180deg); }
+  80% { transform: translate(1px, -2px); }
+}
 @keyframes fadeInUp {
   from { opacity: 0; transform: translateY(28px); }
   to { opacity: 1; transform: translateY(0); }

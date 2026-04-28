@@ -192,15 +192,82 @@ export default function Reactor3D({
           </linearGradient>
         </defs>
 
-        {/* ================ EXPLOSION FLASH (full overlay during explosion) ================ */}
-        {(state === 'explosion-1' || state === 'explosion-2') && (
-          <ellipse
-            cx="550" cy="350"
-            rx={state === 'explosion-2' ? 800 : 500}
-            ry={state === 'explosion-2' ? 800 : 500}
-            fill="url(#explosionFlash)"
-            style={{ animation: 'expanFlash 0.8s ease-out' }}
-          />
+        {/* ================ EXPLOSION VFX ================ */}
+        {/* First explosion (steam) - amber/orange, less powerful */}
+        {state === 'explosion-1' && (
+          <>
+            {/* Initial flash */}
+            <ellipse cx="550" cy="380" rx="450" ry="450" fill="url(#explosionFlash)"
+                     style={{ animation: 'expanFlash 0.8s ease-out' }} />
+            {/* Shockwave ring 1 */}
+            <circle cx="550" cy="380" r="100" fill="none" stroke="#fbbf24" strokeWidth="3"
+                    opacity="0.8" style={{ animation: 'shockwave 1.2s ease-out forwards' }} />
+            {/* Shockwave ring 2 (delayed) */}
+            <circle cx="550" cy="380" r="100" fill="none" stroke="#dc2626" strokeWidth="2"
+                    opacity="0.6" style={{ animation: 'shockwave 1.5s ease-out 0.3s forwards' }} />
+            {/* Debris flying outward */}
+            {Array.from({ length: 30 }).map((_, i) => {
+              const angle = (i / 30) * Math.PI * 2;
+              const speed = 0.5 + Math.random() * 0.8;
+              return (
+                <rect
+                  key={`debris1-${i}`}
+                  x={550 + Math.cos(angle) * 80 * speed}
+                  y={380 + Math.sin(angle) * 60 * speed}
+                  width={3 + Math.random() * 5}
+                  height={3 + Math.random() * 5}
+                  fill={Math.random() > 0.5 ? '#3a3a3a' : '#fbbf24'}
+                  opacity={0.9}
+                  style={{
+                    animation: `debrisFly 1.5s cubic-bezier(0.5, 0, 0.5, 1) forwards`,
+                    transform: `translate(${Math.cos(angle) * 400 * speed}px, ${Math.sin(angle) * 300 * speed}px) rotate(${Math.random() * 720}deg)`,
+                  }}
+                />
+              );
+            })}
+          </>
+        )}
+
+        {/* Second explosion (hydrogen) - much more powerful, white-hot */}
+        {state === 'explosion-2' && (
+          <>
+            {/* Massive central flash */}
+            <ellipse cx="550" cy="380" rx="900" ry="900" fill="url(#explosionFlash)"
+                     style={{ animation: 'expanFlash 1.2s ease-out' }} />
+            {/* Multiple shockwave rings */}
+            <circle cx="550" cy="380" r="100" fill="none" stroke="#ffffff" strokeWidth="5"
+                    opacity="1" style={{ animation: 'shockwave 1.5s ease-out forwards' }} />
+            <circle cx="550" cy="380" r="100" fill="none" stroke="#fbbf24" strokeWidth="4"
+                    opacity="0.85" style={{ animation: 'shockwave 1.8s ease-out 0.2s forwards' }} />
+            <circle cx="550" cy="380" r="100" fill="none" stroke="#dc2626" strokeWidth="3"
+                    opacity="0.7" style={{ animation: 'shockwave 2.1s ease-out 0.4s forwards' }} />
+            {/* Massive debris field — building parts, fuel, graphite */}
+            {Array.from({ length: 60 }).map((_, i) => {
+              const angle = (i / 60) * Math.PI * 2;
+              const speed = 0.7 + Math.random() * 1.3;
+              const isHot = Math.random() > 0.4;
+              return (
+                <rect
+                  key={`debris2-${i}`}
+                  x={550 + Math.cos(angle) * 60}
+                  y={380 + Math.sin(angle) * 40}
+                  width={4 + Math.random() * 8}
+                  height={4 + Math.random() * 8}
+                  fill={isHot ? (Math.random() > 0.5 ? '#fbbf24' : '#dc2626') : '#1a1a1a'}
+                  opacity={0.9}
+                  style={{
+                    animation: `debrisFly 2.5s cubic-bezier(0.5, 0, 0.5, 1) forwards`,
+                    transform: `translate(${Math.cos(angle) * 600 * speed}px, ${Math.sin(angle) * 500 * speed - 100}px) rotate(${Math.random() * 1080}deg)`,
+                    filter: isHot ? 'drop-shadow(0 0 4px currentColor)' : 'none',
+                  }}
+                />
+              );
+            })}
+            {/* Fireball expanding upward */}
+            <ellipse cx="550" cy="350" rx="200" ry="100" fill="#fef08a" opacity="0.6"
+                     filter="url(#blur8)"
+                     style={{ animation: 'fireballRise 2s ease-out forwards' }} />
+          </>
         )}
 
         {/* ================ CONCRETE BIOLOGICAL SHIELDING (outer walls) ================ */}
@@ -276,6 +343,54 @@ export default function Reactor3D({
           />
         )}
 
+        {/* ================ ACTIVE NEUTRONS — fission particles flying inside core ================ */}
+        {!isDestroyed && power > 50 && (
+          <g style={{ mixBlendMode: 'screen' }}>
+            {Array.from({ length: Math.min(Math.round(8 + powerPct * 30), 50) }).map((_, i) => {
+              // Pseudo-random but stable per-tick positions
+              const seed = (i * 137 + tick * 3) % 1000;
+              const angle = (seed / 1000) * Math.PI * 2;
+              const dist = 40 + ((seed * 7) % 200);
+              const x = 550 + Math.cos(angle) * Math.min(dist, 250);
+              const y = 430 + Math.sin(angle) * Math.min(dist * 0.4, 90);
+              const size = isSpike ? 2 + Math.random() * 2 : 1 + Math.random() * 1.5;
+              // Color based on power
+              let color = '#06b6d4'; // cool blue
+              if (isSpike) color = '#ffffff';
+              else if (power > 2000) color = '#fef08a';
+              else if (power > 800) color = '#fbbf24';
+              else if (power > 300) color = '#f59e0b';
+
+              return (
+                <circle
+                  key={`neutron-${i}`}
+                  cx={x}
+                  cy={y}
+                  r={size}
+                  fill={color}
+                  opacity={0.85}
+                  filter="url(#blur1)"
+                />
+              );
+            })}
+            {/* Fission flashes — bright flashes when neutrons "hit" */}
+            {isSpike && Array.from({ length: 15 }).map((_, i) => {
+              if ((tick + i * 7) % 5 !== 0) return null;
+              const x = 350 + ((i * 53 + tick * 11) % 400);
+              const y = 380 + ((i * 31) % 100);
+              return (
+                <circle
+                  key={`flash-${i}`}
+                  cx={x} cy={y} r="6"
+                  fill="#ffffff"
+                  opacity={0.9}
+                  filter="url(#blur3)"
+                />
+              );
+            })}
+          </g>
+        )}
+
         {/* ================ PRESSURE TUBES (vertical lines through graphite) ================ */}
         {!isDestroyed && tubePositions.map((x, i) => (
           <g key={`tube-${i}`}>
@@ -287,6 +402,31 @@ export default function Reactor3D({
                     strokeDasharray="3 5"
                     opacity={0.6}
                     style={{ animation: 'flowD 1.5s linear infinite' }} />
+            )}
+            {/* Steam bubbles — appear when steam fraction increases */}
+            {showFlow && steamFraction > 0.2 && i % 2 === 0 && (
+              <>
+                {Array.from({ length: Math.min(Math.floor(steamFraction * 5), 4) }).map((_, j) => {
+                  const bubbleY = 540 - ((tick * 4 + i * 17 + j * 60) % 230);
+                  const bubbleSize = 1.5 + steamFraction * 2.5 + Math.random() * 0.5;
+                  return (
+                    <circle
+                      key={`bubble-${i}-${j}`}
+                      cx={x + (Math.sin(tick * 0.1 + i + j) * 1.5)}
+                      cy={bubbleY}
+                      r={bubbleSize}
+                      fill={isSpike ? '#fef08a' : steamFraction > 0.6 ? '#fbbf24' : '#67e8f9'}
+                      opacity={0.7}
+                    />
+                  );
+                })}
+              </>
+            )}
+            {/* CRACKS in tubes when extreme pressure */}
+            {(state === 'spike' || state === 'explosion-1' || state === 'explosion-2') && i % 3 === 0 && (
+              <line x1={x - 3} y1={350 + (i * 13) % 150} x2={x + 3} y2={355 + (i * 13) % 150}
+                    stroke="#dc2626" strokeWidth="1.5" opacity="0.9"
+                    style={{ animation: 'pulseAlert 0.3s infinite' }} />
             )}
           </g>
         ))}

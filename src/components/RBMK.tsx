@@ -163,11 +163,26 @@ export default function RBMK({ he, t }: { he: boolean; t: (h: string, e: string)
           key={`reactor-${step}`}
           style={{
             background: 'linear-gradient(180deg, rgba(0,0,0,0.5), rgba(0,0,0,0.7))',
-            border: `1px solid ${C.gold}33`,
+            border: `1.5px solid ${
+              cur.mood === 'apocalypse' ? C.danger
+              : cur.mood === 'explosion' ? C.amber
+              : cur.mood === 'critical' ? C.danger + '77'
+              : C.gold + '33'
+            }`,
             borderRadius: 12,
             padding: 16,
             marginBottom: 16,
-            animation: cur.mood === 'apocalypse' ? 'shakeStrong 0.5s' : 'none',
+            animation:
+              step === 8 ? 'screenShake 0.6s ease-out 1' :
+              step === 9 ? 'screenShake 1.2s ease-out 1' :
+              step === 7 ? 'reactorVibrate 0.15s infinite' :
+              cur.mood === 'critical' ? 'reactorVibrate 0.4s infinite' :
+              'none',
+            boxShadow:
+              cur.mood === 'apocalypse' ? `0 0 60px ${C.danger}88, inset 0 0 30px ${C.danger}33` :
+              cur.mood === 'critical' ? `0 0 30px ${C.danger}55` :
+              'none',
+            transition: 'box-shadow 0.5s, border-color 0.5s',
           }}
         >
           <Reactor3D

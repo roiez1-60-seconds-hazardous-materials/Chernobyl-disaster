@@ -165,12 +165,30 @@ export default function ControlRoomHUD({ he, t, power, coreTemp, pressure, orm, 
 
   return (
     <div style={{
-      background: 'linear-gradient(180deg, #0a0e18, #060810)',
-      border: `1px solid ${C.gold}44`,
+      background: alert === 'critical'
+        ? 'linear-gradient(180deg, rgba(40,5,5,0.95), rgba(20,5,5,0.98))'
+        : 'linear-gradient(180deg, #0a0e18, #060810)',
+      border: `1.5px solid ${alert === 'critical' ? C.danger : alert === 'warning' ? C.amber : C.gold + '44'}`,
       borderRadius: 10,
       padding: '14px 16px',
-      boxShadow: `0 4px 16px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.04)`,
+      boxShadow: alert === 'critical'
+        ? `0 0 40px ${C.danger}66, inset 0 0 30px ${C.danger}22, 0 4px 16px rgba(0,0,0,0.7)`
+        : `0 4px 16px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.04)`,
+      position: 'relative',
+      overflow: 'hidden',
+      animation: alert === 'critical' ? 'pulseAlert 1.4s infinite' : 'none',
     }}>
+      {/* Critical state — scan lines overlay (CRT distortion effect) */}
+      {alert === 'critical' && (
+        <div style={{
+          position: 'absolute',
+          inset: 0,
+          background: 'repeating-linear-gradient(0deg, rgba(220,38,38,0.04) 0px, transparent 2px, transparent 4px)',
+          pointerEvents: 'none',
+          zIndex: 1,
+        }} />
+      )}
+
       {/* Header */}
       <div style={{
         display: 'flex',
@@ -178,17 +196,51 @@ export default function ControlRoomHUD({ he, t, power, coreTemp, pressure, orm, 
         alignItems: 'center',
         marginBottom: 14,
         paddingBottom: 10,
-        borderBottom: `1px solid ${C.gold}22`,
+        borderBottom: `1px solid ${alert === 'critical' ? C.danger : C.gold + '22'}`,
         flexWrap: 'wrap', gap: 10,
+        position: 'relative',
+        zIndex: 2,
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+          {/* Multiple alert lights for critical state */}
+          {alert === 'critical' ? (
+            <div style={{ display: 'flex', gap: 4 }}>
+              <span style={{
+                width: 12, height: 12, borderRadius: '50%',
+                background: C.danger,
+                boxShadow: `0 0 12px ${C.danger}, 0 0 20px ${C.danger}`,
+                animation: 'pulseAlert 0.4s infinite',
+              }} />
+              <span style={{
+                width: 12, height: 12, borderRadius: '50%',
+                background: C.danger,
+                boxShadow: `0 0 12px ${C.danger}`,
+                animation: 'pulseAlert 0.4s infinite 0.2s',
+              }} />
+              <span style={{
+                width: 12, height: 12, borderRadius: '50%',
+                background: C.amber,
+                boxShadow: `0 0 12px ${C.amber}`,
+                animation: 'alarmBlink 0.6s infinite',
+              }} />
+            </div>
+          ) : (
+            <span style={{
+              width: 10, height: 10, borderRadius: '50%',
+              background: alertColor,
+              boxShadow: `0 0 10px ${alertColor}`,
+              animation: alert === 'warning' ? 'pulseAlert 1.2s infinite' : 'none',
+            }} />
+          )}
           <span style={{
-            width: 10, height: 10, borderRadius: '50%',
-            background: alertColor,
-            boxShadow: `0 0 10px ${alertColor}`,
-            animation: alert === 'critical' ? 'pulseAlert 0.5s infinite' : alert === 'warning' ? 'pulseAlert 1.2s infinite' : 'none',
-          }} />
-          <span style={{ fontSize: 11, color: alertColor, fontFamily: "'JetBrains Mono', monospace", fontWeight: 800, letterSpacing: '0.15em' }}>
+            fontSize: alert === 'critical' ? 13 : 11,
+            color: alertColor,
+            fontFamily: "'JetBrains Mono', monospace",
+            fontWeight: 900,
+            letterSpacing: '0.15em',
+            animation: alert === 'critical' ? 'glitchText 1.5s infinite' : 'none',
+            textShadow: alert === 'critical' ? `0 0 8px ${C.danger}` : 'none',
+          }}>
             {alertText}
           </span>
         </div>
@@ -197,15 +249,17 @@ export default function ControlRoomHUD({ he, t, power, coreTemp, pressure, orm, 
         </div>
         <div style={{
           padding: '4px 14px',
-          background: alert === 'critical' ? `${C.danger}22` : 'rgba(0,0,0,0.5)',
-          border: `1px solid ${alert === 'critical' ? C.danger : C.gold + '55'}`,
+          background: alert === 'critical' ? `${C.danger}33` : 'rgba(0,0,0,0.5)',
+          border: `1.5px solid ${alert === 'critical' ? C.danger : C.gold + '55'}`,
           borderRadius: 6,
           fontSize: 18,
-          color: alert === 'critical' ? C.danger : C.gold,
+          color: alert === 'critical' ? '#fff' : C.gold,
           fontFamily: "'JetBrains Mono', monospace",
           fontWeight: 900,
           letterSpacing: '0.1em',
           fontVariantNumeric: 'tabular-nums',
+          textShadow: alert === 'critical' ? `0 0 10px ${C.danger}` : 'none',
+          animation: alert === 'critical' ? 'pulseAlert 1s infinite' : 'none',
         }}>
           {time}
         </div>
