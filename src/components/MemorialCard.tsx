@@ -65,7 +65,7 @@ export default function MemorialCard({ he, t, variant, caption_he, caption_en, d
           background: 'rgba(0,0,0,0.7)',
           border: `1px solid ${C.gold}66`,
           borderRadius: 3,
-          fontSize: 9,
+          fontSize: 12,
           color: C.gL,
           fontFamily: "'JetBrains Mono', monospace",
           letterSpacing: '0.2em',
@@ -85,7 +85,7 @@ export default function MemorialCard({ he, t, variant, caption_he, caption_en, d
         borderRadius: 6,
       }}>
         <p style={{
-          fontSize: 12,
+          fontSize: 15,
           color: 'rgba(255,255,255,0.85)',
           lineHeight: 1.6,
           fontStyle: 'italic',

@@ -133,7 +133,7 @@ export default function Footer({ he, t }: { he: boolean; t: (h: string, e: strin
           rel="noopener noreferrer"
           style={{
             display: 'inline-flex', alignItems: 'center', gap: 6,
-            fontSize: 11, color: '#25d366', fontFamily: "'JetBrains Mono', monospace",
+            fontSize: 14, color: '#25d366', fontFamily: "'JetBrains Mono', monospace",
             textDecoration: 'none',
             marginBottom: 12,
             padding: '4px 12px',
@@ -147,10 +147,10 @@ export default function Footer({ he, t }: { he: boolean; t: (h: string, e: strin
           💬 {t('הצטרף לקבוצת 60 שניות חומ״ס', 'Join 60 Sec HazMat group')}
         </a>
 
-        <div style={{ fontSize: 18, fontWeight: 800, color: C.gold, fontFamily: "'Playfair Display', serif", marginBottom: 6, marginTop: 8 }}>
+        <div style={{ fontSize: 21, fontWeight: 800, color: C.gold, fontFamily: "'Playfair Display', serif", marginBottom: 6, marginTop: 8 }}>
           {t('רועי צוקרמן', 'Roie Zukerman')}
         </div>
-        <div style={{ fontSize: 13, color: C.gL, fontFamily: "'JetBrains Mono', monospace", letterSpacing: '0.1em', marginBottom: 14 }}>
+        <div style={{ fontSize: 16, color: C.gL, fontFamily: "'JetBrains Mono', monospace", letterSpacing: '0.1em', marginBottom: 14 }}>
           {t('מומחה לחומ״ס וטב״ק', 'HazMat & CBRN Expert')}
         </div>
 
@@ -162,7 +162,7 @@ export default function Footer({ he, t }: { he: boolean; t: (h: string, e: strin
             gap: 8,
             padding: '8px 16px',
             color: C.gL,
-            fontSize: 13,
+            fontSize: 16,
             fontFamily: "'JetBrains Mono', monospace",
             textDecoration: 'none',
             border: `1px solid ${C.gold}33`,
@@ -180,7 +180,7 @@ export default function Footer({ he, t }: { he: boolean; t: (h: string, e: strin
             (e.currentTarget as HTMLElement).style.color = C.gL;
           }}
           >
-            <span style={{ fontSize: 16 }}>✉</span>
+            <span style={{ fontSize: 19 }}>✉</span>
             roiez1@gmail.com
           </a>
         </div>
@@ -198,12 +198,12 @@ export default function Footer({ he, t }: { he: boolean; t: (h: string, e: strin
           fontFamily: "'JetBrains Mono', monospace",
           boxShadow: `0 0 14px ${C.gold}22`,
         }}>
-          <span style={{ fontSize: 16 }}>👁</span>
-          <span style={{ fontSize: 11, color: C.gL, letterSpacing: '0.15em' }}>
+          <span style={{ fontSize: 19 }}>👁</span>
+          <span style={{ fontSize: 14, color: C.gL, letterSpacing: '0.15em' }}>
             {t('צפיות באפליקציה', 'APP VIEWS')}
           </span>
           <span style={{
-            fontSize: 16, fontWeight: 800,
+            fontSize: 19, fontWeight: 800,
             color: status === 'err' ? 'rgba(255,255,255,0.4)' : C.gold,
             fontFamily: "'Playfair Display', serif",
             minWidth: 28,
@@ -223,7 +223,7 @@ export default function Footer({ he, t }: { he: boolean; t: (h: string, e: strin
           margin: '0 auto 22px',
         }}>
           <div style={{
-            fontSize: 11,
+            fontSize: 14,
             letterSpacing: '0.25em',
             color: C.gold,
             fontFamily: "'JetBrains Mono', monospace",
@@ -247,7 +247,7 @@ export default function Footer({ he, t }: { he: boolean; t: (h: string, e: strin
                 padding: '10px 16px',
                 background: 'linear-gradient(135deg, #25D366 0%, #128C7E 100%)',
                 color: '#fff',
-                fontSize: 13,
+                fontSize: 16,
                 fontWeight: 700,
                 fontFamily: 'Heebo, sans-serif',
                 textDecoration: 'none',
@@ -277,7 +277,7 @@ export default function Footer({ he, t }: { he: boolean; t: (h: string, e: strin
                 padding: '10px 16px',
                 background: 'linear-gradient(135deg, #229ED9 0%, #1B7AB8 100%)',
                 color: '#fff',
-                fontSize: 13,
+                fontSize: 16,
                 fontWeight: 700,
                 fontFamily: 'Heebo, sans-serif',
                 textDecoration: 'none',
@@ -305,7 +305,7 @@ export default function Footer({ he, t }: { he: boolean; t: (h: string, e: strin
                 padding: '10px 16px',
                 background: copied ? `linear-gradient(135deg, ${C.green}, ${C.green}cc)` : 'rgba(255,255,255,0.06)',
                 color: copied ? '#fff' : C.gL,
-                fontSize: 13,
+                fontSize: 16,
                 fontWeight: 700,
                 fontFamily: 'Heebo, sans-serif',
                 border: `1px solid ${copied ? C.green : C.gold + '55'}`,
@@ -327,7 +327,7 @@ export default function Footer({ he, t }: { he: boolean; t: (h: string, e: strin
                 }
               }}
             >
-              <span style={{ fontSize: 14 }}>{copied ? '✓' : '🔗'}</span>
+              <span style={{ fontSize: 17 }}>{copied ? '✓' : '🔗'}</span>
               {copied ? t('הועתק!', 'COPIED!') : t('העתק קישור', 'Copy link')}
             </button>
 
@@ -343,7 +343,7 @@ export default function Footer({ he, t }: { he: boolean; t: (h: string, e: strin
                   padding: '10px 16px',
                   background: 'rgba(255,255,255,0.06)',
                   color: C.gL,
-                  fontSize: 13,
+                  fontSize: 16,
                   fontWeight: 700,
                   fontFamily: 'Heebo, sans-serif',
                   border: `1px solid ${C.gold}55`,
@@ -352,7 +352,7 @@ export default function Footer({ he, t }: { he: boolean; t: (h: string, e: strin
                   transition: 'all 0.25s',
                 }}
               >
-                <span style={{ fontSize: 14 }}>📤</span>
+                <span style={{ fontSize: 17 }}>📤</span>
                 {t('שתף...', 'Share...')}
               </button>
             )}
@@ -361,11 +361,11 @@ export default function Footer({ he, t }: { he: boolean; t: (h: string, e: strin
 
         <div style={{ height: 1, background: `linear-gradient(90deg, transparent, ${C.gold}55, transparent)`, margin: '8px auto 16px', maxWidth: 320 }} />
 
-        <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.7)', lineHeight: 1.85, fontFamily: "'JetBrains Mono', monospace", letterSpacing: '0.05em', maxWidth: 640, margin: '0 auto' }}>
+        <p style={{ fontSize: 15, color: 'rgba(255,255,255,0.7)', lineHeight: 1.85, fontFamily: "'JetBrains Mono', monospace", letterSpacing: '0.05em', maxWidth: 640, margin: '0 auto' }}>
           כל הזכויות שמורות. מבוסס על מקורות פתוחים בלבד. למטרות מקצועיות והדרכתיות. אין להשתמש ללא אישור בכתב.
         </p>
 
-        <div style={{ marginTop: 18, fontSize: 11, color: 'rgba(255,255,255,0.5)', fontFamily: "'JetBrains Mono', monospace" }}>
+        <div style={{ marginTop: 18, fontSize: 14, color: 'rgba(255,255,255,0.5)', fontFamily: "'JetBrains Mono', monospace" }}>
           © {new Date().getFullYear()} · {t('60 שניות חומ״ס', '60 Seconds HazMat')}
         </div>
       </div>

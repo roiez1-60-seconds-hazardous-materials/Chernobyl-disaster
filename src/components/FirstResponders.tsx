@@ -119,7 +119,7 @@ export default function FirstResponders({ he, t }: { he: boolean; t: (h: string,
               border: `1.5px solid ${C.danger}`,
               borderRadius: 30,
               color: '#fff',
-              fontSize: 15, fontWeight: 800,
+              fontSize: 18, fontWeight: 800,
               fontFamily: "'JetBrains Mono', monospace",
               letterSpacing: '0.1em',
               cursor: 'pointer',
@@ -127,7 +127,7 @@ export default function FirstResponders({ he, t }: { he: boolean; t: (h: string,
               boxShadow: isPlayingAll ? `0 0 28px ${C.danger}99` : `0 4px 16px ${C.danger}55`,
               animation: isPlayingAll ? 'pulseAlert 1.4s infinite' : 'none',
             }}>
-              <span style={{ fontSize: 18 }}>{isPlayingAll ? '⏸' : '🎙'}</span>
+              <span style={{ fontSize: 21 }}>{isPlayingAll ? '⏸' : '🎙'}</span>
               {isPlayingAll ? t('עצור קריינות', 'STOP NARRATION') : t('הקרא את הסיפור כולו', 'NARRATE THE FULL STORY')}
             </button>
           </div>
@@ -180,7 +180,7 @@ export default function FirstResponders({ he, t }: { he: boolean; t: (h: string,
                     top: 4,
                     [he ? 'right' : 'left']: 0,
                     width: 'clamp(34px, 5vw, 50px)',
-                    fontSize: 12,
+                    fontSize: 15,
                     fontFamily: "'JetBrains Mono', monospace",
                     fontWeight: 800,
                     color: C.danger,
@@ -202,7 +202,7 @@ export default function FirstResponders({ he, t }: { he: boolean; t: (h: string,
                   }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 10, marginBottom: 8 }}>
                       <h3 style={{
-                        fontSize: 16, fontWeight: 800,
+                        fontSize: 19, fontWeight: 800,
                         color: '#fff',
                         fontFamily: "'Playfair Display', serif",
                         lineHeight: 1.3, flex: 1,
@@ -217,7 +217,7 @@ export default function FirstResponders({ he, t }: { he: boolean; t: (h: string,
                                   background: isPlaying ? `${C.danger}55` : 'rgba(0,0,0,0.5)',
                                   border: `1.5px solid ${isPlaying ? C.danger : C.gold}`,
                                   color: isPlaying ? '#fff' : C.gold,
-                                  fontSize: 14, cursor: 'pointer',
+                                  fontSize: 17, cursor: 'pointer',
                                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                                   flexShrink: 0,
                                   transition: 'all 0.25s',
@@ -228,7 +228,7 @@ export default function FirstResponders({ he, t }: { he: boolean; t: (h: string,
                         </button>
                       )}
                     </div>
-                    <p style={{ fontSize: 15, color: 'rgba(255,255,255,0.92)', lineHeight: 1.95 }}>
+                    <p style={{ fontSize: 18, color: 'rgba(255,255,255,0.92)', lineHeight: 1.95 }}>
                       {ch.body}
                     </p>
                   </div>
@@ -266,7 +266,7 @@ export default function FirstResponders({ he, t }: { he: boolean; t: (h: string,
             textAlign: 'center',
           }}>
             <div style={{ fontSize: 32, marginBottom: 6 }}>🕯</div>
-            <p style={{ fontSize: 15, color: C.gL, lineHeight: 1.85, fontStyle: 'italic', fontFamily: "'Playfair Display', serif" }}>
+            <p style={{ fontSize: 18, color: C.gL, lineHeight: 1.85, fontStyle: 'italic', fontFamily: "'Playfair Display', serif" }}>
               {t(
                 'הם נכנסו אל החושך כדי שאחרים יוכלו לחיות באור.',
                 'They walked into the dark so that others could live in light.'
@@ -280,7 +280,7 @@ export default function FirstResponders({ he, t }: { he: boolean; t: (h: string,
             background: 'rgba(0,0,0,0.4)',
             border: `1px solid ${C.gold}22`,
             borderRadius: 6,
-            fontSize: 9.5, color: 'rgba(255,255,255,0.55)',
+            fontSize: 12, color: 'rgba(255,255,255,0.55)',
             fontFamily: "'JetBrains Mono', monospace",
             lineHeight: 1.7, textAlign: 'center',
           }}>

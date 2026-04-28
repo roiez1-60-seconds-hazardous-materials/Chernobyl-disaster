@@ -8,7 +8,7 @@ function StatTile({ n, l, c, delay }: { n: string; l: string; c: string; delay: 
   const { ref, display } = useCountUpString(n);
   return (
     <div className="stat-box hover-lift fade-in" style={{ '--accent': c, animationDelay: `${delay}s` } as any}>
-      <div className="stat-num" style={{ color: c, textShadow: `0 0 18px ${c}55`, fontSize: 'clamp(20px, 3.5vw, 36px)' }}>
+      <div className="stat-num" style={{ color: c, textShadow: `0 0 18px ${c}55`, fontSize: 'clamp(26px, 4vw, 50px)' }}>
         <span ref={ref}>{display}</span>
       </div>
       <div className="stat-lbl">{l}</div>
@@ -106,7 +106,7 @@ export default function Hero({ he, t }: { he: boolean; t: (h: string, e: string)
           }}>״</div>
 
           <p style={{
-            fontSize: 'clamp(15px, 2.4vw, 21px)',
+            fontSize: 'clamp(18px, 2.4vw, 28px)',
             color: '#fff',
             fontStyle: 'italic',
             fontFamily: "'Playfair Display', serif",
@@ -122,11 +122,11 @@ export default function Hero({ he, t }: { he: boolean; t: (h: string, e: string)
           </p>
 
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 12 }}>
-            <div style={{ fontSize: 11, color: C.gL, lineHeight: 1.5, textAlign: he ? 'right' : 'left', flex: 1, minWidth: 200 }}>
-              <div style={{ fontWeight: 700, color: C.gold, fontFamily: "'Playfair Display', serif", fontStyle: 'normal', fontSize: 13 }}>
+            <div style={{ fontSize: 14, color: C.gL, lineHeight: 1.5, textAlign: he ? 'right' : 'left', flex: 1, minWidth: 200 }}>
+              <div style={{ fontWeight: 700, color: C.gold, fontFamily: "'Playfair Display', serif", fontStyle: 'normal', fontSize: 16 }}>
                 {t('— ולרי לגאסוב', '— Valery Legasov')}
               </div>
-              <div style={{ fontSize: 9, color: 'rgba(255,255,255,0.55)', fontFamily: "'JetBrains Mono', monospace", letterSpacing: '0.08em', marginTop: 2 }}>
+              <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.55)', fontFamily: "'JetBrains Mono', monospace", letterSpacing: '0.08em', marginTop: 2 }}>
                 {t('סגן מנהל מכון קורצ׳אטוב · אחראי חקירת האסון', 'Deputy Director, Kurchatov Institute · Lead Investigator')}
               </div>
             </div>
@@ -141,7 +141,7 @@ export default function Hero({ he, t }: { he: boolean; t: (h: string, e: string)
                 border: `1.5px solid ${isPlaying ? C.danger : C.gold}`,
                 borderRadius: 30,
                 color: '#fff',
-                fontSize: 12, fontWeight: 800,
+                fontSize: 15, fontWeight: 800,
                 fontFamily: "'JetBrains Mono', monospace",
                 letterSpacing: '0.1em',
                 cursor: 'pointer',
@@ -150,7 +150,7 @@ export default function Hero({ he, t }: { he: boolean; t: (h: string, e: string)
                 boxShadow: isPlaying ? `0 0 22px ${C.danger}77` : `0 4px 12px ${C.gold}44`,
                 animation: isPlaying ? 'pulseAlert 1.4s infinite' : 'none',
               }}>
-                <span style={{ fontSize: 16 }}>{isPlaying ? '⏸' : '🔊'}</span>
+                <span style={{ fontSize: 19 }}>{isPlaying ? '⏸' : '🔊'}</span>
                 {isPlaying ? t('עצור', 'STOP') : t('האזן', 'LISTEN')}
               </button>
             )}
@@ -166,7 +166,7 @@ export default function Hero({ he, t }: { he: boolean; t: (h: string, e: string)
           border: `1px solid ${C.gold}55`,
           background: `${C.gold}08`,
           borderRadius: 3,
-          fontSize: 10,
+          fontSize: 13,
           fontWeight: 700,
           letterSpacing: '0.25em',
           color: C.gold,
@@ -183,7 +183,7 @@ export default function Hero({ he, t }: { he: boolean; t: (h: string, e: string)
         </div>
 
         <h1 style={{
-          fontSize: 'clamp(40px, 11vw, 86px)',
+          fontSize: 'clamp(48px, 11vw, 110px)',
           fontWeight: 900,
           fontFamily: "'Playfair Display', serif",
           lineHeight: 1.05,
@@ -203,7 +203,7 @@ export default function Hero({ he, t }: { he: boolean; t: (h: string, e: string)
         </h1>
 
         <h2 style={{
-          fontSize: 'clamp(16px, 2.5vw, 22px)',
+          fontSize: 'clamp(20px, 2.6vw, 30px)',
           fontWeight: 400,
           color: C.gL,
           fontFamily: "'Playfair Display', serif",
@@ -226,7 +226,7 @@ export default function Hero({ he, t }: { he: boolean; t: (h: string, e: string)
         }} />
 
         <p style={{
-          fontSize: 'clamp(14px, 2.2vw, 18px)',
+          fontSize: 'clamp(17px, 2.2vw, 24px)',
           color: 'rgba(255,255,255,0.85)',
           lineHeight: 1.85,
           maxWidth: 660,
@@ -262,7 +262,7 @@ export default function Hero({ he, t }: { he: boolean; t: (h: string, e: string)
               <StatTile key={i} n={s.n} l={s.l} c={s.c} delay={1.1 + i * 0.08} />
             ) : (
               <div key={i} className="stat-box hover-lift" style={{ '--accent': s.c, opacity: revealed ? 1 : 0, transform: revealed ? 'translateY(0)' : 'translateY(12px)', transition: `opacity 0.6s ease-out ${1.1 + i * 0.08}s, transform 0.6s ease-out ${1.1 + i * 0.08}s` } as any}>
-                <div className="stat-num" style={{ color: s.c, textShadow: `0 0 18px ${s.c}55`, fontSize: 'clamp(20px, 3.5vw, 36px)' }}>{s.n}</div>
+                <div className="stat-num" style={{ color: s.c, textShadow: `0 0 18px ${s.c}55`, fontSize: 'clamp(26px, 4vw, 50px)' }}>{s.n}</div>
                 <div className="stat-lbl">{s.l}</div>
               </div>
             )
@@ -277,7 +277,7 @@ export default function Hero({ he, t }: { he: boolean; t: (h: string, e: string)
         }}>
           <a href="#timeline" style={{ textDecoration: 'none' }}>
             <div style={{ display: 'inline-flex', flexDirection: 'column', alignItems: 'center', gap: 4, color: C.gold }}>
-              <div style={{ fontSize: 10, fontFamily: "'JetBrains Mono', monospace", letterSpacing: '0.2em' }}>
+              <div style={{ fontSize: 13, fontFamily: "'JetBrains Mono', monospace", letterSpacing: '0.2em' }}>
                 {t('המשך למטה', 'SCROLL')}
               </div>
               <div style={{ fontSize: 22, animation: 'float 2s ease-in-out infinite' }}>↓</div>

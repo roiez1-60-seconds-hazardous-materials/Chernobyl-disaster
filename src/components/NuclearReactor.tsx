@@ -150,7 +150,7 @@ export default function NuclearReactor({ he, t }: { he: boolean; t: (h: string, 
                 <h3 style={{ fontSize: 20, fontWeight: 800, color: cur.c, fontFamily: "'Playfair Display', serif", marginBottom: 6 }}>
                   {t(cur.he, cur.en)}
                 </h3>
-                <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.9)', lineHeight: 1.7, maxWidth: 600 }}>
+                <p style={{ fontSize: 16, color: 'rgba(255,255,255,0.9)', lineHeight: 1.7, maxWidth: 600 }}>
                   {t(cur.desc_he, cur.desc_en)}
                 </p>
               </div>
@@ -172,7 +172,7 @@ export default function NuclearReactor({ he, t }: { he: boolean; t: (h: string, 
 
         {/* Educational note */}
         <div className="card-light" style={{ padding: '14px 18px', textAlign: 'center' }}>
-          <p style={{ fontSize: 13, color: C.gL, lineHeight: 1.8 }}>
+          <p style={{ fontSize: 16, color: C.gL, lineHeight: 1.8 }}>
             💡 {t(
               'בכור גרעיני, החום נוצר על ידי ביקוע גרעיני — לא על ידי שריפה. אבל ב-RBMK הסובייטי היה פגם תכן קריטי שהפך אותו לפצצת זמן. בסעיף הבא נראה איך.',
               'In a nuclear reactor, heat is produced by nuclear fission — not combustion. But the Soviet RBMK had a critical design flaw making it a ticking time bomb. The next section shows how.'

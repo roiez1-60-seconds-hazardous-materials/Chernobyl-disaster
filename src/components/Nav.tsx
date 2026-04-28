@@ -99,10 +99,10 @@ export default function Nav({ he, setHe, t }: { he: boolean; setHe: (v: boolean)
             </div>
           </a>
           <a href="#hero" style={{ display: 'flex', flexDirection: 'column', lineHeight: 1.15, minWidth: 0, textDecoration: 'none' }}>
-            <span style={{ fontSize: 13, fontWeight: 800, color: C.gold, fontFamily: "'Playfair Display', serif", whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+            <span style={{ fontSize: 16, fontWeight: 800, color: C.gold, fontFamily: "'Playfair Display', serif", whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
               {t('60 שניות חומ״ס', '60 Sec HazMat')}
             </span>
-            <span style={{ fontSize: 10, color: 'rgba(255,255,255,0.6)', fontFamily: "'JetBrains Mono', monospace", whiteSpace: 'nowrap', letterSpacing: '0.1em' }}>
+            <span style={{ fontSize: 13, color: 'rgba(255,255,255,0.6)', fontFamily: "'JetBrains Mono', monospace", whiteSpace: 'nowrap', letterSpacing: '0.1em' }}>
               CHERNOBYL · 1986
             </span>
           </a>
@@ -117,10 +117,10 @@ export default function Nav({ he, setHe, t }: { he: boolean; setHe: (v: boolean)
               background: 'rgba(0,0,0,0.45)',
               border: `1px solid ${C.gold}33`,
               borderRadius: 6,
-              fontSize: 10, color: C.gL,
+              fontSize: 13, color: C.gL,
               fontFamily: "'JetBrains Mono', monospace", fontWeight: 700,
             }}>
-              <span style={{ fontSize: 10 }}>👁</span>
+              <span style={{ fontSize: 13 }}>👁</span>
               <span style={{ color: '#fff' }}>{visits.toLocaleString()}</span>
             </div>
           )}
@@ -131,7 +131,7 @@ export default function Nav({ he, setHe, t }: { he: boolean; setHe: (v: boolean)
             background: soundOn ? `${C.danger}33` : `${C.gold}15`,
             border: `1px solid ${soundOn ? C.danger : `${C.gold}55`}`,
             color: soundOn ? C.danger : C.gold,
-            fontSize: 14, cursor: 'pointer',
+            fontSize: 17, cursor: 'pointer',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
             transition: 'all 0.25s',
             animation: soundOn ? 'pulseAlert 2s infinite' : 'none',
@@ -141,7 +141,7 @@ export default function Nav({ he, setHe, t }: { he: boolean; setHe: (v: boolean)
 
           {/* Lang toggle */}
           <button onClick={() => setHe(!he)} style={{
-            padding: '5px 10px', fontSize: 10, fontWeight: 700,
+            padding: '5px 10px', fontSize: 13, fontWeight: 700,
             background: `${C.gold}25`, border: `1px solid ${C.gold}55`,
             color: C.gold, borderRadius: 6, cursor: 'pointer',
             fontFamily: "'JetBrains Mono', monospace", letterSpacing: '0.05em',

@@ -86,10 +86,10 @@ export default function RBMK({ he, t }: { he: boolean; t: (h: string, e: string)
           }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
               <span style={{ width: 8, height: 8, borderRadius: '50%', background: accentColor, animation: 'pulseAlert 1.2s infinite', boxShadow: `0 0 10px ${accentColor}` }} />
-              <span style={{ fontSize: 13, fontWeight: 800, color: '#fff', fontFamily: "'JetBrains Mono', monospace", letterSpacing: '0.1em' }}>
+              <span style={{ fontSize: 16, fontWeight: 800, color: '#fff', fontFamily: "'JetBrains Mono', monospace", letterSpacing: '0.1em' }}>
                 {cur.time}
               </span>
-              <span style={{ fontSize: 10, color: 'rgba(255,255,255,0.5)', fontFamily: "'JetBrains Mono', monospace" }}>
+              <span style={{ fontSize: 13, color: 'rgba(255,255,255,0.5)', fontFamily: "'JetBrains Mono', monospace" }}>
                 26·04·1986
               </span>
             </div>
@@ -98,7 +98,7 @@ export default function RBMK({ he, t }: { he: boolean; t: (h: string, e: string)
               background: `${accentColor}25`,
               border: `1px solid ${accentColor}99`,
               borderRadius: 4,
-              fontSize: 10,
+              fontSize: 13,
               fontWeight: 800,
               color: accentColor,
               fontFamily: "'JetBrains Mono', monospace",
@@ -130,10 +130,10 @@ export default function RBMK({ he, t }: { he: boolean; t: (h: string, e: string)
             borderInlineStart: `5px solid ${accentColor}`,
           }}>
             <div className="fade-in" key={step}>
-              <h3 style={{ fontSize: 17, fontWeight: 900, color: '#fff', fontFamily: "'Playfair Display', serif", marginBottom: 6, lineHeight: 1.3 }}>
+              <h3 style={{ fontSize: 20, fontWeight: 900, color: '#fff', fontFamily: "'Playfair Display', serif", marginBottom: 6, lineHeight: 1.3 }}>
                 {t(cur.he, cur.en)}
               </h3>
-              <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.92)', lineHeight: 1.85 }}>
+              <p style={{ fontSize: 16, color: 'rgba(255,255,255,0.92)', lineHeight: 1.85 }}>
                 {pro ? t(cur.pro_he, cur.pro_en) : t(cur.simple_he, cur.simple_en)}
               </p>
             </div>
@@ -152,7 +152,7 @@ export default function RBMK({ he, t }: { he: boolean; t: (h: string, e: string)
                   border: i === step ? `1px solid ${accentColor}` : '1px solid rgba(255,255,255,0.08)',
                   borderRadius: 5,
                   cursor: 'pointer',
-                  fontSize: 9, fontWeight: 700,
+                  fontSize: 12, fontWeight: 700,
                   fontFamily: "'JetBrains Mono', monospace",
                   transition: 'all 0.25s',
                   boxShadow: i === step ? `0 0 10px ${accentColor}88` : 'none',
@@ -184,7 +184,7 @@ export default function RBMK({ he, t }: { he: boolean; t: (h: string, e: string)
 
         {/* Components — expand in place */}
         <div className="card" style={{ padding: 'clamp(14px, 3vw, 22px)' }}>
-          <h3 style={{ fontSize: 17, fontWeight: 800, color: C.gold, fontFamily: "'Playfair Display', serif", marginBottom: 14, textAlign: 'center' }}>
+          <h3 style={{ fontSize: 20, fontWeight: 800, color: C.gold, fontFamily: "'Playfair Display', serif", marginBottom: 14, textAlign: 'center' }}>
             🔧 {t('12 רכיבי הכור', '12 Reactor Components')}
           </h3>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
@@ -204,15 +204,15 @@ export default function RBMK({ he, t }: { he: boolean; t: (h: string, e: string)
                     display: 'flex', justifyContent: 'space-between', alignItems: 'center',
                     color: isOpen ? '#fff' : 'rgba(255,255,255,0.85)',
                     textAlign: he ? 'right' : 'left',
-                    fontSize: 13, fontWeight: 700,
+                    fontSize: 16, fontWeight: 700,
                     fontFamily: "'Heebo', sans-serif",
                   }}>
                     <span>{t(comp.he, comp.en)}</span>
-                    <span style={{ color: C.gold, fontSize: 12, transition: 'transform 0.3s', transform: isOpen ? 'rotate(45deg)' : 'rotate(0)' }}>＋</span>
+                    <span style={{ color: C.gold, fontSize: 15, transition: 'transform 0.3s', transform: isOpen ? 'rotate(45deg)' : 'rotate(0)' }}>＋</span>
                   </button>
                   {isOpen && (
                     <div className="fade-in" style={{ padding: '0 14px 14px', borderTop: `1px solid ${C.gold}33` }}>
-                      <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.9)', lineHeight: 1.85, paddingTop: 10 }}>
+                      <p style={{ fontSize: 15, color: 'rgba(255,255,255,0.9)', lineHeight: 1.85, paddingTop: 10 }}>
                         {pro ? t(comp.pro_he, comp.pro_en) : t(comp.simple_he, comp.simple_en)}
                       </p>
                     </div>
@@ -221,14 +221,14 @@ export default function RBMK({ he, t }: { he: boolean; t: (h: string, e: string)
               );
             })}
           </div>
-          <div style={{ marginTop: 12, fontSize: 11, color: 'rgba(255,255,255,0.55)', textAlign: 'center', fontFamily: "'JetBrains Mono', monospace" }}>
+          <div style={{ marginTop: 12, fontSize: 14, color: 'rgba(255,255,255,0.55)', textAlign: 'center', fontFamily: "'JetBrains Mono', monospace" }}>
             💡 {t('מצב נוכחי', 'Current mode')}: <span style={{ color: pro ? C.gold : C.green }}>{pro ? '🎓 ' + t('מקצועי', 'PRO') : '👨‍🏫 ' + t('פשוט', 'SIMPLE')}</span>
           </div>
         </div>
 
         {/* The 4 fatal flaws — clearer language */}
         <div className="card-light" style={{ padding: 'clamp(14px, 3vw, 22px)', marginTop: 18 }}>
-          <h3 style={{ fontSize: 17, fontWeight: 800, color: C.danger, fontFamily: "'Playfair Display', serif", marginBottom: 14, textAlign: 'center' }}>
+          <h3 style={{ fontSize: 20, fontWeight: 800, color: C.danger, fontFamily: "'Playfair Display', serif", marginBottom: 14, textAlign: 'center' }}>
             ⚠ {t('4 הכשלים הקטלניים של RBMK', '4 Fatal RBMK Flaws')}
           </h3>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 10 }}>
@@ -269,10 +269,10 @@ export default function RBMK({ he, t }: { he: boolean; t: (h: string, e: string)
                 borderRadius: 10,
               }}>
                 <div style={{ fontSize: 22, marginBottom: 6 }}>{f.icon}</div>
-                <div style={{ fontSize: 13, fontWeight: 800, color: C.danger, marginBottom: 6, fontFamily: "'Playfair Display', serif" }}>
+                <div style={{ fontSize: 16, fontWeight: 800, color: C.danger, marginBottom: 6, fontFamily: "'Playfair Display', serif" }}>
                   {i + 1}. {t(f.he, f.en)}
                 </div>
-                <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.88)', lineHeight: 1.75 }}>
+                <div style={{ fontSize: 15, color: 'rgba(255,255,255,0.88)', lineHeight: 1.75 }}>
                   {t(f.desc_he, f.desc_en)}
                 </div>
               </div>
@@ -551,12 +551,12 @@ function MiniStat({ label, value, unit, max, cur, color, alert }: { label: strin
       transition: 'all 0.4s',
       color,
     }}>
-      <div style={{ fontSize: 8, fontFamily: "'JetBrains Mono', monospace", letterSpacing: '0.15em', color: 'rgba(255,255,255,0.6)', marginBottom: 2 }}>
+      <div style={{ fontSize: 11, fontFamily: "'JetBrains Mono', monospace", letterSpacing: '0.15em', color: 'rgba(255,255,255,0.6)', marginBottom: 2 }}>
         {label}
       </div>
       <div style={{ display: 'flex', alignItems: 'baseline', gap: 3 }}>
-        <span style={{ fontSize: 18, fontWeight: 900, color, fontFamily: "'Playfair Display', serif", lineHeight: 1 }}>{value}</span>
-        <span style={{ fontSize: 9, color: 'rgba(255,255,255,0.5)', fontFamily: "'JetBrains Mono', monospace" }}>{unit}</span>
+        <span style={{ fontSize: 21, fontWeight: 900, color, fontFamily: "'Playfair Display', serif", lineHeight: 1 }}>{value}</span>
+        <span style={{ fontSize: 12, color: 'rgba(255,255,255,0.5)', fontFamily: "'JetBrains Mono', monospace" }}>{unit}</span>
       </div>
       <div style={{ marginTop: 4, height: 3, borderRadius: 1, background: 'rgba(255,255,255,0.08)', overflow: 'hidden' }}>
         <div style={{

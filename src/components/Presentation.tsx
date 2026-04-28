@@ -47,13 +47,13 @@ export default function Presentation({ he, t }: { he: boolean; t: (h: string, e:
                 position: 'absolute', bottom: 0, left: 0, right: 0,
                 padding: '20px 12px 8px',
                 background: 'linear-gradient(0deg, rgba(0,0,0,0.85), transparent)',
-                color: '#fff', fontSize: 11,
+                color: '#fff', fontSize: 14,
                 fontFamily: "'JetBrains Mono', monospace",
                 fontWeight: 700, letterSpacing: '0.1em',
                 display: 'flex', justifyContent: 'space-between', alignItems: 'center',
               }}>
                 <span style={{ color: C.gold }}>SLIDE {i + 1}</span>
-                <span style={{ fontSize: 14 }}>🔍</span>
+                <span style={{ fontSize: 17 }}>🔍</span>
               </div>
             </button>
           ))}
@@ -70,7 +70,7 @@ export default function Presentation({ he, t }: { he: boolean; t: (h: string, e:
               position: 'absolute', top: 16, [he ? 'left' : 'right']: 16,
               background: 'rgba(255,255,255,0.1)', border: `1px solid ${C.gold}`,
               color: C.gold, width: 40, height: 40, borderRadius: '50%',
-              fontSize: 18, cursor: 'pointer', zIndex: 10,
+              fontSize: 21, cursor: 'pointer', zIndex: 10,
             }}>✕</button>
 
             <button onClick={(e) => { e.stopPropagation(); prev(); }} style={{
@@ -91,7 +91,7 @@ export default function Presentation({ he, t }: { he: boolean; t: (h: string, e:
               <Image src={SLIDES[open]} alt={`Slide ${open + 1}`} fill style={{ objectFit: 'contain' }} priority />
             </div>
 
-            <div style={{ position: 'absolute', bottom: 20, left: '50%', transform: 'translateX(-50%)', color: C.gold, fontFamily: "'JetBrains Mono', monospace", fontSize: 12 }}>
+            <div style={{ position: 'absolute', bottom: 20, left: '50%', transform: 'translateX(-50%)', color: C.gold, fontFamily: "'JetBrains Mono', monospace", fontSize: 15 }}>
               {open + 1} / {SLIDES.length}
             </div>
           </div>

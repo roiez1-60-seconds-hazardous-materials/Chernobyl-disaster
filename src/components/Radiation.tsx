@@ -154,7 +154,7 @@ export default function Radiation({ he, t }: { he: boolean; t: (h: string, e: st
         <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', justifyContent: 'center', marginBottom: 20 }}>
           {TABS.map((tb) => (
             <button key={tb.id} onClick={() => setTab(tb.id)} className={`btn-gold ${tab === tb.id ? 'active' : ''}`}>
-              <span style={{ fontSize: 14, marginInlineEnd: 5 }}>{tb.icon}</span>{t(tb.he, tb.en)}
+              <span style={{ fontSize: 17, marginInlineEnd: 5 }}>{tb.icon}</span>{t(tb.he, tb.en)}
             </button>
           ))}
         </div>
@@ -174,21 +174,21 @@ export default function Radiation({ he, t }: { he: boolean; t: (h: string, e: st
                   <h3 style={{ fontSize: 22, fontWeight: 900, color: iso.color, fontFamily: "'Playfair Display', serif", textShadow: `0 0 20px ${iso.color}66` }}>
                     {iso.symbol}
                   </h3>
-                  <span style={{ fontSize: 12, color: C.gL, fontFamily: "'JetBrains Mono', monospace" }}>
+                  <span style={{ fontSize: 15, color: C.gL, fontFamily: "'JetBrains Mono', monospace" }}>
                     T½ = {iso.half}
                   </span>
                 </div>
-                <div style={{ fontSize: 15, color: '#fff', fontWeight: 700, marginBottom: 8 }}>
+                <div style={{ fontSize: 18, color: '#fff', fontWeight: 700, marginBottom: 8 }}>
                   {t(iso.he, iso.name)}
                 </div>
-                <div style={{ marginBottom: 8, padding: '6px 10px', background: 'rgba(0,0,0,0.4)', borderRadius: 6, fontSize: 13 }}>
+                <div style={{ marginBottom: 8, padding: '6px 10px', background: 'rgba(0,0,0,0.4)', borderRadius: 6, fontSize: 16 }}>
                   <span style={{ color: 'rgba(255,255,255,0.5)' }}>{t('פוגע ב', 'Targets')}: </span>
                   <span style={{ color: '#fff', fontWeight: 700 }}>{t(iso.target_he, iso.target_en)}</span>
                 </div>
-                <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.85)', lineHeight: 1.7, marginBottom: 8 }}>
+                <p style={{ fontSize: 17, color: 'rgba(255,255,255,0.85)', lineHeight: 1.7, marginBottom: 8 }}>
                   {t(iso.danger_he, iso.danger_en)}
                 </p>
-                <div style={{ fontSize: 13, fontFamily: "'JetBrains Mono', monospace", color: iso.color, fontWeight: 700, padding: '4px 8px', background: `${iso.color}15`, borderRadius: 4, display: 'inline-block' }}>
+                <div style={{ fontSize: 16, fontFamily: "'JetBrains Mono', monospace", color: iso.color, fontWeight: 700, padding: '4px 8px', background: `${iso.color}15`, borderRadius: 4, display: 'inline-block' }}>
                   {iso.released}
                 </div>
               </div>
@@ -198,7 +198,7 @@ export default function Radiation({ he, t }: { he: boolean; t: (h: string, e: st
 
         {tab === 'scale' && (
           <div className="fade-in card" style={{ padding: 20 }}>
-            <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.7)', marginBottom: 14, textAlign: 'center' }}>
+            <p style={{ fontSize: 17, color: 'rgba(255,255,255,0.7)', marginBottom: 14, textAlign: 'center' }}>
               {t('סקאלה לוגריתמית של מנות קרינה', 'Logarithmic dose scale')}
             </p>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
@@ -208,8 +208,8 @@ export default function Radiation({ he, t }: { he: boolean; t: (h: string, e: st
                 return (
                   <div key={i} className="fade-in" style={{ animationDelay: `${i * 0.04}s` }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 3, gap: 8, flexWrap: 'wrap' }}>
-                      <span style={{ fontSize: 14, color: '#fff', fontWeight: 600 }}>{t(d.label_he, d.label_en)}</span>
-                      <span style={{ fontSize: 13, color: riskC, fontFamily: "'JetBrains Mono', monospace", fontWeight: 700 }}>
+                      <span style={{ fontSize: 17, color: '#fff', fontWeight: 600 }}>{t(d.label_he, d.label_en)}</span>
+                      <span style={{ fontSize: 16, color: riskC, fontFamily: "'JetBrains Mono', monospace", fontWeight: 700 }}>
                         {d.mSv.toLocaleString()} mSv
                       </span>
                     </div>
@@ -514,7 +514,7 @@ function DispersionMap({ he, t }: { he: boolean; t: (h: string, e: string) => st
         <div style={{ display: 'flex', gap: 5, flexWrap: 'wrap' }}>
           {PHASES.map((p) => (
             <button key={p.n} onClick={() => { setPhase(p.n); setAuto(false); }} style={{
-              padding: '8px 14px', fontSize: 14, fontWeight: 800,
+              padding: '8px 14px', fontSize: 17, fontWeight: 800,
               background: phase === p.n ? p.color + '33' : 'rgba(0,0,0,0.4)',
               color: phase === p.n ? '#fff' : 'rgba(255,255,255,0.7)',
               border: `1.5px solid ${phase === p.n ? p.color : 'rgba(255,255,255,0.12)'}`,
@@ -553,8 +553,8 @@ function DispersionMap({ he, t }: { he: boolean; t: (h: string, e: string) => st
             padding: 20, textAlign: 'center',
           }}>
             <div style={{ fontSize: 28 }}>🗺</div>
-            <div style={{ fontSize: 15, color: '#fbbf24' }}>{mapError}</div>
-            <div style={{ fontSize: 13, color: 'rgba(255,255,255,0.6)', maxWidth: 380, lineHeight: 1.6 }}>
+            <div style={{ fontSize: 18, color: '#fbbf24' }}>{mapError}</div>
+            <div style={{ fontSize: 16, color: 'rgba(255,255,255,0.6)', maxWidth: 380, lineHeight: 1.6 }}>
               {t('יש להגדיר NEXT_PUBLIC_MAPBOX_TOKEN במשתני הסביבה של Vercel', 'NEXT_PUBLIC_MAPBOX_TOKEN must be set in Vercel environment variables')}
             </div>
           </div>
@@ -563,7 +563,7 @@ function DispersionMap({ he, t }: { he: boolean; t: (h: string, e: string) => st
           <div style={{
             position: 'absolute', inset: 0,
             display: 'flex', alignItems: 'center', justifyContent: 'center',
-            background: 'rgba(229,231,235,0.95)', color: '#1f2937', fontSize: 15,
+            background: 'rgba(229,231,235,0.95)', color: '#1f2937', fontSize: 18,
           }}>
             {t('טוען מפה...', 'Loading map...')}
           </div>
@@ -580,20 +580,20 @@ function DispersionMap({ he, t }: { he: boolean; t: (h: string, e: string) => st
         borderRadius: 10,
       }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 6, flexWrap: 'wrap', gap: 8 }}>
-          <h3 style={{ fontSize: 16, fontWeight: 900, color: '#fff', fontFamily: "'Playfair Display', serif" }}>
+          <h3 style={{ fontSize: 19, fontWeight: 900, color: '#fff', fontFamily: "'Playfair Display', serif" }}>
             {t(`שלב ${cur.n}: ${cur.title_he}`, `Phase ${cur.n}: ${cur.title_en}`)}
           </h3>
-          <div style={{ fontSize: 13, color: cur.color, fontFamily: "'JetBrains Mono', monospace", fontWeight: 800 }}>
+          <div style={{ fontSize: 16, color: cur.color, fontFamily: "'JetBrains Mono', monospace", fontWeight: 800 }}>
             {t(cur.days_he, cur.days_en)}
           </div>
         </div>
-        <p style={{ fontSize: 15, color: 'rgba(255,255,255,0.92)', lineHeight: 1.85 }}>
+        <p style={{ fontSize: 18, color: 'rgba(255,255,255,0.92)', lineHeight: 1.85 }}>
           {t(cur.desc_he, cur.desc_en)}
         </p>
       </div>
 
       {/* Legend */}
-      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10, justifyContent: 'center', marginTop: 14, fontSize: 13, color: 'rgba(255,255,255,0.85)' }}>
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10, justifyContent: 'center', marginTop: 14, fontSize: 16, color: 'rgba(255,255,255,0.85)' }}>
         <LegendItem c="#7f1d1d" label={t('אפיצנטר', 'Ground Zero')} />
         <LegendItem c="#dc2626" label={t('זיהום קיצוני', 'Extreme')} />
         <LegendItem c="#f97316" label={t('זיהום גבוה', 'Heavy')} />
@@ -602,7 +602,7 @@ function DispersionMap({ he, t }: { he: boolean; t: (h: string, e: string) => st
       </div>
 
       {/* Source attribution */}
-      <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.55)', marginTop: 12, textAlign: 'center', fontFamily: "'JetBrains Mono', monospace", lineHeight: 1.7 }}>
+      <p style={{ fontSize: 15, color: 'rgba(255,255,255,0.55)', marginTop: 12, textAlign: 'center', fontFamily: "'JetBrains Mono', monospace", lineHeight: 1.7 }}>
         📚 {t(
           'מקורות: De Cort et al. (1998) Atlas of Cs-137 Deposition · IAEA Chernobyl Forum 2005 · WMO trajectory analysis · Pöllänen et al. (1997)',
           'Sources: De Cort et al. (1998) Atlas of Cs-137 Deposition · IAEA Chernobyl Forum 2005 · WMO trajectory analysis · Pöllänen et al. (1997)'

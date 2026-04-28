@@ -28,7 +28,7 @@ export default function Sources({ he, t }: { he: boolean; t: (h: string, e: stri
             const active = cat === k;
             return (
               <button key={k} onClick={() => setCat(active ? null : k)} style={{
-                padding: '7px 12px', fontSize: 13, fontWeight: 700,
+                padding: '7px 12px', fontSize: 16, fontWeight: 700,
                 background: active ? `${v.c}33` : 'rgba(0,0,0,0.4)',
                 color: active ? v.c : 'rgba(255,255,255,0.7)',
                 border: `1px solid ${active ? v.c : 'rgba(255,255,255,0.12)'}`,
@@ -59,18 +59,18 @@ export default function Sources({ he, t }: { he: boolean; t: (h: string, e: stri
                 <div style={{ display: 'flex', alignItems: 'flex-start', gap: 10, marginBottom: 8 }}>
                   <div style={{ fontSize: 24 }}>{s.icon}</div>
                   <div style={{ flex: 1, minWidth: 0 }}>
-                    <h3 style={{ fontSize: 14, fontWeight: 800, color: '#fff', fontFamily: "'Playfair Display', serif", lineHeight: 1.3, marginBottom: 3 }}>
+                    <h3 style={{ fontSize: 17, fontWeight: 800, color: '#fff', fontFamily: "'Playfair Display', serif", lineHeight: 1.3, marginBottom: 3 }}>
                       {s.title}
                     </h3>
-                    <div style={{ fontSize: 13, color: cv.c, fontStyle: 'italic' }}>
+                    <div style={{ fontSize: 16, color: cv.c, fontStyle: 'italic' }}>
                       {s.subtitle} {s.year && `· ${s.year}`}
                     </div>
                   </div>
                 </div>
-                <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.8)', lineHeight: 1.7, marginBottom: 8 }}>
+                <p style={{ fontSize: 17, color: 'rgba(255,255,255,0.8)', lineHeight: 1.7, marginBottom: 8 }}>
                   {t(s.desc_he, s.desc_en)}
                 </p>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: 12, fontFamily: "'JetBrains Mono', monospace" }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: 15, fontFamily: "'JetBrains Mono', monospace" }}>
                   <span style={{ padding: '2px 8px', background: `${cv.c}25`, color: cv.c, borderRadius: 3, letterSpacing: '0.1em' }}>
                     {t(cv.he, cv.en)}
                   </span>
@@ -83,7 +83,7 @@ export default function Sources({ he, t }: { he: boolean; t: (h: string, e: stri
 
         {/* Disclaimer */}
         <div className="card-light" style={{ padding: '14px 18px', marginTop: 22, textAlign: 'center' }}>
-          <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.7)', lineHeight: 1.7 }}>
+          <p style={{ fontSize: 16, color: 'rgba(255,255,255,0.7)', lineHeight: 1.7 }}>
             {t(
               'כל הנתונים והנתונים בתיק מודיעין זה מבוססים על מקורות פתוחים ומאומתים בלבד. אין מידע מסווג או נתונים מומצאים.',
               'All data in this dossier is based on verified open sources only. No classified information or fabricated data.'

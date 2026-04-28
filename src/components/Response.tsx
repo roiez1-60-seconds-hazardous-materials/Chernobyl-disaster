@@ -48,7 +48,7 @@ export default function Response({ he, t }: { he: boolean; t: (h: string, e: str
           />
         </div>
 
-        <h3 style={{ fontSize: 18, fontWeight: 800, color: C.gold, fontFamily: "'Playfair Display', serif", marginBottom: 14, textAlign: 'center' }}>
+        <h3 style={{ fontSize: 21, fontWeight: 800, color: C.gold, fontFamily: "'Playfair Display', serif", marginBottom: 14, textAlign: 'center' }}>
           {t('10 קבוצות עיקריות', '10 Major Groups')}
         </h3>
 
@@ -66,26 +66,26 @@ export default function Response({ he, t }: { he: boolean; t: (h: string, e: str
                   <div style={{ fontSize: 32, flexShrink: 0 }}>{g.icon}</div>
                   <div style={{ flex: 1, minWidth: 0 }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', flexWrap: 'wrap', gap: 8 }}>
-                      <h3 style={{ fontSize: 16, fontWeight: 800, color: '#fff', fontFamily: "'Playfair Display', serif" }}>
+                      <h3 style={{ fontSize: 19, fontWeight: 800, color: '#fff', fontFamily: "'Playfair Display', serif" }}>
                         {t(g.he, g.en)}
                       </h3>
                       <div style={{ display: 'flex', gap: 6, alignItems: 'center', fontFamily: "'JetBrains Mono', monospace" }}>
-                        <span style={{ fontSize: 14, fontWeight: 800, color: C.gold }}>{g.count}</span>
-                        <span style={{ fontSize: 11, padding: '2px 6px', background: `${riskC}25`, color: riskC, borderRadius: 4, border: `1px solid ${riskC}55`, letterSpacing: '0.1em' }}>
+                        <span style={{ fontSize: 17, fontWeight: 800, color: C.gold }}>{g.count}</span>
+                        <span style={{ fontSize: 14, padding: '2px 6px', background: `${riskC}25`, color: riskC, borderRadius: 4, border: `1px solid ${riskC}55`, letterSpacing: '0.1em' }}>
                           {t(RISK_HE[g.risk], RISK_EN[g.risk])}
                         </span>
                       </div>
                     </div>
-                    {g.lead && <div style={{ fontSize: 13, color: C.gL, marginTop: 3, fontStyle: 'italic' }}>{g.lead}</div>}
+                    {g.lead && <div style={{ fontSize: 16, color: C.gL, marginTop: 3, fontStyle: 'italic' }}>{g.lead}</div>}
                   </div>
-                  <div style={{ fontSize: 14, color: C.gold, transform: isOpen ? 'rotate(90deg)' : 'rotate(0deg)', transition: 'transform 0.3s' }}>▶</div>
+                  <div style={{ fontSize: 17, color: C.gold, transform: isOpen ? 'rotate(90deg)' : 'rotate(0deg)', transition: 'transform 0.3s' }}>▶</div>
                 </button>
                 {isOpen && (
                   <div className="fade-in" style={{ padding: '0 18px 16px', borderTop: `1px solid ${riskC}33` }}>
-                    <p style={{ fontSize: 15, color: 'rgba(255,255,255,0.9)', lineHeight: 1.85, marginTop: 12, marginBottom: 10 }}>
+                    <p style={{ fontSize: 18, color: 'rgba(255,255,255,0.9)', lineHeight: 1.85, marginTop: 12, marginBottom: 10 }}>
                       {t(g.desc_he, g.desc_en)}
                     </p>
-                    <div style={{ display: 'flex', gap: 14, fontSize: 13, color: 'rgba(255,255,255,0.6)', fontFamily: "'JetBrains Mono', monospace", flexWrap: 'wrap' }}>
+                    <div style={{ display: 'flex', gap: 14, fontSize: 16, color: 'rgba(255,255,255,0.6)', fontFamily: "'JetBrains Mono', monospace", flexWrap: 'wrap' }}>
                       <span><span style={{ color: riskC }}>●</span> {t('סיכון', 'Risk')}: {t(RISK_HE[g.risk], RISK_EN[g.risk])}</span>
                       <span><span style={{ color: C.gold }}>●</span> {t('מנת קרינה', 'Dose')}: {g.dose}</span>
                     </div>

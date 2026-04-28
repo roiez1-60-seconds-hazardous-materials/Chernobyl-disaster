@@ -77,7 +77,7 @@ export default function SectionDivider({
           </div>
           {symbolLabel_he && (
             <div style={{
-              fontSize: 11,
+              fontSize: 14,
               letterSpacing: '0.3em',
               color: C.gold,
               fontFamily: "'JetBrains Mono', monospace",
@@ -114,7 +114,7 @@ export default function SectionDivider({
           </p>
           {by_he && (
             <div style={{
-              fontSize: 11,
+              fontSize: 14,
               color: 'rgba(200,164,78,0.7)',
               fontFamily: "'JetBrains Mono', monospace",
               letterSpacing: '0.15em',

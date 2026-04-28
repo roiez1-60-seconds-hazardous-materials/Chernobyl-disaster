@@ -5,28 +5,27 @@ html, body {
   font-family: 'Heebo', sans-serif;
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
-  font-size: 17px;
-  line-height: 1.6;
+  font-size: 18px;
+  line-height: 1.65;
 }
 
-/* Desktop scaling — significantly larger on big screens */
+/* Aggressive desktop scaling */
 @media (min-width: 768px) {
-  html, body { font-size: 18px; }
-}
-@media (min-width: 1024px) {
   html, body { font-size: 19px; }
 }
-@media (min-width: 1280px) {
-  html, body { font-size: 20px; }
-}
-@media (min-width: 1600px) {
+@media (min-width: 1024px) {
   html, body { font-size: 21px; }
 }
+@media (min-width: 1280px) {
+  html, body { font-size: 23px; }
+}
+@media (min-width: 1600px) {
+  html, body { font-size: 25px; }
+}
 @media (min-width: 1920px) {
-  html, body { font-size: 22px; }
+  html, body { font-size: 27px; }
 }
 
-/* Body paragraphs (default for <p> tags) */
 p { font-size: inherit; }
 
 /* ===================== Backgrounds ===================== */
@@ -100,40 +99,40 @@ section#radiation {
 section#glossary { background: linear-gradient(180deg, transparent, rgba(6,182,212,0.03), transparent); }
 section#presentation { background: linear-gradient(180deg, transparent, rgba(200,164,78,0.04), transparent); }
 
-.section-kicker {
-  display: inline-block;
-  border: 1px solid rgba(200,164,78,0.4);
-  padding: 5px 20px;
-  color: #c8a44e;
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 0.3em;
-  font-family: 'JetBrains Mono', monospace;
-  background: rgba(200,164,78,0.05);
-  margin-bottom: 14px;
-  border-radius: 2px;
-}
-
 .section-title {
   font-family: 'Playfair Display', serif;
-  font-size: clamp(38px, 6.5vw, 78px);
+  font-size: clamp(46px, 7vw, 92px);
   font-weight: 900;
   background: linear-gradient(135deg, #c8a44e 0%, #e8d5a0 50%, #c8a44e 100%);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
-  margin-bottom: 12px;
+  margin-bottom: 14px;
   line-height: 1.1;
 }
 
 .section-subtitle {
-  font-size: clamp(16px, 2.6vw, 24px);
+  font-size: clamp(19px, 2.6vw, 28px);
   font-weight: 400;
   color: rgba(232,213,160,0.92);
   font-family: 'Playfair Display', serif;
-  margin-bottom: 16px;
+  margin-bottom: 18px;
   font-style: italic;
   line-height: 1.5;
+}
+
+.section-kicker {
+  display: inline-block;
+  border: 1px solid rgba(200,164,78,0.4);
+  padding: 6px 22px;
+  color: #c8a44e;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.3em;
+  font-family: 'JetBrains Mono', monospace;
+  background: rgba(200,164,78,0.05);
+  margin-bottom: 16px;
+  border-radius: 2px;
 }
 
 .section-number {
@@ -436,14 +435,14 @@ section#presentation { background: linear-gradient(180deg, transparent, rgba(200
 }
 .stat-num {
   font-family: 'Playfair Display', serif;
-  font-size: clamp(22px, 4vw, 38px);
+  font-size: clamp(28px, 4.5vw, 48px);
   font-weight: 900;
   line-height: 1;
-  margin-bottom: 6px;
+  margin-bottom: 8px;
 }
 .stat-lbl {
-  font-size: 12px;
-  color: rgba(255,255,255,0.78);
+  font-size: 14px;
+  color: rgba(255,255,255,0.82);
   font-family: 'JetBrains Mono', monospace;
   letter-spacing: 0.05em;
   line-height: 1.45;

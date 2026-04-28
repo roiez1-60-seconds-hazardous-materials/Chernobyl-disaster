@@ -29,10 +29,10 @@ function CasualtyCard({ s, color, i }: { s: any; color: string; i: number }) {
       }}>
         <span ref={ref}>{display}</span>
       </div>
-      <div style={{ fontSize: 15, fontWeight: 700, color: '#fff', marginBottom: 6 }}>
+      <div style={{ fontSize: 18, fontWeight: 700, color: '#fff', marginBottom: 6 }}>
         {s.label}
       </div>
-      <div style={{ fontSize: 13, color: 'rgba(255,255,255,0.65)', lineHeight: 1.6 }}>
+      <div style={{ fontSize: 16, color: 'rgba(255,255,255,0.65)', lineHeight: 1.6 }}>
         {s.detail}
       </div>
     </div>
@@ -53,10 +53,10 @@ function FirefightersVisual({ he, t }: { he: boolean; t: (h: string, e: string) 
       transition: 'opacity 1s ease-out',
     }}>
       <div style={{ textAlign: 'center', marginBottom: 16 }}>
-        <h3 style={{ fontSize: 17, fontWeight: 800, color: '#fff', fontFamily: "'Playfair Display', serif", marginBottom: 4 }}>
+        <h3 style={{ fontSize: 20, fontWeight: 800, color: '#fff', fontFamily: "'Playfair Display', serif", marginBottom: 4 }}>
           {t('28 הכבאים שמתו', '28 Firefighters Who Died')}
         </h3>
-        <p style={{ fontSize: 13, color: C.gL, fontFamily: "'JetBrains Mono', monospace", letterSpacing: '0.1em' }}>
+        <p style={{ fontSize: 16, color: C.gL, fontFamily: "'JetBrains Mono', monospace", letterSpacing: '0.1em' }}>
           {t('כל פרצוף — חבר, אבא, בן', 'Each face — friend, father, son')}
         </p>
       </div>
@@ -79,7 +79,7 @@ function FirefightersVisual({ he, t }: { he: boolean; t: (h: string, e: string) 
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              fontSize: 14,
+              fontSize: 17,
               transition: `all 0.4s ease-out ${i * 0.04}s`,
               boxShadow: visible ? `0 0 8px ${C.danger}33, inset 0 0 6px ${C.danger}22` : 'none',
               opacity: visible ? 1 : 0,
@@ -95,7 +95,7 @@ function FirefightersVisual({ he, t }: { he: boolean; t: (h: string, e: string) 
       <p style={{
         textAlign: 'center',
         marginTop: 16,
-        fontSize: 13,
+        fontSize: 16,
         color: 'rgba(255,255,255,0.6)',
         fontFamily: "'Playfair Display', serif",
         fontStyle: 'italic',
@@ -137,7 +137,7 @@ export default function Casualties({ he, t }: { he: boolean; t: (h: string, e: s
         <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', justifyContent: 'center', marginBottom: 20 }}>
           {TABS.map((tb) => (
             <button key={tb.id} onClick={() => setTab(tb.id)} style={{
-              padding: '10px 18px', fontSize: 14, fontWeight: 700,
+              padding: '10px 18px', fontSize: 17, fontWeight: 700,
               background: tab === tb.id ? `${tb.c}33` : 'rgba(0,0,0,0.4)',
               color: tab === tb.id ? '#fff' : 'rgba(255,255,255,0.7)',
               border: `1px solid ${tab === tb.id ? tb.c : 'rgba(255,255,255,0.12)'}`,
@@ -147,7 +147,7 @@ export default function Casualties({ he, t }: { he: boolean; t: (h: string, e: s
               display: 'flex', alignItems: 'center', gap: 6,
               boxShadow: tab === tb.id ? `0 0 16px ${tb.c}55` : 'none',
             }}>
-              <span style={{ fontSize: 16 }}>{tb.icon}</span>
+              <span style={{ fontSize: 19 }}>{tb.icon}</span>
               {t(tb.he, tb.en)}
             </button>
           ))}
@@ -170,10 +170,10 @@ export default function Casualties({ he, t }: { he: boolean; t: (h: string, e: s
 
         {/* Important notes */}
         <div className="card-light" style={{ padding: '16px 20px', marginTop: 22 }}>
-          <h4 style={{ fontSize: 15, fontWeight: 700, color: C.gold, marginBottom: 8, fontFamily: "'JetBrains Mono', monospace", letterSpacing: '0.1em' }}>
+          <h4 style={{ fontSize: 18, fontWeight: 700, color: C.gold, marginBottom: 8, fontFamily: "'JetBrains Mono', monospace", letterSpacing: '0.1em' }}>
             ⓘ {t('הערות חשובות', 'IMPORTANT NOTES')}
           </h4>
-          <ul style={{ paddingInlineStart: 18, fontSize: 14, color: 'rgba(255,255,255,0.85)', lineHeight: 1.85 }}>
+          <ul style={{ paddingInlineStart: 18, fontSize: 17, color: 'rgba(255,255,255,0.85)', lineHeight: 1.85 }}>
             <li>{t('המספרים הסופיים של נפגעי סרטן עתידיים שנויים במחלוקת בקהילה המדעית — הערכות נעות בין 4,000 (WHO) ל-93,000 (גרינפיס).', 'Final cancer fatality numbers are scientifically disputed — estimates range from 4,000 (WHO) to 93,000 (Greenpeace).')}</li>
             <li>{t('סרטן בלוטת התריס בילדים הוא ההשפעה היחידה שבוודאות ניתן לייחס ישירות לחשיפת קרינה ואיכות מזון מזוהם בעת האסון.', 'Childhood thyroid cancer is the only effect definitively attributable to radiation exposure and contaminated food during the disaster.')}</li>
             <li>{t('כ-20% מהליקווידטורים מתו ב-30 השנים שאחרי — חלק גדול מהתמותה הזו לא ניתן לייחס ישירות לקרינה.', '~20% of liquidators died in following 30 years — much of this mortality cannot be directly attributed to radiation.')}</li>

@@ -40,7 +40,7 @@ export default function Glossary({ he, t }: { he: boolean; t: (h: string, e: str
               background: 'rgba(0,0,0,0.5)',
               border: `1px solid ${C.gold}55`,
               borderRadius: 8,
-              color: '#fff', fontSize: 14,
+              color: '#fff', fontSize: 17,
               fontFamily: "'Heebo', sans-serif",
               direction: he ? 'rtl' : 'ltr',
               outline: 'none',
@@ -55,7 +55,7 @@ export default function Glossary({ he, t }: { he: boolean; t: (h: string, e: str
               const active = cat === k;
               return (
                 <button key={k} onClick={() => setCat(active ? null : k)} style={{
-                  padding: '7px 12px', fontSize: 13, fontWeight: 700,
+                  padding: '7px 12px', fontSize: 16, fontWeight: 700,
                   background: active ? `${v.c}33` : 'rgba(0,0,0,0.4)',
                   color: active ? v.c : 'rgba(255,255,255,0.7)',
                   border: `1px solid ${active ? v.c : 'rgba(255,255,255,0.12)'}`,
@@ -84,14 +84,14 @@ export default function Glossary({ he, t }: { he: boolean; t: (h: string, e: str
                   animationDelay: `${i * 0.02}s`,
                 }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 6, gap: 8 }}>
-                    <h3 style={{ fontSize: 15, fontWeight: 800, color: cv.c, fontFamily: "'Playfair Display', serif", lineHeight: 1.3 }}>
+                    <h3 style={{ fontSize: 18, fontWeight: 800, color: cv.c, fontFamily: "'Playfair Display', serif", lineHeight: 1.3 }}>
                       {t(tr.he, tr.en)}
                     </h3>
-                    <span style={{ fontSize: 8, padding: '2px 6px', background: `${cv.c}25`, color: cv.c, borderRadius: 3, fontFamily: "'JetBrains Mono', monospace", letterSpacing: '0.1em', whiteSpace: 'nowrap', flexShrink: 0 }}>
+                    <span style={{ fontSize: 11, padding: '2px 6px', background: `${cv.c}25`, color: cv.c, borderRadius: 3, fontFamily: "'JetBrains Mono', monospace", letterSpacing: '0.1em', whiteSpace: 'nowrap', flexShrink: 0 }}>
                       {t(cv.he, cv.en)}
                     </span>
                   </div>
-                  <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.85)', lineHeight: 1.7 }}>
+                  <p style={{ fontSize: 17, color: 'rgba(255,255,255,0.85)', lineHeight: 1.7 }}>
                     {t(tr.def_he, tr.def_en)}
                   </p>
                 </div>
