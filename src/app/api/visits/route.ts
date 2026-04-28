@@ -1,65 +1,33 @@
-// Visit counter — tries multiple free counter APIs in sequence.
+// Visit counter — Vercel KV (Redis) backed.
 // GET /api/visits          → returns current count (no increment)
-// GET /api/visits?inc=1    → increments and returns new count
+// GET /api/visits?inc=1    → atomically increments and returns new count
+//
+// Setup required in Vercel dashboard:
+// 1. Storage → Create Database → KV (Upstash Redis)
+// 2. Connect to project — auto-injects KV_REST_API_URL + KV_REST_API_TOKEN
+// 3. Redeploy
+
+import { kv } from '@vercel/kv';
 
 export const runtime = 'edge';
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
 
-const NAMESPACE = 'chernobyl-60sec';
-const KEY = 'visits';
+const COUNTER_KEY = 'chernobyl:visits';
+const SEED_FLAG = 'chernobyl:seeded';
+const SEED_VALUE = 100; // baseline visits before KV migration
 
-type Endpoint = {
-  name: string;
-  up: string;
-  get: string;
-  extract: (d: any) => number | null;
-};
+async function ensureSeed(): Promise<void> {
+  // Only seed once: check flag
+  const seeded = await kv.get(SEED_FLAG);
+  if (seeded) return;
 
-const ENDPOINTS: Endpoint[] = [
-  // counterapi.dev v2 (newer)
-  {
-    name: 'counterapi-v2',
-    up: `https://api.counterapi.dev/v2/${NAMESPACE}/${KEY}/up`,
-    get: `https://api.counterapi.dev/v2/${NAMESPACE}/${KEY}`,
-    extract: (d) => (typeof d?.data?.count === 'number' ? d.data.count : null),
-  },
-  // counterapi.dev v1 (older)
-  {
-    name: 'counterapi-v1',
-    up: `https://api.counterapi.dev/v1/${NAMESPACE}/${KEY}/up`,
-    get: `https://api.counterapi.dev/v1/${NAMESPACE}/${KEY}`,
-    extract: (d) => (typeof d?.count === 'number' ? d.count : null),
-  },
-  // abacus.jasoncameron.dev
-  {
-    name: 'abacus',
-    up: `https://abacus.jasoncameron.dev/hit/${NAMESPACE}/${KEY}`,
-    get: `https://abacus.jasoncameron.dev/get/${NAMESPACE}/${KEY}`,
-    extract: (d) =>
-      typeof d?.value === 'number' ? d.value :
-      typeof d?.count === 'number' ? d.count : null,
-  },
-];
-
-async function tryEndpoint(ep: Endpoint, increment: boolean): Promise<{ count: number; source: string } | null> {
-  try {
-    const url = increment ? ep.up : ep.get;
-    const res = await fetch(url, {
-      cache: 'no-store',
-      signal: AbortSignal.timeout(4500),
-    });
-    if (!res.ok) return null;
-    const data = await res.json().catch(() => null);
-    if (!data) return null;
-    const count = ep.extract(data);
-    if (typeof count === 'number' && count >= 0) {
-      return { count, source: ep.name };
-    }
-    return null;
-  } catch {
-    return null;
+  // Set initial value if counter doesn't exist or is below seed
+  const current = (await kv.get<number>(COUNTER_KEY)) || 0;
+  if (current < SEED_VALUE) {
+    await kv.set(COUNTER_KEY, SEED_VALUE);
   }
+  await kv.set(SEED_FLAG, '1');
 }
 
 export async function GET(request: Request) {
@@ -71,27 +39,44 @@ export async function GET(request: Request) {
     'Cache-Control': 'no-store, max-age=0',
   };
 
-  // Try each endpoint in order
-  const errors: string[] = [];
-  for (const ep of ENDPOINTS) {
-    const result = await tryEndpoint(ep, increment);
-    if (result) {
+  try {
+    // Check KV is configured
+    if (!process.env.KV_REST_API_URL || !process.env.KV_REST_API_TOKEN) {
       return new Response(
-        JSON.stringify({ count: result.count, ok: true, source: result.source }),
+        JSON.stringify({
+          count: null,
+          ok: false,
+          error: 'Vercel KV not configured. Add KV storage in Vercel dashboard.',
+        }),
         { status: 200, headers }
       );
     }
-    errors.push(ep.name);
-  }
 
-  // All endpoints failed — return graceful error
-  return new Response(
-    JSON.stringify({
-      count: null,
-      ok: false,
-      tried: errors,
-      error: 'All counter services unavailable',
-    }),
-    { status: 200, headers } // 200 so client UI doesn't break
-  );
+    // One-time seed
+    await ensureSeed();
+
+    let count: number;
+    if (increment) {
+      // Atomic increment — Redis INCR is bulletproof against races
+      count = await kv.incr(COUNTER_KEY);
+    } else {
+      count = (await kv.get<number>(COUNTER_KEY)) || SEED_VALUE;
+    }
+
+    return new Response(
+      JSON.stringify({ count, ok: true, source: 'vercel-kv' }),
+      { status: 200, headers }
+    );
+  } catch (err: any) {
+    console.error('KV error:', err?.message || err);
+    return new Response(
+      JSON.stringify({
+        count: null,
+        ok: false,
+        error: 'Counter service error',
+        detail: err?.message,
+      }),
+      { status: 200, headers }
+    );
+  }
 }
