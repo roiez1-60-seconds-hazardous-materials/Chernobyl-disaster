@@ -325,60 +325,103 @@ export default function RBMK({ he, t }: { he: boolean; t: (h: string, e: string)
           }}>
             {t('הרכיבים העיקריים של RBMK-1000', 'Main RBMK-1000 Components')}
           </h3>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 8 }}>
-            {RBMK_COMP.map((c) => {
-              const isOpen = openComp === c.id;
-              return (
-                <button
-                  key={c.id}
-                  onClick={() => setOpenComp(isOpen ? null : c.id)}
-                  style={{
-                    padding: '12px 14px',
-                    background: isOpen ? `${C.gold}25` : 'rgba(0,0,0,0.4)',
-                    border: `1px solid ${isOpen ? C.gold : C.gold + '33'}`,
-                    borderRadius: 8,
-                    color: '#fff',
-                    cursor: 'pointer',
-                    textAlign: he ? 'right' : 'left',
-                    transition: 'all 0.25s',
-                    fontSize: 14,
-                    fontWeight: 700,
-                    fontFamily: "'JetBrains Mono', monospace",
-                  }}
-                >
-                  {t(c.he, c.en)}
-                </button>
-              );
-            })}
-          </div>
 
-          {cmpEntry && (
-            <div
-              key={cmpEntry.id}
-              style={{
-                marginTop: 14,
-                padding: '20px 24px',
-                background: 'linear-gradient(135deg, rgba(0,0,0,0.6), rgba(20,30,55,0.4))',
-                border: `1px solid ${C.gold}55`,
-                borderInlineStart: `4px solid ${C.gold}`,
-                borderRadius: 10,
-                animation: 'fadeIn 0.4s',
-              }}
-            >
-              <h4 style={{
-                fontSize: 18,
-                fontWeight: 800,
-                color: C.gold,
-                fontFamily: "'Playfair Display', serif",
-                marginBottom: 8,
+          {/* Group cards in rows; expansion appears within the row of the clicked card */}
+          {(() => {
+            // Calculate how many cards per row based on viewport breakpoints
+            // We use grid auto-fit, but for the inline expansion we render row-by-row
+            // The trick: render all cards, but inject a full-width panel after the row containing the open card
+            // We use CSS grid + gridColumn span trick to achieve in-row expansion
+
+            return (
+              <div style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+                gap: 10,
               }}>
-                {t(cmpEntry.he, cmpEntry.en)}
-              </h4>
-              <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.9)', lineHeight: 1.85 }}>
-                {proMode ? t((cmpEntry as any).pro_he, (cmpEntry as any).pro_en) : t(cmpEntry.simple_he, cmpEntry.simple_en)}
-              </p>
-            </div>
-          )}
+                {RBMK_COMP.map((c, idx) => {
+                  const isOpen = openComp === c.id;
+                  return (
+                    <div key={c.id} style={{ display: 'contents' }}>
+                      <button
+                        onClick={() => setOpenComp(isOpen ? null : c.id)}
+                        style={{
+                          padding: '14px 16px',
+                          background: isOpen ? `${C.gold}25` : 'rgba(0,0,0,0.4)',
+                          border: `1.5px solid ${isOpen ? C.gold : C.gold + '33'}`,
+                          borderRadius: 10,
+                          color: '#fff',
+                          cursor: 'pointer',
+                          textAlign: he ? 'right' : 'left',
+                          transition: 'all 0.25s',
+                          fontSize: 15,
+                          fontWeight: 700,
+                          fontFamily: "'JetBrains Mono', monospace",
+                          boxShadow: isOpen ? `0 0 16px ${C.gold}55` : 'none',
+                          position: 'relative',
+                        }}
+                      >
+                        <span style={{ marginInlineEnd: 6 }}>{isOpen ? '▼' : he ? '◀' : '▶'}</span>
+                        {t(c.he, c.en)}
+                      </button>
+
+                      {/* Inline expansion panel — full width below this card's row */}
+                      {isOpen && (
+                        <div
+                          style={{
+                            gridColumn: '1 / -1',
+                            padding: '22px 26px',
+                            background: 'linear-gradient(135deg, rgba(200,164,78,0.1), rgba(0,0,0,0.7))',
+                            border: `1.5px solid ${C.gold}77`,
+                            borderInlineStart: `5px solid ${C.gold}`,
+                            borderRadius: 12,
+                            animation: 'expandPanel 0.4s cubic-bezier(0.16, 1, 0.3, 1)',
+                            boxShadow: `0 8px 24px rgba(0,0,0,0.5), 0 0 32px ${C.gold}22`,
+                            marginTop: 4, marginBottom: 4,
+                          }}
+                        >
+                          <h4 style={{
+                            fontSize: 22,
+                            fontWeight: 900,
+                            color: C.gold,
+                            fontFamily: "'Playfair Display', serif",
+                            marginBottom: 12,
+                            display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                            gap: 12, flexWrap: 'wrap',
+                          }}>
+                            <span>{t(c.he, c.en)}</span>
+                            <button
+                              onClick={() => setOpenComp(null)}
+                              aria-label={t('סגור', 'Close')}
+                              style={{
+                                width: 32, height: 32,
+                                borderRadius: '50%',
+                                background: 'rgba(0,0,0,0.5)',
+                                border: `1px solid ${C.gold}55`,
+                                color: C.gL,
+                                cursor: 'pointer',
+                                fontSize: 16,
+                                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                              }}
+                            >
+                              ✕
+                            </button>
+                          </h4>
+                          <p style={{
+                            fontSize: 17,
+                            color: 'rgba(255,255,255,0.95)',
+                            lineHeight: 1.85,
+                          }}>
+                            {proMode ? t((c as any).pro_he, (c as any).pro_en) : t(c.simple_he, c.simple_en)}
+                          </p>
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            );
+          })()}
         </div>
       </div>
 

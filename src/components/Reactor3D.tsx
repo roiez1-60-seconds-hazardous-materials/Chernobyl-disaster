@@ -454,85 +454,52 @@ export default function Reactor3D({
           </g>
         )}
 
-        {/* ================ LABELS ================ */}
+        {/* ================ LABELS — only shown if showLabels and viewport is wide enough ================ */}
         {showLabels && (
-          <g style={{ pointerEvents: 'none' }}>
-            {/* Labels with pointer lines */}
+          <g style={{ pointerEvents: 'none' }} className="reactor-labels">
+            {/* Numbered indicators on key components — small numbered circles */}
 
-            {/* Upper biological shield */}
+            {/* 1. Upper biological shield */}
             <g>
-              <line x1="950" y1="265" x2="1000" y2="265" stroke={C.gold} strokeWidth="1" />
-              <text x="1005" y="262" fill={C.gold} fontSize="12" fontFamily="JetBrains Mono" fontWeight="700">
-                {he ? 'מגן ביולוגי עליון' : 'Upper Bio Shield'}
-              </text>
-              <text x="1005" y="275" fill={C.gL} fontSize="10" fontFamily="JetBrains Mono">
-                {he ? '2,000 טון' : '2,000 tons'}
-              </text>
+              <circle cx="540" cy="265" r="14" fill={C.gold} stroke="#000" strokeWidth="1.5" />
+              <text x="540" y="270" textAnchor="middle" fill="#000" fontSize="14" fontFamily="JetBrains Mono" fontWeight="900">1</text>
             </g>
 
-            {/* Steam separator */}
+            {/* 2. Steam separator */}
             <g>
-              <line x1="370" y1="160" x2="430" y2="120" stroke={C.gold} strokeWidth="1" />
-              <text x="430" y="115" fill={C.gold} fontSize="12" fontFamily="JetBrains Mono" fontWeight="700">
-                {he ? 'מפריד קיטור' : 'Steam Drum'}
-              </text>
-              <text x="430" y="128" fill={C.gL} fontSize="10" fontFamily="JetBrains Mono">
-                {he ? '4 יחידות' : '4 units'}
-              </text>
+              <circle cx="500" cy="160" r="14" fill={C.gold} stroke="#000" strokeWidth="1.5" />
+              <text x="500" y="165" textAnchor="middle" fill="#000" fontSize="14" fontFamily="JetBrains Mono" fontWeight="900">2</text>
             </g>
 
-            {/* Control rods */}
+            {/* 3. Control rods */}
             <g>
-              <line x1="220" y1="220" x2="120" y2="170" stroke={C.gold} strokeWidth="1" />
-              <text x="115" y="160" textAnchor="end" fill={C.gold} fontSize="12" fontFamily="JetBrains Mono" fontWeight="700">
-                {he ? 'מוטות בקרה' : 'Control Rods'}
-              </text>
-              <text x="115" y="172" textAnchor="end" fill={isSpike ? C.danger : C.gL} fontSize="10" fontFamily="JetBrains Mono">
-                {he ? `${rodPosition}% מוחדרים` : `${rodPosition}% inserted`}
-              </text>
-              {isSpike && (
-                <text x="115" y="184" textAnchor="end" fill={C.danger} fontSize="9" fontFamily="JetBrains Mono" fontWeight="800">
-                  {he ? '⚠ קצה גרפיט!' : '⚠ Graphite tip!'}
-                </text>
-              )}
+              <circle cx="240" cy="220" r="14" fill={isSpike ? C.danger : C.gold} stroke="#000" strokeWidth="1.5"
+                      style={{ animation: isSpike ? 'pulseAlert 0.8s infinite' : 'none' }} />
+              <text x="240" y="225" textAnchor="middle" fill="#000" fontSize="14" fontFamily="JetBrains Mono" fontWeight="900">3</text>
             </g>
 
-            {/* Graphite stack */}
+            {/* 4. Graphite stack */}
             <g>
-              <line x1="280" y1="380" x2="120" y2="430" stroke={C.gold} strokeWidth="1" />
-              <text x="115" y="430" textAnchor="end" fill={C.gold} fontSize="12" fontFamily="JetBrains Mono" fontWeight="700">
-                {he ? 'גרפיט מאט' : 'Graphite Moderator'}
-              </text>
-              <text x="115" y="442" textAnchor="end" fill={C.gL} fontSize="10" fontFamily="JetBrains Mono">
-                {he ? '1,700 טון' : '1,700 tons'}
-              </text>
+              <circle cx="350" cy="430" r="14" fill={C.gold} stroke="#000" strokeWidth="1.5" />
+              <text x="350" y="435" textAnchor="middle" fill="#000" fontSize="14" fontFamily="JetBrains Mono" fontWeight="900">4</text>
             </g>
 
-            {/* Pressure tubes */}
+            {/* 5. Pressure tubes */}
             <g>
-              <line x1="700" y1="430" x2="900" y2="380" stroke={C.gold} strokeWidth="1" />
-              <text x="905" y="378" fill={C.gold} fontSize="12" fontFamily="JetBrains Mono" fontWeight="700">
-                {he ? 'תעלות לחץ' : 'Pressure Tubes'}
-              </text>
-              <text x="905" y="391" fill={C.gL} fontSize="10" fontFamily="JetBrains Mono">
-                {he ? '1,661 תעלות' : '1,661 channels'}
-              </text>
+              <circle cx="700" cy="430" r="14" fill={C.gold} stroke="#000" strokeWidth="1.5" />
+              <text x="700" y="435" textAnchor="middle" fill="#000" fontSize="14" fontFamily="JetBrains Mono" fontWeight="900">5</text>
             </g>
 
-            {/* MCP */}
+            {/* 6. MCP */}
             <g>
-              <line x1="100" y1="520" x2="50" y2="560" stroke={C.gold} strokeWidth="1" />
-              <text x="50" y="580" fill={C.gold} fontSize="11" fontFamily="JetBrains Mono" fontWeight="700">
-                {he ? 'משאבת קירור' : 'Coolant Pump'}
-              </text>
+              <circle cx="100" cy="480" r="14" fill={C.gold} stroke="#000" strokeWidth="1.5" />
+              <text x="100" y="485" textAnchor="middle" fill="#000" fontSize="14" fontFamily="JetBrains Mono" fontWeight="900">6</text>
             </g>
 
-            {/* Concrete shielding */}
+            {/* 7. Concrete shielding */}
             <g>
-              <line x1="100" y1="380" x2="40" y2="380" stroke={C.gold} strokeWidth="1" />
-              <text x="35" y="378" textAnchor="end" fill={C.gold} fontSize="11" fontFamily="JetBrains Mono" fontWeight="700">
-                {he ? 'מעטפת בטון' : 'Concrete Shield'}
-              </text>
+              <circle cx="120" cy="370" r="14" fill={C.gold} stroke="#000" strokeWidth="1.5" />
+              <text x="120" y="375" textAnchor="middle" fill="#000" fontSize="14" fontFamily="JetBrains Mono" fontWeight="900">7</text>
             </g>
           </g>
         )}
@@ -545,6 +512,93 @@ export default function Reactor3D({
           {he ? 'חתך אנכי · יחידה 4' : 'CROSS-SECTION · UNIT 4'}
         </text>
       </svg>
+
+      {/* ================ LEGEND — readable at any screen size ================ */}
+      {showLabels && (
+        <div style={{
+          marginTop: 14,
+          padding: '14px 16px',
+          background: 'linear-gradient(135deg, rgba(0,0,0,0.6), rgba(20,30,55,0.4))',
+          border: `1px solid ${C.gold}33`,
+          borderRadius: 10,
+        }}>
+          <div style={{
+            fontSize: 12,
+            color: C.gold,
+            fontFamily: "'JetBrains Mono', monospace",
+            fontWeight: 800,
+            letterSpacing: '0.15em',
+            marginBottom: 10,
+          }}>
+            {he ? '◆ מקרא רכיבי הכור' : '◆ REACTOR LEGEND'}
+          </div>
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+            gap: 8,
+          }}>
+            {[
+              { n: 1, he_l: 'מגן ביולוגי עליון', en_l: 'Upper Bio Shield', he_d: '2,000 טון · נעקר בפיצוץ', en_d: '2,000 tons · ejected in blast' },
+              { n: 2, he_l: 'מפריד קיטור', en_l: 'Steam Separator', he_d: '4 יחידות · מפרידות אדים ממים', en_d: '4 units · separate steam from water' },
+              { n: 3, he_l: 'מוטות בקרה', en_l: 'Control Rods',
+                he_d: rodPosition > 0 ? `${rodPosition}% מוחדרים${isSpike ? ' · ⚠ קצה גרפיט קטלני' : ''}` : 'יצאו מהליבה',
+                en_d: rodPosition > 0 ? `${rodPosition}% inserted${isSpike ? ' · ⚠ Graphite tip!' : ''}` : 'withdrawn',
+                color: isSpike ? C.danger : undefined },
+              { n: 4, he_l: 'גרפיט מאט', en_l: 'Graphite Moderator', he_d: '1,700 טון · בלוקי פחמן טהור', en_d: '1,700 tons · pure carbon blocks' },
+              { n: 5, he_l: 'תעלות לחץ', en_l: 'Pressure Tubes', he_d: '1,661 תעלות · מכילות דלק וקירור', en_d: '1,661 channels · contain fuel & coolant' },
+              { n: 6, he_l: 'משאבות קירור', en_l: 'Coolant Pumps', he_d: '8 משאבות · מסחררות מים בליבה', en_d: '8 pumps · circulate water through core' },
+              { n: 7, he_l: 'מעטפת בטון', en_l: 'Concrete Shielding', he_d: 'מעטפת חיצונית · בלי קונטיינמנט!', en_d: 'Outer shielding · NO containment dome!' },
+            ].map((item) => (
+              <div key={item.n} style={{
+                display: 'flex',
+                alignItems: 'flex-start',
+                gap: 10,
+                padding: '8px 10px',
+                background: 'rgba(0,0,0,0.35)',
+                borderRadius: 6,
+                border: `1px solid ${item.color || C.gold}22`,
+              }}>
+                <div style={{
+                  flexShrink: 0,
+                  width: 26,
+                  height: 26,
+                  borderRadius: '50%',
+                  background: item.color || C.gold,
+                  color: '#000',
+                  fontWeight: 900,
+                  fontSize: 14,
+                  fontFamily: "'JetBrains Mono', monospace",
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  animation: item.color === C.danger ? 'pulseAlert 1s infinite' : 'none',
+                }}>
+                  {item.n}
+                </div>
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div style={{
+                    fontSize: 14,
+                    color: '#fff',
+                    fontWeight: 700,
+                    lineHeight: 1.3,
+                    marginBottom: 2,
+                  }}>
+                    {t(item.he_l, item.en_l)}
+                  </div>
+                  <div style={{
+                    fontSize: 12,
+                    color: item.color === C.danger ? C.danger : 'rgba(255,255,255,0.65)',
+                    lineHeight: 1.4,
+                    fontFamily: "'JetBrains Mono', monospace",
+                  }}>
+                    {t(item.he_d, item.en_d)}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       <style jsx>{`
         @keyframes expanFlash {
