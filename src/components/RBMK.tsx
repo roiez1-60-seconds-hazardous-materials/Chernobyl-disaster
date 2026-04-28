@@ -197,6 +197,63 @@ export default function RBMK({ he, t }: { he: boolean; t: (h: string, e: string)
           />
         </div>
 
+        {/* Step description card — RIGHT BELOW the simulator */}
+        <div
+          key={`desc-${step}`}
+          style={{
+            padding: 'clamp(14px, 2.5vw, 22px) clamp(16px, 3vw, 26px)',
+            background: cur.mood === 'apocalypse'
+              ? `linear-gradient(135deg, ${C.danger}40, rgba(0,0,0,0.92))`
+              : cur.mood === 'explosion'
+              ? `linear-gradient(135deg, ${C.amber}30, rgba(0,0,0,0.92))`
+              : cur.mood === 'critical'
+              ? `linear-gradient(135deg, ${C.danger}25, rgba(0,0,0,0.9))`
+              : cur.mood === 'danger'
+              ? `linear-gradient(135deg, ${C.amber}25, rgba(0,0,0,0.9))`
+              : `linear-gradient(135deg, ${C.gold}20, rgba(0,0,0,0.88))`,
+            border: `1.5px solid ${
+              cur.mood === 'apocalypse' ? C.danger
+              : cur.mood === 'explosion' ? C.amber
+              : cur.mood === 'critical' ? C.danger
+              : cur.mood === 'danger' ? C.amber
+              : C.gold
+            }77`,
+            borderInlineStart: `5px solid ${
+              cur.mood === 'apocalypse' ? C.danger
+              : cur.mood === 'explosion' ? C.amber
+              : cur.mood === 'critical' ? C.danger
+              : cur.mood === 'danger' ? C.amber
+              : C.gold
+            }`,
+            borderRadius: 12,
+            marginBottom: 16,
+            animation: 'fadeIn 0.6s ease-out',
+            boxShadow: '0 8px 28px rgba(0,0,0,0.6)',
+          }}
+        >
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 10, flexWrap: 'wrap', gap: 10 }}>
+            <h3 style={{ fontSize: 22, fontWeight: 900, color: '#fff', fontFamily: "'Playfair Display', serif", lineHeight: 1.2 }}>
+              {t(cur.he, cur.en)}
+            </h3>
+            <div style={{
+              padding: '4px 12px',
+              background: 'rgba(0,0,0,0.5)',
+              border: `1px solid ${C.gold}55`,
+              borderRadius: 6,
+              fontSize: 14,
+              color: C.gold,
+              fontFamily: "'JetBrains Mono', monospace",
+              fontWeight: 800,
+              letterSpacing: '0.1em',
+            }}>
+              {t(`שלב ${step + 1}/${INSAG.length}`, `Step ${step + 1}/${INSAG.length}`)} · {cur.time}
+            </div>
+          </div>
+          <p style={{ fontSize: 16, color: 'rgba(255,255,255,0.92)', lineHeight: 1.85 }}>
+            {proMode ? t(cur.pro_he, cur.pro_en) : t(cur.simple_he, cur.simple_en)}
+          </p>
+        </div>
+
         {/* Step controls */}
         <div style={{
           display: 'flex',
@@ -270,68 +327,6 @@ export default function RBMK({ he, t }: { he: boolean; t: (h: string, e: string)
           >
             {proMode ? t('מצב פשוט', 'Simple') : t('מצב מקצועי', 'Pro mode')}
           </button>
-        </div>
-
-        {/* Step description card — sticky on mobile so always visible alongside simulator */}
-        <div
-          key={`desc-${step}`}
-          style={{
-            padding: 'clamp(14px, 2.5vw, 22px) clamp(16px, 3vw, 26px)',
-            background: cur.mood === 'apocalypse'
-              ? `linear-gradient(135deg, ${C.danger}40, rgba(0,0,0,0.92))`
-              : cur.mood === 'explosion'
-              ? `linear-gradient(135deg, ${C.amber}30, rgba(0,0,0,0.92))`
-              : cur.mood === 'critical'
-              ? `linear-gradient(135deg, ${C.danger}25, rgba(0,0,0,0.9))`
-              : cur.mood === 'danger'
-              ? `linear-gradient(135deg, ${C.amber}25, rgba(0,0,0,0.9))`
-              : `linear-gradient(135deg, ${C.gold}20, rgba(0,0,0,0.88))`,
-            backdropFilter: 'blur(12px)',
-            WebkitBackdropFilter: 'blur(12px)',
-            border: `1.5px solid ${
-              cur.mood === 'apocalypse' ? C.danger
-              : cur.mood === 'explosion' ? C.amber
-              : cur.mood === 'critical' ? C.danger
-              : cur.mood === 'danger' ? C.amber
-              : C.gold
-            }77`,
-            borderInlineStart: `5px solid ${
-              cur.mood === 'apocalypse' ? C.danger
-              : cur.mood === 'explosion' ? C.amber
-              : cur.mood === 'critical' ? C.danger
-              : cur.mood === 'danger' ? C.amber
-              : C.gold
-            }`,
-            borderRadius: 12,
-            marginBottom: 24,
-            animation: 'fadeIn 0.6s ease-out',
-            position: 'sticky',
-            bottom: 12,
-            zIndex: 5,
-            boxShadow: '0 8px 28px rgba(0,0,0,0.6)',
-          }}
-        >
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 10, flexWrap: 'wrap', gap: 10 }}>
-            <h3 style={{ fontSize: 22, fontWeight: 900, color: '#fff', fontFamily: "'Playfair Display', serif", lineHeight: 1.2 }}>
-              {t(cur.he, cur.en)}
-            </h3>
-            <div style={{
-              padding: '4px 12px',
-              background: 'rgba(0,0,0,0.5)',
-              border: `1px solid ${C.gold}55`,
-              borderRadius: 6,
-              fontSize: 14,
-              color: C.gold,
-              fontFamily: "'JetBrains Mono', monospace",
-              fontWeight: 800,
-              letterSpacing: '0.1em',
-            }}>
-              {t(`שלב ${step + 1}/${INSAG.length}`, `Step ${step + 1}/${INSAG.length}`)} · {cur.time}
-            </div>
-          </div>
-          <p style={{ fontSize: 16, color: 'rgba(255,255,255,0.92)', lineHeight: 1.85 }}>
-            {proMode ? t(cur.pro_he, cur.pro_en) : t(cur.simple_he, cur.simple_en)}
-          </p>
         </div>
 
         {/* RBMK Components — bottom info section */}

@@ -655,91 +655,106 @@ export default function Reactor3D({
         </text>
       </svg>
 
-      {/* ================ LEGEND — readable at any screen size ================ */}
+      {/* ================ LEGEND — collapsible to keep simulator + text together ================ */}
       {showLabels && (
-        <div style={{
-          marginTop: 14,
-          padding: '14px 16px',
-          background: 'linear-gradient(135deg, rgba(0,0,0,0.6), rgba(20,30,55,0.4))',
-          border: `1px solid ${C.gold}33`,
-          borderRadius: 10,
+        <details style={{
+          marginTop: 12,
         }}>
-          <div style={{
-            fontSize: 12,
+          <summary style={{
+            cursor: 'pointer',
+            padding: '10px 14px',
+            background: 'linear-gradient(135deg, rgba(200,164,78,0.15), rgba(0,0,0,0.6))',
+            border: `1px solid ${C.gold}55`,
+            borderRadius: 8,
+            fontSize: 13,
             color: C.gold,
             fontFamily: "'JetBrains Mono', monospace",
             fontWeight: 800,
-            letterSpacing: '0.15em',
-            marginBottom: 10,
+            letterSpacing: '0.12em',
+            listStyle: 'none',
+            userSelect: 'none',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            gap: 10,
           }}>
-            {he ? '◆ מקרא רכיבי הכור' : '◆ REACTOR LEGEND'}
-          </div>
+            <span>◆ {he ? 'מקרא רכיבי הכור (לחץ לפתיחה)' : 'REACTOR LEGEND (click to expand)'}</span>
+            <span style={{ fontSize: 11, opacity: 0.7 }}>▾</span>
+          </summary>
           <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-            gap: 8,
+            marginTop: 10,
+            padding: '14px 16px',
+            background: 'linear-gradient(135deg, rgba(0,0,0,0.6), rgba(20,30,55,0.4))',
+            border: `1px solid ${C.gold}33`,
+            borderRadius: 10,
           }}>
-            {[
-              { n: 1, he_l: 'מגן ביולוגי עליון', en_l: 'Upper Bio Shield', he_d: '2,000 טון · נעקר בפיצוץ', en_d: '2,000 tons · ejected in blast' },
-              { n: 2, he_l: 'מפריד קיטור', en_l: 'Steam Separator', he_d: '4 יחידות · מפרידות אדים ממים', en_d: '4 units · separate steam from water' },
-              { n: 3, he_l: 'מוטות בקרה', en_l: 'Control Rods',
-                he_d: rodPosition > 0 ? `${rodPosition}% מוחדרים${isSpike ? ' · ⚠ קצה גרפיט קטלני' : ''}` : 'יצאו מהליבה',
-                en_d: rodPosition > 0 ? `${rodPosition}% inserted${isSpike ? ' · ⚠ Graphite tip!' : ''}` : 'withdrawn',
-                color: isSpike ? C.danger : undefined },
-              { n: 4, he_l: 'גרפיט מאט', en_l: 'Graphite Moderator', he_d: '1,700 טון · בלוקי פחמן טהור', en_d: '1,700 tons · pure carbon blocks' },
-              { n: 5, he_l: 'תעלות לחץ', en_l: 'Pressure Tubes', he_d: '1,661 תעלות · מכילות דלק וקירור', en_d: '1,661 channels · contain fuel & coolant' },
-              { n: 6, he_l: 'משאבות קירור', en_l: 'Coolant Pumps', he_d: '8 משאבות · מסחררות מים בליבה', en_d: '8 pumps · circulate water through core' },
-              { n: 7, he_l: 'מעטפת בטון', en_l: 'Concrete Shielding', he_d: 'מעטפת חיצונית · בלי קונטיינמנט!', en_d: 'Outer shielding · NO containment dome!' },
-            ].map((item) => (
-              <div key={item.n} style={{
-                display: 'flex',
-                alignItems: 'flex-start',
-                gap: 10,
-                padding: '8px 10px',
-                background: 'rgba(0,0,0,0.35)',
-                borderRadius: 6,
-                border: `1px solid ${item.color || C.gold}22`,
-              }}>
-                <div style={{
-                  flexShrink: 0,
-                  width: 26,
-                  height: 26,
-                  borderRadius: '50%',
-                  background: item.color || C.gold,
-                  color: '#000',
-                  fontWeight: 900,
-                  fontSize: 14,
-                  fontFamily: "'JetBrains Mono', monospace",
+            <div style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
+              gap: 8,
+            }}>
+              {[
+                { n: 1, he_l: 'מגן ביולוגי עליון', en_l: 'Upper Bio Shield', he_d: '2,000 טון · נעקר בפיצוץ', en_d: '2,000 tons · ejected in blast' },
+                { n: 2, he_l: 'מפריד קיטור', en_l: 'Steam Separator', he_d: '4 יחידות · מפרידות אדים ממים', en_d: '4 units · separate steam from water' },
+                { n: 3, he_l: 'מוטות בקרה', en_l: 'Control Rods',
+                  he_d: rodPosition > 0 ? `${rodPosition}% מוחדרים${isSpike ? ' · ⚠ קצה גרפיט קטלני' : ''}` : 'יצאו מהליבה',
+                  en_d: rodPosition > 0 ? `${rodPosition}% inserted${isSpike ? ' · ⚠ Graphite tip!' : ''}` : 'withdrawn',
+                  color: isSpike ? C.danger : undefined },
+                { n: 4, he_l: 'גרפיט מאט', en_l: 'Graphite Moderator', he_d: '1,700 טון · בלוקי פחמן טהור', en_d: '1,700 tons · pure carbon blocks' },
+                { n: 5, he_l: 'תעלות לחץ', en_l: 'Pressure Tubes', he_d: '1,661 תעלות · מכילות דלק וקירור', en_d: '1,661 channels · contain fuel & coolant' },
+                { n: 6, he_l: 'משאבות קירור', en_l: 'Coolant Pumps', he_d: '8 משאבות · מסחררות מים בליבה', en_d: '8 pumps · circulate water through core' },
+                { n: 7, he_l: 'מעטפת בטון', en_l: 'Concrete Shielding', he_d: 'מעטפת חיצונית · בלי קונטיינמנט!', en_d: 'Outer shielding · NO containment dome!' },
+              ].map((item) => (
+                <div key={item.n} style={{
                   display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  animation: item.color === C.danger ? 'pulseAlert 1s infinite' : 'none',
+                  alignItems: 'flex-start',
+                  gap: 10,
+                  padding: '8px 10px',
+                  background: 'rgba(0,0,0,0.35)',
+                  borderRadius: 6,
+                  border: `1px solid ${item.color || C.gold}22`,
                 }}>
-                  {item.n}
-                </div>
-                <div style={{ flex: 1, minWidth: 0 }}>
                   <div style={{
+                    flexShrink: 0,
+                    width: 26,
+                    height: 26,
+                    borderRadius: '50%',
+                    background: item.color || C.gold,
+                    color: '#000',
+                    fontWeight: 900,
                     fontSize: 14,
-                    color: '#fff',
-                    fontWeight: 700,
-                    lineHeight: 1.3,
-                    marginBottom: 2,
-                  }}>
-                    {t(item.he_l, item.en_l)}
-                  </div>
-                  <div style={{
-                    fontSize: 12,
-                    color: item.color === C.danger ? C.danger : 'rgba(255,255,255,0.65)',
-                    lineHeight: 1.4,
                     fontFamily: "'JetBrains Mono', monospace",
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    animation: item.color === C.danger ? 'pulseAlert 1s infinite' : 'none',
                   }}>
-                    {t(item.he_d, item.en_d)}
+                    {item.n}
+                  </div>
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <div style={{
+                      fontSize: 14,
+                      color: '#fff',
+                      fontWeight: 700,
+                      lineHeight: 1.3,
+                      marginBottom: 2,
+                    }}>
+                      {t(item.he_l, item.en_l)}
+                    </div>
+                    <div style={{
+                      fontSize: 12,
+                      color: item.color === C.danger ? C.danger : 'rgba(255,255,255,0.65)',
+                      lineHeight: 1.4,
+                      fontFamily: "'JetBrains Mono', monospace",
+                    }}>
+                      {t(item.he_d, item.en_d)}
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
-        </div>
+        </details>
       )}
 
       <style jsx>{`
