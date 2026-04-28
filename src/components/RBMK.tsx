@@ -391,8 +391,8 @@ function CinematicReactor({ step, he, t }: { step: number; he: boolean; t: (h: s
         {/* Step 1: Power reduction arrows */}
         {step === 0 && (
           <g style={{ animation: 'fadeIn 0.6s' }}>
-            <text x="500" y="220" fill={C.amber} fontSize="22" fontFamily="JetBrains Mono" fontWeight="700">↓</text>
-            <text x="500" y="245" fill={C.gL} fontSize="9" fontFamily="JetBrains Mono">REDUCE</text>
+            <text x="500" y="220" fill={C.amber} fontSize="28" fontFamily="JetBrains Mono" fontWeight="700">↓</text>
+            <text x="500" y="248" fill={C.gL} fontSize="14" fontFamily="JetBrains Mono" fontWeight="700">{he ? 'הורדת הספק' : 'POWER ↓'}</text>
           </g>
         )}
 

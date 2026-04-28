@@ -8,7 +8,6 @@ export default function Nav({ he, setHe, t }: { he: boolean; setHe: (v: boolean)
   const [progress, setProgress] = useState(0);
   const [active, setActive] = useState('hero');
   const [soundOn, setSoundOn] = useState(false);
-  const [visits, setVisits] = useState<number | null>(null);
 
   // Scroll progress + active section
   useEffect(() => {
@@ -26,22 +25,6 @@ export default function Nav({ he, setHe, t }: { he: boolean; setHe: (v: boolean)
     window.addEventListener('scroll', onScroll, { passive: true });
     onScroll();
     return () => window.removeEventListener('scroll', onScroll);
-  }, []);
-
-  // Visit counter — increment once per session
-  useEffect(() => {
-    const KEY = 'chernobyl_visit_counted';
-    const counted = sessionStorage.getItem(KEY);
-    const url = counted ? '/api/visits' : '/api/visits?inc=1';
-    fetch(url)
-      .then((r) => r.json())
-      .then((d) => {
-        if (typeof d?.count === 'number') {
-          setVisits(d.count);
-          if (!counted) sessionStorage.setItem(KEY, '1');
-        }
-      })
-      .catch(() => {});
   }, []);
 
   // Sound toggle
@@ -109,22 +92,6 @@ export default function Nav({ he, setHe, t }: { he: boolean; setHe: (v: boolean)
         </div>
 
         <div style={{ display: 'flex', gap: 6, alignItems: 'center', flexShrink: 0 }}>
-          {/* Visit counter */}
-          {visits !== null && (
-            <div title={t('כניסות לאתר', 'Site visits')} style={{
-              display: 'inline-flex', alignItems: 'center', gap: 4,
-              padding: '5px 8px',
-              background: 'rgba(0,0,0,0.45)',
-              border: `1px solid ${C.gold}33`,
-              borderRadius: 6,
-              fontSize: 13, color: C.gL,
-              fontFamily: "'JetBrains Mono', monospace", fontWeight: 700,
-            }}>
-              <span style={{ fontSize: 13 }}>👁</span>
-              <span style={{ color: '#fff' }}>{visits.toLocaleString()}</span>
-            </div>
-          )}
-
           {/* Sound toggle */}
           <button onClick={toggleSound} aria-label={t('הפעל סאונד', 'Toggle sound')} title={t('סאונד אסון', 'Disaster soundscape')} style={{
             width: 32, height: 32, borderRadius: 6,

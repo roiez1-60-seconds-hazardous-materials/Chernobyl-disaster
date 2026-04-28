@@ -70,7 +70,7 @@ export default function NuclearReactor({ he, t }: { he: boolean; t: (h: string, 
 
                 {/* Reactor vessel */}
                 <rect x="60" y="100" width="160" height="180" rx="14" fill="rgba(20,30,55,0.8)" stroke={C.gold} strokeWidth="2" />
-                <text x="140" y="92" fill={C.gL} fontSize="11" fontFamily="JetBrains Mono" textAnchor="middle" fontWeight="700">{he ? 'ליבה' : 'CORE'}</text>
+                <text x="140" y="88" fill={C.gL} fontSize="16" fontFamily="JetBrains Mono" textAnchor="middle" fontWeight="800">{he ? 'ליבת הכור' : 'REACTOR CORE'}</text>
 
                 {/* Core glow */}
                 <circle cx="140" cy="190" r="50" fill="url(#coreGrad)" opacity={step >= 0 ? 1 : 0.3} style={{ animation: 'pulseFire 2s infinite' }} />
@@ -107,7 +107,7 @@ export default function NuclearReactor({ he, t }: { he: boolean; t: (h: string, 
 
                 {/* Steam generator */}
                 <rect x="320" y="120" width="80" height="100" rx="8" fill="rgba(10,30,50,0.8)" stroke={C.blue} strokeWidth="2" />
-                <text x="360" y="112" fill={C.blue} fontSize="10" fontFamily="JetBrains Mono" textAnchor="middle" fontWeight="700">{he ? 'תופי קיטור' : 'STEAM'}</text>
+                <text x="360" y="108" fill={C.blue} fontSize="14" fontFamily="JetBrains Mono" textAnchor="middle" fontWeight="800">{he ? 'מחולל קיטור' : 'STEAM GEN.'}</text>
 
                 {/* Steam particles (step 3) */}
                 {step >= 3 && [...Array(8)].map((_, i) => (
@@ -127,7 +127,7 @@ export default function NuclearReactor({ he, t }: { he: boolean; t: (h: string, 
                 <g style={{ transformOrigin: '500px 145px', animation: step >= 4 ? 'spin 2s linear infinite' : 'none' }}>
                   <line x1="500" y1="145" x2="500" y2="120" stroke={step >= 4 ? C.gold : '#444'} strokeWidth="1.5" />
                 </g>
-                <text x="500" y="195" fill={step >= 4 ? C.green : 'rgba(255,255,255,0.4)'} fontSize="11" fontFamily="JetBrains Mono" textAnchor="middle" fontWeight="700">{he ? 'טורבינה' : 'TURBINE'}</text>
+                <text x="500" y="195" fill={step >= 4 ? C.green : 'rgba(255,255,255,0.4)'} fontSize="14" fontFamily="JetBrains Mono" textAnchor="middle" fontWeight="800">{he ? 'טורבינה' : 'TURBINE'}</text>
 
                 {/* Electricity bolts (step 4) */}
                 {step === 4 && (
