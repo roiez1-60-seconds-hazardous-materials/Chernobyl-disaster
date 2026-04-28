@@ -5,7 +5,29 @@ html, body {
   font-family: 'Heebo', sans-serif;
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
+  font-size: 17px;
+  line-height: 1.6;
 }
+
+/* Desktop scaling — significantly larger on big screens */
+@media (min-width: 768px) {
+  html, body { font-size: 18px; }
+}
+@media (min-width: 1024px) {
+  html, body { font-size: 19px; }
+}
+@media (min-width: 1280px) {
+  html, body { font-size: 20px; }
+}
+@media (min-width: 1600px) {
+  html, body { font-size: 21px; }
+}
+@media (min-width: 1920px) {
+  html, body { font-size: 22px; }
+}
+
+/* Body paragraphs (default for <p> tags) */
+p { font-size: inherit; }
 
 /* ===================== Backgrounds ===================== */
 .mh {
@@ -81,9 +103,9 @@ section#presentation { background: linear-gradient(180deg, transparent, rgba(200
 .section-kicker {
   display: inline-block;
   border: 1px solid rgba(200,164,78,0.4);
-  padding: 4px 18px;
+  padding: 5px 20px;
   color: #c8a44e;
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 700;
   letter-spacing: 0.3em;
   font-family: 'JetBrains Mono', monospace;
@@ -94,28 +116,29 @@ section#presentation { background: linear-gradient(180deg, transparent, rgba(200
 
 .section-title {
   font-family: 'Playfair Display', serif;
-  font-size: clamp(30px, 5.5vw, 50px);
+  font-size: clamp(38px, 6.5vw, 78px);
   font-weight: 900;
   background: linear-gradient(135deg, #c8a44e 0%, #e8d5a0 50%, #c8a44e 100%);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
-  margin-bottom: 8px;
+  margin-bottom: 12px;
   line-height: 1.1;
 }
 
 .section-subtitle {
-  font-size: clamp(13px, 2.4vw, 17px);
+  font-size: clamp(16px, 2.6vw, 24px);
   font-weight: 400;
-  color: rgba(232,213,160,0.85);
+  color: rgba(232,213,160,0.92);
   font-family: 'Playfair Display', serif;
-  margin-bottom: 12px;
+  margin-bottom: 16px;
   font-style: italic;
+  line-height: 1.5;
 }
 
 .section-number {
   font-family: 'Playfair Display', serif;
-  font-size: clamp(60px, 14vw, 130px);
+  font-size: clamp(60px, 14vw, 150px);
   font-weight: 900;
   background: linear-gradient(180deg, rgba(200,164,78,0.15) 0%, rgba(200,164,78,0.02) 100%);
   -webkit-background-clip: text;
@@ -413,17 +436,18 @@ section#presentation { background: linear-gradient(180deg, transparent, rgba(200
 }
 .stat-num {
   font-family: 'Playfair Display', serif;
-  font-size: clamp(20px, 4vw, 32px);
+  font-size: clamp(22px, 4vw, 38px);
   font-weight: 900;
   line-height: 1;
   margin-bottom: 6px;
 }
 .stat-lbl {
-  font-size: 10px;
-  color: rgba(255,255,255,0.7);
+  font-size: 12px;
+  color: rgba(255,255,255,0.78);
   font-family: 'JetBrains Mono', monospace;
   letter-spacing: 0.05em;
-  line-height: 1.4;
+  line-height: 1.45;
+  font-weight: 500;
 }
 
 /* ===================== Mood backgrounds ===================== */

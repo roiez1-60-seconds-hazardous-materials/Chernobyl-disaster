@@ -26,7 +26,7 @@ export default function Presentation({ he, t }: { he: boolean; t: (h: string, e:
 
   return (
     <section id="presentation" style={{ padding: '60px 16px 30px', position: 'relative' }}>
-      <div style={{ maxWidth: 1100, margin: '0 auto' }}>
+      <div style={{ maxWidth: 1280, margin: '0 auto' }}>
         <div style={{ textAlign: 'center', marginBottom: 28, position: 'relative' }}>
           <div className="section-number" style={{ top: '-20px', insetInlineEnd: '5%' }}>10</div>
           <div className="section-kicker">[ {t('סעיף תשיעי · מצגת', 'PART NINE · PRESENTATION')} ]</div>

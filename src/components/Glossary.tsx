@@ -19,7 +19,7 @@ export default function Glossary({ he, t }: { he: boolean; t: (h: string, e: str
 
   return (
     <section id="glossary" style={{ padding: '60px 16px 30px', position: 'relative' }}>
-      <div style={{ maxWidth: 1100, margin: '0 auto' }}>
+      <div style={{ maxWidth: 1280, margin: '0 auto' }}>
         <div style={{ textAlign: 'center', marginBottom: 28, position: 'relative' }}>
           <div className="section-number" style={{ top: '-20px', insetInlineEnd: '5%' }}>08</div>
           <div className="section-kicker">[ {t('סעיף שביעי · מונחים', 'PART SEVEN · GLOSSARY')} ]</div>
@@ -55,7 +55,7 @@ export default function Glossary({ he, t }: { he: boolean; t: (h: string, e: str
               const active = cat === k;
               return (
                 <button key={k} onClick={() => setCat(active ? null : k)} style={{
-                  padding: '7px 12px', fontSize: 11, fontWeight: 700,
+                  padding: '7px 12px', fontSize: 13, fontWeight: 700,
                   background: active ? `${v.c}33` : 'rgba(0,0,0,0.4)',
                   color: active ? v.c : 'rgba(255,255,255,0.7)',
                   border: `1px solid ${active ? v.c : 'rgba(255,255,255,0.12)'}`,
@@ -91,7 +91,7 @@ export default function Glossary({ he, t }: { he: boolean; t: (h: string, e: str
                       {t(cv.he, cv.en)}
                     </span>
                   </div>
-                  <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.85)', lineHeight: 1.7 }}>
+                  <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.85)', lineHeight: 1.7 }}>
                     {t(tr.def_he, tr.def_en)}
                   </p>
                 </div>

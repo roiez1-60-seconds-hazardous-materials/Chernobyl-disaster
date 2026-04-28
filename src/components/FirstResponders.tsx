@@ -92,7 +92,7 @@ export default function FirstResponders({ he, t }: { he: boolean; t: (h: string,
 
   return (
     <section id="responders" style={{ padding: '60px 16px 30px', position: 'relative' }}>
-      <div style={{ maxWidth: 1100, margin: '0 auto' }}>
+      <div style={{ maxWidth: 1280, margin: '0 auto' }}>
         <div style={{ textAlign: 'center', marginBottom: 28, position: 'relative' }}>
           <div className="section-number" style={{ top: '-20px', insetInlineStart: '5%', color: 'rgba(220,38,38,0.18)' }}>04</div>
           <div className="section-kicker" style={{ borderColor: `${C.danger}77`, color: C.danger, background: `${C.danger}10` }}>
@@ -119,7 +119,7 @@ export default function FirstResponders({ he, t }: { he: boolean; t: (h: string,
               border: `1.5px solid ${C.danger}`,
               borderRadius: 30,
               color: '#fff',
-              fontSize: 13, fontWeight: 800,
+              fontSize: 15, fontWeight: 800,
               fontFamily: "'JetBrains Mono', monospace",
               letterSpacing: '0.1em',
               cursor: 'pointer',
@@ -180,7 +180,7 @@ export default function FirstResponders({ he, t }: { he: boolean; t: (h: string,
                     top: 4,
                     [he ? 'right' : 'left']: 0,
                     width: 'clamp(34px, 5vw, 50px)',
-                    fontSize: 10,
+                    fontSize: 12,
                     fontFamily: "'JetBrains Mono', monospace",
                     fontWeight: 800,
                     color: C.danger,
@@ -228,7 +228,7 @@ export default function FirstResponders({ he, t }: { he: boolean; t: (h: string,
                         </button>
                       )}
                     </div>
-                    <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.92)', lineHeight: 1.95 }}>
+                    <p style={{ fontSize: 15, color: 'rgba(255,255,255,0.92)', lineHeight: 1.95 }}>
                       {ch.body}
                     </p>
                   </div>
@@ -266,7 +266,7 @@ export default function FirstResponders({ he, t }: { he: boolean; t: (h: string,
             textAlign: 'center',
           }}>
             <div style={{ fontSize: 32, marginBottom: 6 }}>🕯</div>
-            <p style={{ fontSize: 13, color: C.gL, lineHeight: 1.85, fontStyle: 'italic', fontFamily: "'Playfair Display', serif" }}>
+            <p style={{ fontSize: 15, color: C.gL, lineHeight: 1.85, fontStyle: 'italic', fontFamily: "'Playfair Display', serif" }}>
               {t(
                 'הם נכנסו אל החושך כדי שאחרים יוכלו לחיות באור.',
                 'They walked into the dark so that others could live in light.'

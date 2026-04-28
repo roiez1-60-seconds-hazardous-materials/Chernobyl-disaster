@@ -56,7 +56,7 @@ export default function RBMK({ he, t }: { he: boolean; t: (h: string, e: string)
           100% { opacity: 0; }
         }
       `}</style>
-      <div style={{ maxWidth: 1100, margin: '0 auto' }}>
+      <div style={{ maxWidth: 1280, margin: '0 auto' }}>
         <div style={{ textAlign: 'center', marginBottom: 22, position: 'relative' }}>
           <div className="section-number" style={{ top: '-20px', insetInlineEnd: '5%' }}>03</div>
           <div className="section-kicker">[ {t('סעיף שלישי · RBMK', 'PART THREE · RBMK')} ]</div>

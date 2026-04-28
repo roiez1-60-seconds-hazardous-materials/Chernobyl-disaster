@@ -8,7 +8,7 @@ function StatTile({ n, l, c, delay }: { n: string; l: string; c: string; delay: 
   const { ref, display } = useCountUpString(n);
   return (
     <div className="stat-box hover-lift fade-in" style={{ '--accent': c, animationDelay: `${delay}s` } as any}>
-      <div className="stat-num" style={{ color: c, textShadow: `0 0 18px ${c}55`, fontSize: 'clamp(16px, 3.2vw, 26px)' }}>
+      <div className="stat-num" style={{ color: c, textShadow: `0 0 18px ${c}55`, fontSize: 'clamp(20px, 3.5vw, 36px)' }}>
         <span ref={ref}>{display}</span>
       </div>
       <div className="stat-lbl">{l}</div>
@@ -106,7 +106,7 @@ export default function Hero({ he, t }: { he: boolean; t: (h: string, e: string)
           }}>״</div>
 
           <p style={{
-            fontSize: 'clamp(13px, 2.6vw, 17px)',
+            fontSize: 'clamp(15px, 2.4vw, 21px)',
             color: '#fff',
             fontStyle: 'italic',
             fontFamily: "'Playfair Display', serif",
@@ -203,7 +203,7 @@ export default function Hero({ he, t }: { he: boolean; t: (h: string, e: string)
         </h1>
 
         <h2 style={{
-          fontSize: 'clamp(13px, 2.6vw, 18px)',
+          fontSize: 'clamp(16px, 2.5vw, 22px)',
           fontWeight: 400,
           color: C.gL,
           fontFamily: "'Playfair Display', serif",
@@ -226,7 +226,7 @@ export default function Hero({ he, t }: { he: boolean; t: (h: string, e: string)
         }} />
 
         <p style={{
-          fontSize: 'clamp(12px, 2.3vw, 15px)',
+          fontSize: 'clamp(14px, 2.2vw, 18px)',
           color: 'rgba(255,255,255,0.85)',
           lineHeight: 1.85,
           maxWidth: 660,
@@ -262,7 +262,7 @@ export default function Hero({ he, t }: { he: boolean; t: (h: string, e: string)
               <StatTile key={i} n={s.n} l={s.l} c={s.c} delay={1.1 + i * 0.08} />
             ) : (
               <div key={i} className="stat-box hover-lift" style={{ '--accent': s.c, opacity: revealed ? 1 : 0, transform: revealed ? 'translateY(0)' : 'translateY(12px)', transition: `opacity 0.6s ease-out ${1.1 + i * 0.08}s, transform 0.6s ease-out ${1.1 + i * 0.08}s` } as any}>
-                <div className="stat-num" style={{ color: s.c, textShadow: `0 0 18px ${s.c}55`, fontSize: 'clamp(16px, 3.2vw, 26px)' }}>{s.n}</div>
+                <div className="stat-num" style={{ color: s.c, textShadow: `0 0 18px ${s.c}55`, fontSize: 'clamp(20px, 3.5vw, 36px)' }}>{s.n}</div>
                 <div className="stat-lbl">{s.l}</div>
               </div>
             )

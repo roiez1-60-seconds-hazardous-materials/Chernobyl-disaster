@@ -79,19 +79,34 @@ export default function Nav({ he, setHe, t }: { he: boolean; setHe: (v: boolean)
         display: 'flex', justifyContent: 'space-between', alignItems: 'center',
         gap: 8,
       }}>
-        <a href="#hero" style={{ display: 'flex', alignItems: 'center', gap: 8, textDecoration: 'none', minWidth: 0 }}>
-          <div className="logo-orb" style={{ width: 32, height: 32, position: 'relative', flexShrink: 0 }}>
-            <Image src="/images/logo-60sec.png" alt="60 שניות" width={32} height={32} style={{ borderRadius: '50%' }} />
-          </div>
-          <div style={{ display: 'flex', flexDirection: 'column', lineHeight: 1.1, minWidth: 0 }}>
-            <span style={{ fontSize: 10, fontWeight: 800, color: C.gold, fontFamily: "'Playfair Display', serif", whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10, minWidth: 0 }}>
+          <a
+            href="https://chat.whatsapp.com/K4NzcZucmimKYFOXE3VVtD?mode=gi_t"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label={t('הצטרף לקבוצת 60 שניות חומ״ס בוואטסאפ', 'Join 60 Seconds HazMat WhatsApp group')}
+            title={t('לחץ להצטרפות לקבוצת 60 שניות חומ״ס', 'Click to join 60 Seconds HazMat group')}
+            style={{ display: 'inline-flex', textDecoration: 'none', flexShrink: 0 }}
+          >
+            <div className="logo-orb" style={{
+              width: 38, height: 38, position: 'relative',
+              transition: 'transform 0.3s, box-shadow 0.3s',
+              cursor: 'pointer',
+            }}
+            onMouseEnter={(e) => { e.currentTarget.style.transform = 'scale(1.08)'; e.currentTarget.style.boxShadow = `0 0 16px ${C.gold}88`; }}
+            onMouseLeave={(e) => { e.currentTarget.style.transform = 'scale(1)'; e.currentTarget.style.boxShadow = 'none'; }}>
+              <Image src="/images/logo-60sec.png" alt="60 שניות" width={38} height={38} style={{ borderRadius: '50%' }} />
+            </div>
+          </a>
+          <a href="#hero" style={{ display: 'flex', flexDirection: 'column', lineHeight: 1.15, minWidth: 0, textDecoration: 'none' }}>
+            <span style={{ fontSize: 13, fontWeight: 800, color: C.gold, fontFamily: "'Playfair Display', serif", whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
               {t('60 שניות חומ״ס', '60 Sec HazMat')}
             </span>
-            <span style={{ fontSize: 8, color: 'rgba(255,255,255,0.55)', fontFamily: "'JetBrains Mono', monospace", whiteSpace: 'nowrap' }}>
+            <span style={{ fontSize: 10, color: 'rgba(255,255,255,0.6)', fontFamily: "'JetBrains Mono', monospace", whiteSpace: 'nowrap', letterSpacing: '0.1em' }}>
               CHERNOBYL · 1986
             </span>
-          </div>
-        </a>
+          </a>
+        </div>
 
         <div style={{ display: 'flex', gap: 6, alignItems: 'center', flexShrink: 0 }}>
           {/* Visit counter */}

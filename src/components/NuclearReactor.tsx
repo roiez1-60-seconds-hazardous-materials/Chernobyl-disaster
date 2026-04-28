@@ -37,7 +37,7 @@ export default function NuclearReactor({ he, t }: { he: boolean; t: (h: string, 
 
   return (
     <section id="reactor-general" style={{ padding: '60px 16px 30px', position: 'relative' }}>
-      <div style={{ maxWidth: 1100, margin: '0 auto' }}>
+      <div style={{ maxWidth: 1280, margin: '0 auto' }}>
         <div style={{ textAlign: 'center', marginBottom: 28, position: 'relative' }}>
           <div className="section-number" style={{ top: '-20px', insetInlineStart: '5%' }}>02</div>
           <div className="section-kicker">[ {t('סעיף שני · פיזיקה', 'PART TWO · PHYSICS')} ]</div>

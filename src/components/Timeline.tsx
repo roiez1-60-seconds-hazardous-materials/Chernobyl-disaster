@@ -8,7 +8,7 @@ export default function Timeline({ he, t }: { he: boolean; t: (h: string, e: str
 
   return (
     <section id="timeline" style={{ padding: '60px 16px 30px', position: 'relative' }}>
-      <div style={{ maxWidth: 1100, margin: '0 auto', position: 'relative' }}>
+      <div style={{ maxWidth: 1280, margin: '0 auto', position: 'relative' }}>
         <div style={{ textAlign: 'center', marginBottom: 28, position: 'relative' }}>
           <div className="section-number" style={{ top: '-20px', insetInlineEnd: '5%' }}>01</div>
           <div className="section-kicker">[ {t('סעיף ראשון · ציר זמן', 'PART ONE · TIMELINE')} ]</div>
@@ -27,7 +27,7 @@ export default function Timeline({ he, t }: { he: boolean; t: (h: string, e: str
             const isActive = filter === k;
             return (
               <button key={k} onClick={() => setFilter(isActive ? null : k)} style={{
-                padding: '8px 14px', fontSize: 11, fontWeight: 700,
+                padding: '8px 14px', fontSize: 13, fontWeight: 700,
                 background: isActive ? `${v.c}33` : 'rgba(0,0,0,0.4)',
                 color: isActive ? v.c : 'rgba(255,255,255,0.7)',
                 border: `1px solid ${isActive ? v.c : 'rgba(255,255,255,0.12)'}`,
@@ -68,14 +68,14 @@ export default function Timeline({ he, t }: { he: boolean; t: (h: string, e: str
                 }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 6, flexWrap: 'wrap', gap: 6 }}>
                     <div style={{ fontSize: 14, fontWeight: 900, color: cat.c, fontFamily: "'JetBrains Mono', monospace" }}>{ev.date}</div>
-                    <div style={{ fontSize: 9, fontWeight: 700, color: cat.c, fontFamily: "'JetBrains Mono', monospace", letterSpacing: '0.15em', background: `${cat.c}15`, padding: '2px 8px', borderRadius: 4, border: `1px solid ${cat.c}33` }}>
+                    <div style={{ fontSize: 11, fontWeight: 700, color: cat.c, fontFamily: "'JetBrains Mono', monospace", letterSpacing: '0.15em', background: `${cat.c}15`, padding: '2px 8px', borderRadius: 4, border: `1px solid ${cat.c}33` }}>
                       {t(cat.he, cat.en)}
                     </div>
                   </div>
                   <h3 style={{ fontSize: 16, fontWeight: 800, color: '#fff', fontFamily: "'Playfair Display', serif", lineHeight: 1.3, marginBottom: 8 }}>
                     {t(ev.he, ev.en)}
                   </h3>
-                  <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.85)', lineHeight: 1.85 }}>
+                  <p style={{ fontSize: 15, color: 'rgba(255,255,255,0.85)', lineHeight: 1.85 }}>
                     {t(ev.desc_he, ev.desc_en)}
                   </p>
                 </div>

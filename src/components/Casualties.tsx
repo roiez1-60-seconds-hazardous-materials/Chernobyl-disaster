@@ -29,10 +29,10 @@ function CasualtyCard({ s, color, i }: { s: any; color: string; i: number }) {
       }}>
         <span ref={ref}>{display}</span>
       </div>
-      <div style={{ fontSize: 13, fontWeight: 700, color: '#fff', marginBottom: 6 }}>
+      <div style={{ fontSize: 15, fontWeight: 700, color: '#fff', marginBottom: 6 }}>
         {s.label}
       </div>
-      <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.65)', lineHeight: 1.6 }}>
+      <div style={{ fontSize: 13, color: 'rgba(255,255,255,0.65)', lineHeight: 1.6 }}>
         {s.detail}
       </div>
     </div>
@@ -56,7 +56,7 @@ function FirefightersVisual({ he, t }: { he: boolean; t: (h: string, e: string) 
         <h3 style={{ fontSize: 17, fontWeight: 800, color: '#fff', fontFamily: "'Playfair Display', serif", marginBottom: 4 }}>
           {t('28 הכבאים שמתו', '28 Firefighters Who Died')}
         </h3>
-        <p style={{ fontSize: 11, color: C.gL, fontFamily: "'JetBrains Mono', monospace", letterSpacing: '0.1em' }}>
+        <p style={{ fontSize: 13, color: C.gL, fontFamily: "'JetBrains Mono', monospace", letterSpacing: '0.1em' }}>
           {t('כל פרצוף — חבר, אבא, בן', 'Each face — friend, father, son')}
         </p>
       </div>
@@ -95,7 +95,7 @@ function FirefightersVisual({ he, t }: { he: boolean; t: (h: string, e: string) 
       <p style={{
         textAlign: 'center',
         marginTop: 16,
-        fontSize: 11,
+        fontSize: 13,
         color: 'rgba(255,255,255,0.6)',
         fontFamily: "'Playfair Display', serif",
         fontStyle: 'italic',
@@ -124,7 +124,7 @@ export default function Casualties({ he, t }: { he: boolean; t: (h: string, e: s
 
   return (
     <section id="casualties" style={{ padding: '60px 16px 30px', position: 'relative' }}>
-      <div style={{ maxWidth: 1100, margin: '0 auto' }}>
+      <div style={{ maxWidth: 1280, margin: '0 auto' }}>
         <div style={{ textAlign: 'center', marginBottom: 28, position: 'relative' }}>
           <div className="section-number" style={{ top: '-20px', insetInlineEnd: '5%' }}>06</div>
           <div className="section-kicker">[ {t('סעיף שישי · נפגעים', 'PART SIX · CASUALTIES')} ]</div>
@@ -137,7 +137,7 @@ export default function Casualties({ he, t }: { he: boolean; t: (h: string, e: s
         <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', justifyContent: 'center', marginBottom: 20 }}>
           {TABS.map((tb) => (
             <button key={tb.id} onClick={() => setTab(tb.id)} style={{
-              padding: '10px 18px', fontSize: 12, fontWeight: 700,
+              padding: '10px 18px', fontSize: 14, fontWeight: 700,
               background: tab === tb.id ? `${tb.c}33` : 'rgba(0,0,0,0.4)',
               color: tab === tb.id ? '#fff' : 'rgba(255,255,255,0.7)',
               border: `1px solid ${tab === tb.id ? tb.c : 'rgba(255,255,255,0.12)'}`,
@@ -170,10 +170,10 @@ export default function Casualties({ he, t }: { he: boolean; t: (h: string, e: s
 
         {/* Important notes */}
         <div className="card-light" style={{ padding: '16px 20px', marginTop: 22 }}>
-          <h4 style={{ fontSize: 13, fontWeight: 700, color: C.gold, marginBottom: 8, fontFamily: "'JetBrains Mono', monospace", letterSpacing: '0.1em' }}>
+          <h4 style={{ fontSize: 15, fontWeight: 700, color: C.gold, marginBottom: 8, fontFamily: "'JetBrains Mono', monospace", letterSpacing: '0.1em' }}>
             ⓘ {t('הערות חשובות', 'IMPORTANT NOTES')}
           </h4>
-          <ul style={{ paddingInlineStart: 18, fontSize: 12, color: 'rgba(255,255,255,0.85)', lineHeight: 1.85 }}>
+          <ul style={{ paddingInlineStart: 18, fontSize: 14, color: 'rgba(255,255,255,0.85)', lineHeight: 1.85 }}>
             <li>{t('המספרים הסופיים של נפגעי סרטן עתידיים שנויים במחלוקת בקהילה המדעית — הערכות נעות בין 4,000 (WHO) ל-93,000 (גרינפיס).', 'Final cancer fatality numbers are scientifically disputed — estimates range from 4,000 (WHO) to 93,000 (Greenpeace).')}</li>
             <li>{t('סרטן בלוטת התריס בילדים הוא ההשפעה היחידה שבוודאות ניתן לייחס ישירות לחשיפת קרינה ואיכות מזון מזוהם בעת האסון.', 'Childhood thyroid cancer is the only effect definitively attributable to radiation exposure and contaminated food during the disaster.')}</li>
             <li>{t('כ-20% מהליקווידטורים מתו ב-30 השנים שאחרי — חלק גדול מהתמותה הזו לא ניתן לייחס ישירות לקרינה.', '~20% of liquidators died in following 30 years — much of this mortality cannot be directly attributed to radiation.')}</li>
