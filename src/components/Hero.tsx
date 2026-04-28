@@ -252,11 +252,11 @@ export default function Hero({ he, t }: { he: boolean; t: (h: string, e: string)
         }}>
           {[
             { n: '01:23:47', l: t('הפיצוץ', 'Explosion'), c: C.danger, isCount: false },
-            { n: '5,300', l: 'PBq Cs-137', c: C.amber, isCount: true },
+            { n: '5,300', l: t('פטה-בקרל', 'PBq released'), c: C.amber, isCount: true },
             { n: '~600K', l: t('ליקווידטורים', 'Liquidators'), c: C.gold, isCount: true },
             { n: '350K', l: t('פונו', 'Evacuated'), c: C.purple, isCount: true },
-            { n: '2,600', l: t('קמ״ר', 'km²'), c: C.blue, isCount: true },
-            { n: '40', l: t('שנים', 'Years'), c: C.green, isCount: true },
+            { n: '2,600', l: t('קמ״ר אזור סגור', 'km² Exclusion'), c: C.blue, isCount: true },
+            { n: '40', l: t('שנים מאז', 'Years since'), c: C.green, isCount: true },
           ].map((s, i) => (
             s.isCount ? (
               <StatTile key={i} n={s.n} l={s.l} c={s.c} delay={1.1 + i * 0.08} />

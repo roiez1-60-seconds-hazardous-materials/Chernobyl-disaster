@@ -1,0 +1,558 @@
+'use client';
+import { useEffect, useState, useMemo } from 'react';
+import { C } from '@/lib/data';
+
+export type ReactorState =
+  | 'stable'      // Normal operation, ~3200 MW
+  | 'low'         // Low power test, ~700 MW
+  | 'xenon'       // Xenon poisoning, falling power
+  | 'rod-pull'    // Operators pulling rods to compensate
+  | 'test'        // Test running, dangerous configuration
+  | 'spike'       // Power surge starting
+  | 'az5'         // AZ-5 button pressed, rods inserting (positive scram)
+  | 'explosion-1' // First steam explosion
+  | 'explosion-2' // Second hydrogen explosion
+  | 'destroyed';  // Core exposed, graphite fire
+
+interface ReactorProps {
+  he: boolean;
+  t: (h: string, e: string) => string;
+  power: number;          // 0-3500 MW
+  rodPosition: number;    // 0-100 (% inserted)
+  coreTemp: number;       // °C
+  steamFraction: number;  // 0-1
+  state: ReactorState;
+  showLabels?: boolean;
+  showFlow?: boolean;
+  width?: number;
+}
+
+/**
+ * RBMK-1000 — Cross-section, cinematic.
+ *
+ * Real components, accurate proportions:
+ * - Concrete biological shielding (outer)
+ * - Reactor vessel (11.8m × 7m)
+ * - Upper "Schema E" biological shield — 2000 ton lid
+ * - Lower biological shield
+ * - Graphite moderator stack — 1700 tons
+ * - Pressure tubes (1661 in real life, ~30 representative here)
+ * - Control rods with graphite tips (the fatal flaw!)
+ * - Coolant flow (down/up)
+ * - 4 Steam separators (drums)
+ * - 8 Main Coolant Pumps (MCPs)
+ * - Refueling machine on top
+ */
+export default function Reactor3D({
+  he, t, power, rodPosition, coreTemp, steamFraction, state,
+  showLabels = true, showFlow = true, width = 1100,
+}: ReactorProps) {
+  const [tick, setTick] = useState(0);
+
+  // 80ms tick = 12.5 fps for non-CSS animations
+  useEffect(() => {
+    const id = setInterval(() => setTick((t) => (t + 1) % 1000), 80);
+    return () => clearInterval(id);
+  }, []);
+
+  const isExplosion = state === 'explosion-1' || state === 'explosion-2' || state === 'destroyed';
+  const isHotState = power > 1500 || coreTemp > 800;
+  const isSpike = state === 'spike' || state === 'az5';
+  const isAz5 = state === 'az5';
+  const isDestroyed = state === 'destroyed';
+
+  // Power as % for visual intensity
+  const powerPct = Math.min(power / 3200, 1.5); // can exceed 100%
+
+  // Core color/glow based on state
+  const coreColor = useMemo(() => {
+    if (isDestroyed) return '#1a0a05';
+    if (state === 'explosion-2') return '#ffffff';
+    if (state === 'explosion-1') return '#fef3c7';
+    if (isSpike) return `hsl(${30 - powerPct * 30}, 100%, ${50 + powerPct * 30}%)`;
+    if (isHotState) return '#f97316';
+    if (power < 200) return '#3b82f6';
+    return '#fbbf24';
+  }, [state, power, isHotState, isSpike, isDestroyed, powerPct]);
+
+  // Smoke/steam intensity
+  const steamIntensity = isDestroyed ? 1 : isExplosion ? 0.9 : Math.min(steamFraction * 1.2, 1);
+
+  // Control rod offset (0 = fully out, full insertion = fully in)
+  // rod is 7m long, fully inserted means pos=100
+  const rodOffset = (100 - rodPosition) * 1.5; // visual offset in SVG units
+
+  // 12 control rods spread across width
+  const rodCount = 12;
+  const rodPositions = Array.from({ length: rodCount }, (_, i) => {
+    return 220 + (i * 38);
+  });
+
+  // 30 pressure tubes (representative of 1661)
+  const tubeCount = 30;
+  const tubePositions = Array.from({ length: tubeCount }, (_, i) => {
+    return 215 + (i * 15.5);
+  });
+
+  return (
+    <div style={{ width: '100%', maxWidth: width, margin: '0 auto', position: 'relative' }}>
+      <svg
+        viewBox="0 0 1100 700"
+        style={{
+          width: '100%',
+          height: 'auto',
+          display: 'block',
+          filter: isExplosion ? `drop-shadow(0 0 30px ${C.danger})` : 'none',
+        }}
+      >
+        <defs>
+          {/* Concrete shielding gradient */}
+          <linearGradient id="concrete" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor="#5a5a5a" />
+            <stop offset="50%" stopColor="#3a3a3a" />
+            <stop offset="100%" stopColor="#252525" />
+          </linearGradient>
+          {/* Graphite stack */}
+          <linearGradient id="graphite" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor="#2a2a2a" />
+            <stop offset="100%" stopColor="#0a0a0a" />
+          </linearGradient>
+          {/* Steel */}
+          <linearGradient id="steel" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stopColor="#444" />
+            <stop offset="50%" stopColor="#888" />
+            <stop offset="100%" stopColor="#444" />
+          </linearGradient>
+          {/* Biological shield (lid) - massive concrete+steel */}
+          <linearGradient id="lidGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor="#6a6a6a" />
+            <stop offset="50%" stopColor="#4a4a4a" />
+            <stop offset="100%" stopColor="#2a2a2a" />
+          </linearGradient>
+          {/* Core glow */}
+          <radialGradient id="coreGlow" cx="50%" cy="50%">
+            <stop offset="0%" stopColor={coreColor} stopOpacity={isDestroyed ? 0.3 : 0.95} />
+            <stop offset="40%" stopColor={coreColor} stopOpacity="0.6" />
+            <stop offset="100%" stopColor={coreColor} stopOpacity="0" />
+          </radialGradient>
+          {/* Water flow */}
+          <linearGradient id="waterGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor="#06b6d4" stopOpacity="0.7" />
+            <stop offset="100%" stopColor="#0ea5e9" stopOpacity="0.5" />
+          </linearGradient>
+          <linearGradient id="hotWaterGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor="#f97316" stopOpacity="0.7" />
+            <stop offset="100%" stopColor="#fbbf24" stopOpacity="0.5" />
+          </linearGradient>
+          {/* Steam */}
+          <linearGradient id="steamGrad" x1="0" y1="100%" x2="0" y2="0%">
+            <stop offset="0%" stopColor="#ffffff" stopOpacity="0.05" />
+            <stop offset="100%" stopColor="#ffffff" stopOpacity="0.5" />
+          </linearGradient>
+          {/* Explosion */}
+          <radialGradient id="explosionFlash">
+            <stop offset="0%" stopColor="#ffffff" stopOpacity="1" />
+            <stop offset="20%" stopColor="#fef08a" stopOpacity="0.95" />
+            <stop offset="40%" stopColor="#fbbf24" stopOpacity="0.8" />
+            <stop offset="70%" stopColor="#dc2626" stopOpacity="0.5" />
+            <stop offset="100%" stopColor="#dc2626" stopOpacity="0" />
+          </radialGradient>
+          {/* Filters */}
+          <filter id="blur1"><feGaussianBlur stdDeviation="1.5" /></filter>
+          <filter id="blur3"><feGaussianBlur stdDeviation="3" /></filter>
+          <filter id="blur8"><feGaussianBlur stdDeviation="8" /></filter>
+          <filter id="glow">
+            <feGaussianBlur stdDeviation="4" result="b" />
+            <feMerge>
+              <feMergeNode in="b" />
+              <feMergeNode in="SourceGraphic" />
+            </feMerge>
+          </filter>
+        </defs>
+
+        {/* ================ BACKGROUND ================ */}
+        <rect width="1100" height="700" fill={isExplosion ? '#1a0505' : '#080a14'} />
+
+        {/* Subtle grid */}
+        <g opacity="0.04">
+          {Array.from({ length: 12 }).map((_, i) => (
+            <line key={`gh-${i}`} x1="0" y1={i * 60} x2="1100" y2={i * 60} stroke={C.gold} strokeWidth="0.5" />
+          ))}
+          {Array.from({ length: 20 }).map((_, i) => (
+            <line key={`gv-${i}`} x1={i * 55} y1="0" x2={i * 55} y2="700" stroke={C.gold} strokeWidth="0.5" />
+          ))}
+        </g>
+
+        {/* Sky/atmosphere fading down */}
+        <rect width="1100" height="700" fill="url(#bgFade)" />
+        <defs>
+          <linearGradient id="bgFade" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor={isExplosion ? '#3a0a0a' : '#1a2540'} stopOpacity="0.4" />
+            <stop offset="100%" stopColor="#000" stopOpacity="0" />
+          </linearGradient>
+        </defs>
+
+        {/* ================ EXPLOSION FLASH (full overlay during explosion) ================ */}
+        {(state === 'explosion-1' || state === 'explosion-2') && (
+          <ellipse
+            cx="550" cy="350"
+            rx={state === 'explosion-2' ? 800 : 500}
+            ry={state === 'explosion-2' ? 800 : 500}
+            fill="url(#explosionFlash)"
+            style={{ animation: 'expanFlash 0.8s ease-out' }}
+          />
+        )}
+
+        {/* ================ CONCRETE BIOLOGICAL SHIELDING (outer walls) ================ */}
+        {/* Outer concrete vessel — the building itself */}
+        <rect x="80" y="180" width="940" height="430" fill="url(#concrete)" stroke="#1a1a1a" strokeWidth="2" />
+        {/* Concrete texture lines */}
+        {Array.from({ length: 8 }).map((_, i) => (
+          <line key={`ch-${i}`} x1="80" y1={210 + i * 50} x2="1020" y2={210 + i * 50} stroke="#1a1a1a" strokeWidth="0.5" opacity="0.5" />
+        ))}
+        {Array.from({ length: 16 }).map((_, i) => (
+          <line key={`cv-${i}`} x1={80 + i * 60} y1="180" x2={80 + i * 60} y2="610" stroke="#1a1a1a" strokeWidth="0.5" opacity="0.4" />
+        ))}
+
+        {/* Inner reactor cavity (where the actual reactor sits) */}
+        <rect x="180" y="220" width="740" height="370" fill="#0a0a0a" stroke="#3a3a3a" strokeWidth="1.5" />
+
+        {/* ================ LOWER BIOLOGICAL SHIELD (Schema OR — 2000 tons) ================ */}
+        <rect x="190" y="540" width="720" height="40" fill="url(#lidGrad)" stroke="#1a1a1a" strokeWidth="1" />
+        {/* Bolts */}
+        {Array.from({ length: 14 }).map((_, i) => (
+          <circle key={`bolt-bot-${i}`} cx={210 + i * 50} cy="560" r="3" fill="#666" stroke="#222" strokeWidth="0.5" />
+        ))}
+
+        {/* ================ GRAPHITE STACK ================ */}
+        {!isDestroyed ? (
+          <g>
+            {/* Graphite blocks - 13 columns × 8 rows */}
+            {Array.from({ length: 13 }).map((_, col) =>
+              Array.from({ length: 8 }).map((_, row) => (
+                <rect
+                  key={`g-${col}-${row}`}
+                  x={210 + col * 38}
+                  y={310 + row * 28}
+                  width="36"
+                  height="26"
+                  fill="url(#graphite)"
+                  stroke="#0a0a0a"
+                  strokeWidth="0.5"
+                />
+              ))
+            )}
+          </g>
+        ) : (
+          // Destroyed: scattered graphite chunks
+          <g>
+            {Array.from({ length: 30 }).map((_, i) => {
+              const x = 100 + Math.random() * 900;
+              const y = 100 + Math.random() * 500;
+              const r = 8 + Math.random() * 15;
+              return (
+                <g key={`debris-${i}`}>
+                  <rect x={x} y={y} width={r} height={r} fill="url(#graphite)" transform={`rotate(${Math.random() * 90} ${x + r/2} ${y + r/2})`} />
+                  {/* Glowing edges */}
+                  <rect x={x} y={y} width={r} height={r} fill="none" stroke="#fbbf24" strokeWidth="0.5" opacity="0.6" transform={`rotate(${Math.random() * 90} ${x + r/2} ${y + r/2})`} />
+                </g>
+              );
+            })}
+          </g>
+        )}
+
+        {/* ================ CORE GLOW (the reaction itself) ================ */}
+        {!isDestroyed && (
+          <ellipse
+            cx="550"
+            cy="430"
+            rx={Math.min(280 * (0.5 + powerPct * 0.5), 380)}
+            ry={Math.min(110 * (0.5 + powerPct * 0.5), 160)}
+            fill="url(#coreGlow)"
+            style={{
+              animation: isSpike ? 'pulseFire 0.4s infinite' : 'pulseFire 2s infinite',
+              mixBlendMode: 'screen',
+            }}
+          />
+        )}
+
+        {/* ================ PRESSURE TUBES (vertical lines through graphite) ================ */}
+        {!isDestroyed && tubePositions.map((x, i) => (
+          <g key={`tube-${i}`}>
+            <line x1={x} y1="305" x2={x} y2="540" stroke="#1a1a1a" strokeWidth="2.5" />
+            {showFlow && (
+              <line x1={x} y1="305" x2={x} y2="540"
+                    stroke={isHotState ? '#fbbf24' : '#06b6d4'}
+                    strokeWidth="1"
+                    strokeDasharray="3 5"
+                    opacity={0.6}
+                    style={{ animation: 'flowD 1.5s linear infinite' }} />
+            )}
+          </g>
+        ))}
+
+        {/* ================ CONTROL RODS (THE FATAL ones with graphite tips!) ================ */}
+        {!isDestroyed && rodPositions.map((x, i) => {
+          const rodTopY = 250 - rodOffset;
+          // Graphite tip is at the bottom of the rod (4.5m of graphite below boron)
+          // When rod is partially inserted, the GRAPHITE TIP enters core first — displacing water
+          const graphiteTipY = rodTopY + 50;
+          const boronStart = graphiteTipY + 20;
+          const boronEnd = boronStart + 130;
+          return (
+            <g key={`rod-${i}`}>
+              {/* Rod casing/track */}
+              <rect x={x - 3} y="200" width="6" height="60" fill="#222" stroke="#444" strokeWidth="0.5" />
+              {/* Rod itself - top section (handle/connector) */}
+              <rect x={x - 4} y={rodTopY} width="8" height="20" fill="#888" stroke="#333" strokeWidth="0.5" />
+              {/* Rod shaft */}
+              <rect x={x - 3} y={rodTopY + 20} width="6" height="30" fill="#666" />
+              {/* GRAPHITE TIP (the killer) - lighter color */}
+              <rect x={x - 4} y={graphiteTipY} width="8" height="20" fill="#3a3a3a" stroke={isSpike ? '#dc2626' : '#1a1a1a'} strokeWidth="1" />
+              {/* Boron carbide section (the absorber) */}
+              <rect x={x - 4} y={boronStart} width="8" height="130" fill="#1a3a5a" stroke="#0a2540" strokeWidth="0.5" />
+              {/* Insertion direction arrow when AZ-5 pressed */}
+              {isAz5 && (
+                <text x={x} y={rodTopY - 5} textAnchor="middle" fontSize="14" fill={C.danger} fontWeight="900" style={{ animation: 'pulseAlert 0.5s infinite' }}>
+                  ↓
+                </text>
+              )}
+            </g>
+          );
+        })}
+
+        {/* ================ UPPER BIOLOGICAL SHIELD ("Schema E" - 2000 ton lid) ================ */}
+        {!isDestroyed ? (
+          <>
+            <rect x="190" y="240" width="720" height="50" fill="url(#lidGrad)" stroke="#1a1a1a" strokeWidth="1.5" />
+            {/* Bolts on top of lid */}
+            {Array.from({ length: 14 }).map((_, i) => (
+              <circle key={`bolt-${i}`} cx={210 + i * 50} cy="265" r="3.5" fill="#666" stroke="#222" strokeWidth="0.5" />
+            ))}
+            {/* Top surface highlight */}
+            <rect x="190" y="240" width="720" height="3" fill="#7a7a7a" opacity="0.6" />
+          </>
+        ) : (
+          // Lid blown off — show edges of broken lid
+          <>
+            <polygon points="190,240 250,180 280,250 200,250" fill="url(#lidGrad)" stroke="#1a1a1a" strokeWidth="1" />
+            <polygon points="850,250 920,170 910,240 870,260" fill="url(#lidGrad)" stroke="#1a1a1a" strokeWidth="1" />
+          </>
+        )}
+
+        {/* ================ STEAM SEPARATORS (4 drums on top) ================ */}
+        {[300, 500, 700, 900].map((x, i) => (
+          <g key={`drum-${i}`}>
+            <ellipse cx={x} cy="160" rx="60" ry="22" fill="url(#steel)" stroke="#1a1a1a" strokeWidth="1.5" />
+            <ellipse cx={x} cy="160" rx="60" ry="22" fill={isHotState ? '#3a2010' : 'transparent'} opacity="0.4" />
+            {/* Steam dome */}
+            <path d={`M ${x - 60} 160 A 60 22 0 0 0 ${x + 60} 160`} fill="rgba(255,255,255,0.1)" />
+            {/* Pipes connecting drum to reactor */}
+            <line x1={x - 25} y1="180" x2={x - 25} y2="240" stroke="#666" strokeWidth="3" />
+            <line x1={x + 25} y1="180" x2={x + 25} y2="240" stroke="#666" strokeWidth="3" />
+            {/* Steam outlet pipe */}
+            <line x1={x} y1="138" x2={x} y2="100" stroke="#888" strokeWidth="4" />
+            {/* Steam */}
+            {showFlow && steamFraction > 0.05 && (
+              <circle cx={x} cy={130 - (tick * 2) % 30}
+                      r={3 + steamFraction * 4}
+                      fill="rgba(255,255,255,0.5)"
+                      filter="url(#blur1)"
+                      opacity={0.8 - ((tick * 2) % 30) / 35} />
+            )}
+          </g>
+        ))}
+
+        {/* ================ MAIN COOLANT PUMPS (8 - showing 4 visible) ================ */}
+        {[100, 200, 920, 1010].map((x, i) => (
+          <g key={`mcp-${i}`}>
+            <rect x={x - 25} y="450" width="50" height="60" fill="url(#steel)" stroke="#1a1a1a" strokeWidth="1.5" />
+            <circle cx={x} cy="480" r="18" fill="#222" stroke="#666" strokeWidth="1.5" />
+            {/* Spinning impeller */}
+            <g style={{ transformOrigin: `${x}px 480px`, animation: power > 100 ? 'spin 0.8s linear infinite' : 'none' }}>
+              <line x1={x - 14} y1="480" x2={x + 14} y2="480" stroke="#888" strokeWidth="2" />
+              <line x1={x} y1="466" x2={x} y2="494" stroke="#888" strokeWidth="2" />
+            </g>
+            {/* MCP label */}
+            {showLabels && (
+              <text x={x} y="525" textAnchor="middle" fill="#888" fontSize="10" fontFamily="JetBrains Mono">MCP</text>
+            )}
+          </g>
+        ))}
+
+        {/* ================ COOLANT FLOW LINES ================ */}
+        {showFlow && !isDestroyed && (
+          <>
+            {/* Cold water in (from MCPs to reactor bottom) */}
+            <path d="M 200 500 L 200 580 L 920 580 L 920 500"
+                  stroke="url(#waterGrad)" strokeWidth="6" fill="none" />
+            <path d="M 200 500 L 200 580 L 920 580 L 920 500"
+                  stroke="#06b6d4" strokeWidth="2" fill="none"
+                  strokeDasharray="8 4"
+                  style={{ animation: 'flowD 1.5s linear infinite' }} />
+
+            {/* Hot water/steam out (from reactor top to drums) */}
+            {[300, 500, 700, 900].map((x) => (
+              <line key={`out-${x}`} x1={x - 25} y1="240" x2={x - 25} y2="180"
+                    stroke={isHotState ? '#f97316' : '#06b6d4'} strokeWidth="2.5" strokeDasharray="6 3"
+                    style={{ animation: 'flowDS 1s linear infinite' }} />
+            ))}
+          </>
+        )}
+
+        {/* ================ DESTROYED STATE — exposed core, fire, smoke ================ */}
+        {isDestroyed && (
+          <>
+            {/* Exposed core glow (extreme) */}
+            <ellipse cx="550" cy="430" rx="350" ry="120" fill="url(#explosionFlash)" filter="url(#blur8)" opacity="0.7" />
+            {/* Fire flames coming out */}
+            {Array.from({ length: 20 }).map((_, i) => {
+              const fx = 200 + Math.random() * 700;
+              const fy = 200 + Math.random() * 100;
+              return (
+                <g key={`fire-${i}`}>
+                  <ellipse cx={fx} cy={fy} rx="15" ry="40" fill="#dc2626" opacity={0.7} filter="url(#blur3)"
+                          style={{ animation: `flameWave ${0.5 + Math.random()}s infinite alternate` }} />
+                  <ellipse cx={fx} cy={fy + 10} rx="10" ry="25" fill="#fbbf24" opacity={0.8} filter="url(#blur1)"
+                          style={{ animation: `flameWave ${0.4 + Math.random() * 0.5}s infinite alternate` }} />
+                </g>
+              );
+            })}
+            {/* Black smoke pillar */}
+            {Array.from({ length: 15 }).map((_, i) => (
+              <ellipse key={`smoke-${i}`}
+                       cx={400 + Math.random() * 300}
+                       cy={50 + Math.random() * 100}
+                       rx={40 + Math.random() * 30}
+                       ry={30 + Math.random() * 20}
+                       fill="#1a1010"
+                       opacity={0.6 + Math.random() * 0.3}
+                       filter="url(#blur8)"
+                       style={{ animation: `radFloat ${4 + Math.random() * 4}s ease-in-out infinite` }} />
+            ))}
+            {/* Floating radioactive particles */}
+            {Array.from({ length: 25 }).map((_, i) => (
+              <circle key={`rad-${i}`}
+                      cx={150 + Math.random() * 800}
+                      cy={50 + Math.random() * 250}
+                      r={1 + Math.random() * 2}
+                      fill="#fbbf24"
+                      opacity={0.7}
+                      style={{ animation: `radFloat ${3 + Math.random() * 3}s ease-in-out infinite ${Math.random() * 3}s` }} />
+            ))}
+          </>
+        )}
+
+        {/* ================ HEAT WAVES (when hot) ================ */}
+        {isHotState && !isDestroyed && (
+          <g opacity="0.4">
+            {Array.from({ length: 8 }).map((_, i) => (
+              <path key={`heat-${i}`}
+                    d={`M ${250 + i * 80} 230 Q ${260 + i * 80} ${210 - (tick + i * 5) % 20} ${250 + i * 80} 200`}
+                    stroke="#f97316" strokeWidth="1" fill="none" opacity="0.5" />
+            ))}
+          </g>
+        )}
+
+        {/* ================ LABELS ================ */}
+        {showLabels && (
+          <g style={{ pointerEvents: 'none' }}>
+            {/* Labels with pointer lines */}
+
+            {/* Upper biological shield */}
+            <g>
+              <line x1="950" y1="265" x2="1000" y2="265" stroke={C.gold} strokeWidth="1" />
+              <text x="1005" y="262" fill={C.gold} fontSize="12" fontFamily="JetBrains Mono" fontWeight="700">
+                {he ? 'מגן ביולוגי עליון' : 'Upper Bio Shield'}
+              </text>
+              <text x="1005" y="275" fill={C.gL} fontSize="10" fontFamily="JetBrains Mono">
+                {he ? '2,000 טון' : '2,000 tons'}
+              </text>
+            </g>
+
+            {/* Steam separator */}
+            <g>
+              <line x1="370" y1="160" x2="430" y2="120" stroke={C.gold} strokeWidth="1" />
+              <text x="430" y="115" fill={C.gold} fontSize="12" fontFamily="JetBrains Mono" fontWeight="700">
+                {he ? 'מפריד קיטור' : 'Steam Drum'}
+              </text>
+              <text x="430" y="128" fill={C.gL} fontSize="10" fontFamily="JetBrains Mono">
+                {he ? '4 יחידות' : '4 units'}
+              </text>
+            </g>
+
+            {/* Control rods */}
+            <g>
+              <line x1="220" y1="220" x2="120" y2="170" stroke={C.gold} strokeWidth="1" />
+              <text x="115" y="160" textAnchor="end" fill={C.gold} fontSize="12" fontFamily="JetBrains Mono" fontWeight="700">
+                {he ? 'מוטות בקרה' : 'Control Rods'}
+              </text>
+              <text x="115" y="172" textAnchor="end" fill={isSpike ? C.danger : C.gL} fontSize="10" fontFamily="JetBrains Mono">
+                {he ? `${rodPosition}% מוחדרים` : `${rodPosition}% inserted`}
+              </text>
+              {isSpike && (
+                <text x="115" y="184" textAnchor="end" fill={C.danger} fontSize="9" fontFamily="JetBrains Mono" fontWeight="800">
+                  {he ? '⚠ קצה גרפיט!' : '⚠ Graphite tip!'}
+                </text>
+              )}
+            </g>
+
+            {/* Graphite stack */}
+            <g>
+              <line x1="280" y1="380" x2="120" y2="430" stroke={C.gold} strokeWidth="1" />
+              <text x="115" y="430" textAnchor="end" fill={C.gold} fontSize="12" fontFamily="JetBrains Mono" fontWeight="700">
+                {he ? 'גרפיט מאט' : 'Graphite Moderator'}
+              </text>
+              <text x="115" y="442" textAnchor="end" fill={C.gL} fontSize="10" fontFamily="JetBrains Mono">
+                {he ? '1,700 טון' : '1,700 tons'}
+              </text>
+            </g>
+
+            {/* Pressure tubes */}
+            <g>
+              <line x1="700" y1="430" x2="900" y2="380" stroke={C.gold} strokeWidth="1" />
+              <text x="905" y="378" fill={C.gold} fontSize="12" fontFamily="JetBrains Mono" fontWeight="700">
+                {he ? 'תעלות לחץ' : 'Pressure Tubes'}
+              </text>
+              <text x="905" y="391" fill={C.gL} fontSize="10" fontFamily="JetBrains Mono">
+                {he ? '1,661 תעלות' : '1,661 channels'}
+              </text>
+            </g>
+
+            {/* MCP */}
+            <g>
+              <line x1="100" y1="520" x2="50" y2="560" stroke={C.gold} strokeWidth="1" />
+              <text x="50" y="580" fill={C.gold} fontSize="11" fontFamily="JetBrains Mono" fontWeight="700">
+                {he ? 'משאבת קירור' : 'Coolant Pump'}
+              </text>
+            </g>
+
+            {/* Concrete shielding */}
+            <g>
+              <line x1="100" y1="380" x2="40" y2="380" stroke={C.gold} strokeWidth="1" />
+              <text x="35" y="378" textAnchor="end" fill={C.gold} fontSize="11" fontFamily="JetBrains Mono" fontWeight="700">
+                {he ? 'מעטפת בטון' : 'Concrete Shield'}
+              </text>
+            </g>
+          </g>
+        )}
+
+        {/* ================ TITLE ================ */}
+        <text x="550" y="35" textAnchor="middle" fill={C.gold} fontSize="16" fontFamily="JetBrains Mono" fontWeight="900" letterSpacing="3">
+          RBMK-1000
+        </text>
+        <text x="550" y="55" textAnchor="middle" fill={C.gL} fontSize="11" fontFamily="JetBrains Mono" letterSpacing="2">
+          {he ? 'חתך אנכי · יחידה 4' : 'CROSS-SECTION · UNIT 4'}
+        </text>
+      </svg>
+
+      <style jsx>{`
+        @keyframes expanFlash {
+          0% { opacity: 0; transform: scale(0.3); transform-origin: 550px 350px; }
+          30% { opacity: 1; transform: scale(1); }
+          100% { opacity: 0; transform: scale(1.3); }
+        }
+      `}</style>
+    </div>
+  );
+}
