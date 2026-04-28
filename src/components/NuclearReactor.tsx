@@ -76,8 +76,8 @@ export default function NuclearReactor({ he, t }: { he: boolean; t: (h: string, 
           padding: 'clamp(20px, 3vw, 32px)',
           marginBottom: 20,
         }}>
-          <div style={{ position: 'relative', width: '100%', maxWidth: 1100, margin: '0 auto', aspectRatio: '16/9', maxHeight: '42vh' }}>
-            <svg viewBox="0 0 1100 620" preserveAspectRatio="xMidYMid meet" style={{ width: '100%', height: '100%', display: 'block' }}>
+          <div className="reactor-svg-container" style={{ position: 'relative', width: '100%', maxWidth: 1100, margin: '0 auto', aspectRatio: '16/9' }}>
+            <svg viewBox="0 0 1100 620" preserveAspectRatio="xMidYMid meet" className="reactor-svg" style={{ width: '100%', height: '100%', display: 'block' }}>
               <defs>
                 <linearGradient id="bldgGrad" x1="0" y1="0" x2="0" y2="1">
                   <stop offset="0%" stopColor="#3a3a3a" />

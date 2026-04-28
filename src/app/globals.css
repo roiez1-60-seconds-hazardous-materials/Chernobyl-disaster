@@ -431,6 +431,29 @@ section#presentation { background: linear-gradient(180deg, transparent, rgba(200
   /* Compact RBMK section paddings */
   section#rbmk { padding: 30px 12px 20px !important; }
   section#reactor-general { padding: 30px 12px 20px !important; }
+
+  /* AGGRESSIVE size cap for reactor SVG containers — must override aspect-ratio */
+  .reactor-svg-container {
+    max-height: 280px !important;
+    aspect-ratio: auto !important;
+  }
+  .reactor-svg {
+    max-height: 280px !important;
+    height: 280px !important;
+    width: auto !important;
+    max-width: 100% !important;
+    margin: 0 auto !important;
+  }
+}
+@media (max-width: 480px) {
+  /* Even smaller on phones */
+  .reactor-svg-container {
+    max-height: 220px !important;
+  }
+  .reactor-svg {
+    max-height: 220px !important;
+    height: 220px !important;
+  }
 }
 
 /* ===================== Custom scrollbar ===================== */
