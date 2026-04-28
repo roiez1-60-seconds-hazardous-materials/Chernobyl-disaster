@@ -306,7 +306,7 @@ function CinematicReactor({ step, he, t }: { step: number; he: boolean; t: (h: s
       position: 'relative',
       width: '100%',
       aspectRatio: '4/3',
-      maxWidth: 720,
+      maxWidth: 1000,
       margin: '0 auto',
       background: 'radial-gradient(ellipse at center, rgba(20,30,55,0.4) 0%, rgba(0,0,0,0.6) 100%)',
       borderRadius: 12,
@@ -341,7 +341,7 @@ function CinematicReactor({ step, he, t }: { step: number; he: boolean; t: (h: s
 
         {/* Reactor vessel */}
         <rect x="100" y="80" width="350" height="290" rx="12" fill="url(#vesselGrad)" stroke={isExplosion ? C.danger : C.gold} strokeWidth="2.5" />
-        <text x="275" y="68" fill={C.gL} fontSize="11" fontFamily="JetBrains Mono" textAnchor="middle" fontWeight="700" letterSpacing="2">RBMK-1000</text>
+        <text x="275" y="68" fill={C.gL} fontSize="16" fontFamily="JetBrains Mono" textAnchor="middle" fontWeight="700" letterSpacing="2">RBMK-1000</text>
 
         {/* Core glow */}
         <circle cx="275" cy="225" r={90 + coreGlow * 14} fill="url(#rbmkCore)"
@@ -392,7 +392,7 @@ function CinematicReactor({ step, he, t }: { step: number; he: boolean; t: (h: s
         {step === 0 && (
           <g style={{ animation: 'fadeIn 0.6s' }}>
             <text x="500" y="220" fill={C.amber} fontSize="28" fontFamily="JetBrains Mono" fontWeight="700">↓</text>
-            <text x="500" y="248" fill={C.gL} fontSize="14" fontFamily="JetBrains Mono" fontWeight="700">{he ? 'הורדת הספק' : 'POWER ↓'}</text>
+            <text x="500" y="248" fill={C.gL} fontSize="26" fontFamily="JetBrains Mono" fontWeight="700">{he ? 'הורדת הספק' : 'POWER ↓'}</text>
           </g>
         )}
 
@@ -400,8 +400,8 @@ function CinematicReactor({ step, he, t }: { step: number; he: boolean; t: (h: s
         {step === 1 && (
           <g style={{ animation: 'pulseAlert 1.5s infinite', color: C.danger }}>
             <rect x="465" y="110" width="120" height="60" rx="6" fill="rgba(0,0,0,0.85)" stroke={C.danger} strokeWidth="2" />
-            <text x="525" y="130" fill={C.danger} fontSize="11" fontFamily="JetBrains Mono" textAnchor="middle" fontWeight="900">ECCS</text>
-            <text x="525" y="148" fill="#fff" fontSize="9" fontFamily="JetBrains Mono" textAnchor="middle">DISABLED</text>
+            <text x="525" y="130" fill={C.danger} fontSize="16" fontFamily="JetBrains Mono" textAnchor="middle" fontWeight="900">ECCS</text>
+            <text x="525" y="148" fill="#fff" fontSize="14" fontFamily="JetBrains Mono" textAnchor="middle">DISABLED</text>
             {/* Big X */}
             <line x1="475" y1="120" x2="575" y2="160" stroke={C.danger} strokeWidth="4" />
             <line x1="575" y1="120" x2="475" y2="160" stroke={C.danger} strokeWidth="4" />
@@ -412,8 +412,8 @@ function CinematicReactor({ step, he, t }: { step: number; he: boolean; t: (h: s
         {step === 2 && (
           <g style={{ animation: 'fadeIn 0.8s' }}>
             <rect x="465" y="110" width="120" height="60" rx="6" fill="rgba(0,0,0,0.85)" stroke={C.amber} strokeWidth="1.5" />
-            <text x="525" y="132" fill={C.amber} fontSize="11" fontFamily="JetBrains Mono" textAnchor="middle" fontWeight="800">23:10</text>
-            <text x="525" y="150" fill="#fff" fontSize="8" fontFamily="JetBrains Mono" textAnchor="middle" letterSpacing="1.5">SHIFT CHG</text>
+            <text x="525" y="132" fill={C.amber} fontSize="16" fontFamily="JetBrains Mono" textAnchor="middle" fontWeight="800">23:10</text>
+            <text x="525" y="150" fill="#fff" fontSize="13" fontFamily="JetBrains Mono" textAnchor="middle" letterSpacing="1.5">SHIFT CHG</text>
           </g>
         )}
 
@@ -428,8 +428,8 @@ function CinematicReactor({ step, he, t }: { step: number; he: boolean; t: (h: s
                 fill="#a855f7" opacity="0.6"
                 style={{ animation: `bubbleUp ${2 + Math.random() * 2}s infinite ${i * 0.1}s` }} />
             ))}
-            <text x="500" y="220" fill="#a855f7" fontSize="11" fontFamily="JetBrains Mono" fontWeight="700">Xe-135</text>
-            <text x="500" y="238" fill="#a855f7" fontSize="9" fontFamily="JetBrains Mono">POISON</text>
+            <text x="500" y="220" fill="#a855f7" fontSize="16" fontFamily="JetBrains Mono" fontWeight="700">Xe-135</text>
+            <text x="500" y="238" fill="#a855f7" fontSize="14" fontFamily="JetBrains Mono">POISON</text>
           </g>
         )}
 
@@ -437,11 +437,11 @@ function CinematicReactor({ step, he, t }: { step: number; he: boolean; t: (h: s
         {step === 4 && (
           <g style={{ animation: 'fadeIn 0.6s' }}>
             {[...Array(11)].map((_, i) => (
-              <text key={`up-${i}`} x={130 + i * 30} y="60" fill={C.danger} fontSize="14" textAnchor="middle" fontWeight="900"
+              <text key={`up-${i}`} x={130 + i * 30} y="60" fill={C.danger} fontSize="26" textAnchor="middle" fontWeight="900"
                     style={{ animation: `float 1.4s infinite ${i * 0.05}s` }}>↑</text>
             ))}
-            <text x="500" y="220" fill={C.danger} fontSize="11" fontFamily="JetBrains Mono" fontWeight="700">ORM=8</text>
-            <text x="500" y="238" fill={C.danger} fontSize="9" fontFamily="JetBrains Mono">CRITICAL</text>
+            <text x="500" y="220" fill={C.danger} fontSize="16" fontFamily="JetBrains Mono" fontWeight="700">ORM=8</text>
+            <text x="500" y="238" fill={C.danger} fontSize="14" fontFamily="JetBrains Mono">CRITICAL</text>
           </g>
         )}
 
@@ -457,8 +457,8 @@ function CinematicReactor({ step, he, t }: { step: number; he: boolean; t: (h: s
                 fill="rgba(255,255,255,0.7)"
                 style={{ animation: `bubbleUp ${1.6 + i * 0.2}s infinite ${i * 0.12}s` }} />
             ))}
-            <text x="500" y="220" fill={C.amber} fontSize="11" fontFamily="JetBrains Mono" fontWeight="700">TEST</text>
-            <text x="500" y="238" fill={C.amber} fontSize="9" fontFamily="JetBrains Mono">RUNNING</text>
+            <text x="500" y="220" fill={C.amber} fontSize="16" fontFamily="JetBrains Mono" fontWeight="700">TEST</text>
+            <text x="500" y="238" fill={C.amber} fontSize="14" fontFamily="JetBrains Mono">RUNNING</text>
           </g>
         )}
 
@@ -472,17 +472,17 @@ function CinematicReactor({ step, he, t }: { step: number; he: boolean; t: (h: s
           )}
           <circle cx="0" cy="0" r="20" fill={azActive ? C.danger : 'rgba(60,60,60,0.7)'} stroke="#000" strokeWidth="3"
                   style={{ animation: azActive ? 'pulseAlert 0.5s infinite' : 'none' }} />
-          <text x="0" y="4" fill="#fff" fontSize="11" fontFamily="JetBrains Mono" textAnchor="middle" fontWeight="900">AZ-5</text>
+          <text x="0" y="4" fill="#fff" fontSize="16" fontFamily="JetBrains Mono" textAnchor="middle" fontWeight="900">AZ-5</text>
           {/* Hand pressing AZ-5 at step 6 */}
           {step === 6 && (
-            <text x="0" y="-30" fontSize="22" textAnchor="middle" style={{ animation: 'shake 0.4s infinite' }}>👇</text>
+            <text x="0" y="-30" fontSize="28" textAnchor="middle" style={{ animation: 'shake 0.4s infinite' }}>👇</text>
           )}
         </g>
 
         {/* Power gauge — visible all steps */}
         <g transform="translate(60, 250)">
           <rect x="-20" y="-90" width="40" height="180" rx="6" fill="rgba(0,0,0,0.7)" stroke={C.gold} strokeWidth="1" />
-          <text x="0" y="-100" fill={C.gL} fontSize="8" fontFamily="JetBrains Mono" textAnchor="middle">POWER</text>
+          <text x="0" y="-100" fill={C.gL} fontSize="13" fontFamily="JetBrains Mono" textAnchor="middle">POWER</text>
           {/* Bar */}
           {(() => {
             const power = step <= 2 ? 1600 : step === 3 ? 30 : step === 4 ? 200 : step === 5 ? 200 : step === 6 ? 530 : step === 7 ? 30000 : 30000;
@@ -492,7 +492,7 @@ function CinematicReactor({ step, he, t }: { step: number; he: boolean; t: (h: s
             return (
               <>
                 <rect x="-15" y={85 - h} width="30" height={h} fill={c} style={{ transition: 'all 1s', filter: `drop-shadow(0 0 6px ${c})` }} />
-                <text x="0" y={Math.max(85 - h - 4, -85)} fill={c} fontSize="9" fontFamily="JetBrains Mono" textAnchor="middle" fontWeight="700">{power > 1000 ? `${(power/1000).toFixed(power > 5000 ? 0 : 1)}k` : power}</text>
+                <text x="0" y={Math.max(85 - h - 4, -85)} fill={c} fontSize="14" fontFamily="JetBrains Mono" textAnchor="middle" fontWeight="700">{power > 1000 ? `${(power/1000).toFixed(power > 5000 ? 0 : 1)}k` : power}</text>
               </>
             );
           })()}
@@ -525,13 +525,13 @@ function CinematicReactor({ step, he, t }: { step: number; he: boolean; t: (h: s
             })}
             {/* Fire wisps at top of vessel */}
             {step === 9 && [...Array(8)].map((_, i) => (
-              <text key={`fire-${i}`} x={150 + i * 35} y="100" fontSize="20" style={{ animation: `flameWave ${0.8 + Math.random()}s infinite alternate ${i * 0.1}s` }}>🔥</text>
+              <text key={`fire-${i}`} x={150 + i * 35} y="100" fontSize="26" style={{ animation: `flameWave ${0.8 + Math.random()}s infinite alternate ${i * 0.1}s` }}>🔥</text>
             ))}
           </g>
         )}
 
         {/* Bottom labels */}
-        <text x="275" y="395" fill="rgba(255,255,255,0.5)" fontSize="9" fontFamily="JetBrains Mono" textAnchor="middle" letterSpacing="2">
+        <text x="275" y="395" fill="rgba(255,255,255,0.5)" fontSize="14" fontFamily="JetBrains Mono" textAnchor="middle" letterSpacing="2">
           {he ? '← ליבת הכור · 1,661 ערוצי דלק · 211 מוטות בקרה' : 'Reactor Core · 1,661 Fuel Channels · 211 Control Rods'}
         </text>
       </svg>

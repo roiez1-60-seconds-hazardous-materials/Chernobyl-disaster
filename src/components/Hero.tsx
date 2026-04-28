@@ -8,7 +8,7 @@ function StatTile({ n, l, c, delay }: { n: string; l: string; c: string; delay: 
   const { ref, display } = useCountUpString(n);
   return (
     <div className="stat-box hover-lift fade-in" style={{ '--accent': c, animationDelay: `${delay}s` } as any}>
-      <div className="stat-num" style={{ color: c, textShadow: `0 0 18px ${c}55`, fontSize: 'clamp(26px, 4vw, 50px)' }}>
+      <div className="stat-num" style={{ color: c, textShadow: `0 0 18px ${c}55`, fontSize: 'clamp(20px, 2.8vw, 32px)' }}>
         <span ref={ref}>{display}</span>
       </div>
       <div className="stat-lbl">{l}</div>
@@ -245,7 +245,7 @@ export default function Hero({ he, t }: { he: boolean; t: (h: string, e: string)
         {/* Stats with count-up */}
         <div style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))',
           gap: 8,
           maxWidth: 720,
           margin: '0 auto',
@@ -262,7 +262,7 @@ export default function Hero({ he, t }: { he: boolean; t: (h: string, e: string)
               <StatTile key={i} n={s.n} l={s.l} c={s.c} delay={1.1 + i * 0.08} />
             ) : (
               <div key={i} className="stat-box hover-lift" style={{ '--accent': s.c, opacity: revealed ? 1 : 0, transform: revealed ? 'translateY(0)' : 'translateY(12px)', transition: `opacity 0.6s ease-out ${1.1 + i * 0.08}s, transform 0.6s ease-out ${1.1 + i * 0.08}s` } as any}>
-                <div className="stat-num" style={{ color: s.c, textShadow: `0 0 18px ${s.c}55`, fontSize: 'clamp(26px, 4vw, 50px)' }}>{s.n}</div>
+                <div className="stat-num" style={{ color: s.c, textShadow: `0 0 18px ${s.c}55`, fontSize: 'clamp(20px, 2.8vw, 32px)' }}>{s.n}</div>
                 <div className="stat-lbl">{s.l}</div>
               </div>
             )
