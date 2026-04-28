@@ -17,7 +17,7 @@ interface HudProps {
  * Gauge — circular meter
  */
 function Gauge({
-  label, value, max, unit, color, criticalAt, warningAt, size = 90,
+  label, value, max, unit, color, criticalAt, warningAt, size = 75,
 }: {
   label: string;
   value: number;
@@ -164,7 +164,7 @@ export default function ControlRoomHUD({ he, t, power, coreTemp, pressure, orm, 
                   : (he ? '● תקין' : '● NORMAL');
 
   return (
-    <div style={{
+    <div className="hud-container" style={{
       background: alert === 'critical'
         ? 'linear-gradient(180deg, rgba(40,5,5,0.95), rgba(20,5,5,0.98))'
         : 'linear-gradient(180deg, #0a0e18, #060810)',
@@ -266,7 +266,7 @@ export default function ControlRoomHUD({ he, t, power, coreTemp, pressure, orm, 
       </div>
 
       {/* Gauges */}
-      <div style={{ display: 'flex', gap: 10, justifyContent: 'center', flexWrap: 'wrap', marginBottom: 12 }}>
+      <div className="gauge-grid" style={{ display: 'flex', gap: 10, justifyContent: 'center', flexWrap: 'wrap', marginBottom: 12 }}>
         <Gauge
           label={he ? 'הספק' : 'POWER'}
           value={power}
@@ -285,15 +285,17 @@ export default function ControlRoomHUD({ he, t, power, coreTemp, pressure, orm, 
           warningAt={1500}
           criticalAt={2000}
         />
-        <Gauge
-          label={he ? 'לחץ' : 'PRESSURE'}
-          value={pressure}
-          max={150}
-          unit="atm"
-          color={C.blue}
-          warningAt={90}
-          criticalAt={120}
-        />
+        <div className="hud-secondary" style={{ display: 'contents' }}>
+          <Gauge
+            label={he ? 'לחץ' : 'PRESSURE'}
+            value={pressure}
+            max={150}
+            unit="atm"
+            color={C.blue}
+            warningAt={90}
+            criticalAt={120}
+          />
+        </div>
         <Gauge
           label="ORM"
           value={orm}
@@ -306,7 +308,7 @@ export default function ControlRoomHUD({ he, t, power, coreTemp, pressure, orm, 
       </div>
 
       {/* Linear gauges */}
-      <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
+      <div className="hud-bar-gauges" style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
         <BarGauge
           label={he ? 'אחוז קיטור' : 'STEAM FRACTION'}
           value={steamPct}

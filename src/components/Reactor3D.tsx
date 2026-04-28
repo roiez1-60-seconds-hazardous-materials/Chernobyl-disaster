@@ -98,9 +98,11 @@ export default function Reactor3D({
     <div style={{ width: '100%', maxWidth: width, margin: '0 auto', position: 'relative' }}>
       <svg
         viewBox="0 0 1100 700"
+        preserveAspectRatio="xMidYMid meet"
         style={{
           width: '100%',
           height: 'auto',
+          maxHeight: '42vh',
           display: 'block',
           filter: isExplosion ? `drop-shadow(0 0 30px ${C.danger})` : 'none',
         }}

@@ -422,6 +422,15 @@ section#presentation { background: linear-gradient(180deg, transparent, rgba(200
 
 @media (max-width: 768px) {
   .toc-pill { display: none; }
+  /* Compact HUD on mobile — hide non-essential gauges to save space */
+  .hud-secondary { display: none !important; }
+  .hud-bar-gauges { display: none !important; }
+  /* Smaller HUD overall */
+  .hud-container { padding: 10px 12px !important; }
+  .hud-container .gauge-grid { gap: 6px !important; }
+  /* Compact RBMK section paddings */
+  section#rbmk { padding: 30px 12px 20px !important; }
+  section#reactor-general { padding: 30px 12px 20px !important; }
 }
 
 /* ===================== Custom scrollbar ===================== */

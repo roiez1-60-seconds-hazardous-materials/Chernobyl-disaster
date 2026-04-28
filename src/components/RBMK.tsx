@@ -272,20 +272,22 @@ export default function RBMK({ he, t }: { he: boolean; t: (h: string, e: string)
           </button>
         </div>
 
-        {/* Step description card */}
+        {/* Step description card — sticky on mobile so always visible alongside simulator */}
         <div
           key={`desc-${step}`}
           style={{
-            padding: '20px 24px',
+            padding: 'clamp(14px, 2.5vw, 22px) clamp(16px, 3vw, 26px)',
             background: cur.mood === 'apocalypse'
-              ? `linear-gradient(135deg, ${C.danger}25, rgba(0,0,0,0.7))`
+              ? `linear-gradient(135deg, ${C.danger}40, rgba(0,0,0,0.92))`
               : cur.mood === 'explosion'
-              ? `linear-gradient(135deg, ${C.amber}25, rgba(0,0,0,0.7))`
+              ? `linear-gradient(135deg, ${C.amber}30, rgba(0,0,0,0.92))`
               : cur.mood === 'critical'
-              ? `linear-gradient(135deg, ${C.danger}15, rgba(0,0,0,0.6))`
+              ? `linear-gradient(135deg, ${C.danger}25, rgba(0,0,0,0.9))`
               : cur.mood === 'danger'
-              ? `linear-gradient(135deg, ${C.amber}15, rgba(0,0,0,0.6))`
-              : `linear-gradient(135deg, ${C.gold}10, rgba(0,0,0,0.5))`,
+              ? `linear-gradient(135deg, ${C.amber}25, rgba(0,0,0,0.9))`
+              : `linear-gradient(135deg, ${C.gold}20, rgba(0,0,0,0.88))`,
+            backdropFilter: 'blur(12px)',
+            WebkitBackdropFilter: 'blur(12px)',
             border: `1.5px solid ${
               cur.mood === 'apocalypse' ? C.danger
               : cur.mood === 'explosion' ? C.amber
@@ -303,6 +305,10 @@ export default function RBMK({ he, t }: { he: boolean; t: (h: string, e: string)
             borderRadius: 12,
             marginBottom: 24,
             animation: 'fadeIn 0.6s ease-out',
+            position: 'sticky',
+            bottom: 12,
+            zIndex: 5,
+            boxShadow: '0 8px 28px rgba(0,0,0,0.6)',
           }}
         >
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 10, flexWrap: 'wrap', gap: 10 }}>
