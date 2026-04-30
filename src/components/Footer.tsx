@@ -11,15 +11,31 @@ export default function Footer({ he, t }: { he: boolean; t: (h: string, e: strin
   const [status, setStatus] = useState<'loading' | 'ok' | 'err'>('loading');
   const [copied, setCopied] = useState(false);
 
-  // Single source of truth for visit counting
+  // Single source of truth for visit counting.
+  // Counts a visit if: never counted before, OR more than 30 min since last count.
   useEffect(() => {
     let cancelled = false;
-    const sessionKey = 'chernobyl-visit-counted';
-    const alreadyCounted = typeof window !== 'undefined' && window.sessionStorage.getItem(sessionKey);
+    const STORAGE_KEY = 'chernobyl-last-visit';
+    const COOLDOWN_MS = 30 * 60 * 1000; // 30 minutes
+
+    let shouldIncrement = true;
+    if (typeof window !== 'undefined') {
+      try {
+        const lastVisit = window.localStorage.getItem(STORAGE_KEY);
+        if (lastVisit) {
+          const elapsed = Date.now() - parseInt(lastVisit, 10);
+          if (elapsed < COOLDOWN_MS) {
+            shouldIncrement = false;
+          }
+        }
+      } catch {
+        // localStorage may be unavailable (private mode); fall through to incrementing
+      }
+    }
 
     const fetchVisits = async (attempt = 0) => {
       try {
-        const url = alreadyCounted ? '/api/visits' : '/api/visits?inc=1';
+        const url = shouldIncrement ? '/api/visits?inc=1' : '/api/visits';
         const res = await fetch(url, { cache: 'no-store' });
         const data = await res.json();
         if (cancelled) return;
@@ -27,8 +43,8 @@ export default function Footer({ he, t }: { he: boolean; t: (h: string, e: strin
         if (typeof data.count === 'number') {
           setVisits(data.count);
           setStatus('ok');
-          if (!alreadyCounted && typeof window !== 'undefined') {
-            window.sessionStorage.setItem(sessionKey, '1');
+          if (shouldIncrement && typeof window !== 'undefined') {
+            try { window.localStorage.setItem(STORAGE_KEY, Date.now().toString()); } catch {}
           }
         } else if (attempt < 2) {
           setTimeout(() => fetchVisits(attempt + 1), 1500);
